@@ -1,0 +1,379 @@
+"use client";
+
+import React, { useCallback, useEffect, useState, ReactNode } from "react";
+import { useParams, useRouter } from "next/navigation";
+import api from "@/lib/api";
+import { Task, Comment } from "@/types";
+import Card from "@/components/ui/Card";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Alert from "@/components/ui/Alert";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Link from "next/link";
+import CommentItem from "@/app/comments/CommentItem";
+import useToast from "@/hooks/useToast";
+import { io } from "socket.io-client";
+
+const TaskDetails: React.FC = (): ReactNode => {
+  const { id } = useParams();
+  const router = useRouter();
+  const [task, setTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedPriority, setEditedPriority] = useState(2);
+  const [editedCompleted, setEditedCompleted] = useState(false);
+  const [editedDueDate, setEditedDueDate] = useState("");
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+
+  // Comments state
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentsLoading, setCommentsLoading] = useState(true);
+  const [commentsError, setCommentsError] = useState<string | null>(null);
+  const [newCommentBody, setNewCommentBody] = useState("");
+  const [postCommentLoading, setPostCommentLoading] = useState(false);
+  const [postCommentError, setPostCommentError] = useState<string | null>(null);
+
+  const { showSuccess, showError } = useToast();
+
+  const fetchTaskAndComments = useCallback(async () => {
+    if (!id) {
+      showError("No task ID provided");
+      setLoading(false);
+      setCommentsLoading(false);
+      return;
+    }
+    setLoading(true);
+    setCommentsLoading(true);
+    setCommentsError(null);
+
+    try {
+      const taskResponse = await api.get<Task>(`/tasks/${id}`);
+      if (!taskResponse.data || !taskResponse.data.project) {
+        showError("Task or project data is missing");
+      }
+      setTask(taskResponse.data);
+      setEditedTitle(taskResponse.data.title);
+      setEditedDescription(taskResponse.data.description || "");
+      setEditedPriority(taskResponse.data.priority);
+      setEditedCompleted(taskResponse.data.completed);
+      setEditedDueDate(
+        taskResponse.data.dueDate
+          ? new Date(taskResponse.data.dueDate).toISOString().split("T")[0]
+          : ""
+      );
+
+      const commentsResponse = await api.get<Comment[]>(
+        `comments/${id}/taskId`
+      );
+      setComments(commentsResponse.data);
+    } catch {
+      showError("Failed to fetch task or comments. Please try again.");
+      setTask(null);
+    } finally {
+      setLoading(false);
+      setCommentsLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  useEffect(() => {
+    fetchTaskAndComments();
+    const socket = io("http://localhost:4000", {
+      transports: ["websocket"], // force websocket (optional but recommended)
+      withCredentials: true,
+    });
+    socket.on("connect", () => {
+      console.log("Connected to Socket.io server");
+      socket.emit("joinTaskComments", id);
+    });
+    socket.on("newComment", (newComment: Comment & { taskId?: string }) => {
+      if (newComment.task?.id === id || newComment.taskId === id) {
+        setComments((prev) => [newComment, ...prev]);
+      }
+    });
+
+    socket.on("deletedComment", (deletedCommentId: string) => {
+      setComments((prev) =>
+        prev.filter((comment) => comment.id !== deletedCommentId)
+      );
+    });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from Socket.io server");
+    });
+    return () => {
+      socket.emit("leaveTaskComments", id);
+      socket.disconnect();
+    };
+  }, [fetchTaskAndComments, id]);
+
+  const handleUpdate = async () => {
+    setUpdateLoading(true);
+    setUpdateError(null);
+    try {
+      const response = await api.patch<Task>(`/tasks/${id}`, {
+        title: editedTitle,
+        description: editedDescription,
+        priority: Number(editedPriority),
+        completed: editedCompleted,
+        dueDate: editedDueDate || null,
+      });
+      setTask(response.data);
+      setIsEditing(false);
+      showSuccess("Task updated successfully!");
+    } catch {
+      showError("Failed to Update Task...!");
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const handlePostComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCommentBody.trim()) return;
+
+    setPostCommentLoading(true);
+    setPostCommentError(null);
+    try {
+      await api.post<Comment>(`/comments/${id}`, {
+        body: newCommentBody,
+      });
+      setNewCommentBody("");
+      showSuccess("Comment added successfully!");
+    } catch {
+      showError("Failed to Add Comment...!");
+    } finally {
+      setPostCommentLoading(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (window.confirm("Are you sure you want to delete this comment?")) {
+      try {
+        await api.delete(`/comments/${commentId}`);
+        setComments((prev) =>
+          prev.filter((comment) => comment.id !== commentId)
+        );
+        showSuccess("Comment deleted successfully!");
+      } catch {
+        showError("Failed to delete Comment...!");
+      }
+    }
+  };
+
+  if (loading) return <LoadingSpinner />;
+  if (!task)
+    return <Alert type="info" message="Task not found." className="m-6" />;
+
+  return (
+    <div className="container mx-auto p-6">
+      <Card className="max-w-8xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Task Details: {task.title}
+        </h1>
+
+        {updateError && (
+          <Alert type="error" message={updateError} className="mb-4" />
+        )}
+
+        {!isEditing ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <p className="text-gray-600 text-sm">ID:</p>
+                <p className="text-lg font-medium text-gray-900">{task.id}</p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Project:</p>
+                {task.project ? (
+                  <Link
+                    href={`/projects/${task.project.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    <p className="text-lg font-medium text-gray-900">
+                      {task.project.name}
+                    </p>
+                  </Link>
+                ) : (
+                  <p className="text-lg font-medium text-gray-900">
+                    No project assigned
+                  </p>
+                )}
+              </div>
+              <div className="col-span-full">
+                <p className="text-gray-600 text-sm">Title:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.title}
+                </p>
+              </div>
+              <div className="col-span-full">
+                <p className="text-gray-600 text-sm">Description:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.description || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Priority:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.priority}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Completed:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.completed ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Due Date:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.dueDate
+                    ? new Date(task.dueDate).toLocaleDateString()
+                    : "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Assigned To:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {task.assignedTo?.name || "Unassigned"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Created At:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {new Date(task.createdAt).toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-600 text-sm">Updated At:</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {new Date(task.updatedAt).toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end space-x-3 mb-8">
+              <Button variant="secondary" onClick={() => router.back()}>
+                Back to Project
+              </Button>
+              <Button onClick={() => setIsEditing(true)}>Edit Task</Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <Input
+              label="Title"
+              type="text"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              className="mb-4"
+            />
+            <Input
+              label="Description"
+              type="textarea"
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              className="mb-4"
+            />
+            <div className="mb-4">
+              <label
+                htmlFor="priority"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Priority
+              </label>
+              <select
+                id="priority"
+                value={editedPriority}
+                onChange={(e) => setEditedPriority(Number(e.target.value))}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+                <option value={1}>High</option>
+                <option value={2}>Medium</option>
+                <option value={3}>Low</option>
+              </select>
+            </div>
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="completed"
+                checked={editedCompleted}
+                onChange={(e) => setEditedCompleted(e.target.checked)}
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label
+                htmlFor="completed"
+                className="ml-2 block text-sm text-gray-900"
+              >
+                Completed
+              </label>
+            </div>
+            <Input
+              label="Due Date"
+              type="date"
+              value={editedDueDate}
+              onChange={(e) => setEditedDueDate(e.target.value)}
+              className="mb-6"
+            />
+            <div className="flex justify-end space-x-3 mb-8">
+              <Button variant="secondary" onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleUpdate} loading={updateLoading}>
+                Save Changes
+              </Button>
+            </div>
+          </>
+        )}
+
+        <hr className="my-8" />
+
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Comments</h2>
+          <Button onClick={() => router.push(`/comments/${task.id}`)}>
+            View All Comments
+          </Button>
+        </div>
+        {postCommentError && (
+          <Alert type="error" message={postCommentError} className="mb-4" />
+        )}
+        <form onSubmit={handlePostComment} className="mb-6">
+          <Input
+            type="textarea"
+            placeholder="Add a new comment..."
+            value={newCommentBody}
+            onChange={(e) => setNewCommentBody(e.target.value)}
+            className="mb-2"
+          />
+          <Button type="submit" loading={postCommentLoading} className="w-full">
+            Post Comment
+          </Button>
+        </form>
+
+        {commentsLoading && <LoadingSpinner />}
+        {commentsError && (
+          <Alert type="error" message={commentsError} className="mb-4" />
+        )}
+        {!commentsLoading && comments.length === 0 && !commentsError && (
+          <Alert
+            type="info"
+            message="No comments yet. Be the first to comment!"
+          />
+        )}
+
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <CommentItem
+              comment={comment}
+              key={comment.id}
+              onDelete={handleDeleteComment}
+            />
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+export default TaskDetails;

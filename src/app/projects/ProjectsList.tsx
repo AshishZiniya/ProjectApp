@@ -1,0 +1,162 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// app/projects/ProjectsList.tsx
+"use client";
+
+import React, { useCallback, useEffect, useState } from "react";
+import api from "@/lib/api";
+import { Project, PaginatedResponse } from "@/types";
+import Card from "@/components/ui/Card";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Alert from "@/components/ui/Alert";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Link from "next/link";
+import useToast from "@/hooks/useToast";
+
+const ProjectsList: React.FC = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const { showSuccess, showError } = useToast();
+
+  const fetchProjects = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get<PaginatedResponse<Project>>("/projects", {
+        params: { q, page, limit },
+      });
+      setProjects(response.data.data);
+      setTotalPages(response.data.pages);
+    } catch {
+      showError("Failed to Fetch Data...!");
+    } finally {
+      setLoading(false);
+    }
+  }, [limit, page, q]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      try {
+        await api.delete(`/projects/${id}`);
+        setProjects(projects.filter((project) => project.id !== id));
+        showSuccess("Project deleted successfully!");
+      } catch {
+        showError("Failed to Delete project...!");
+      }
+    }
+  };
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
+        Project Dashboard
+      </h1>
+
+      <div className="flex justify-between items-center mb-6">
+        <Input
+          type="text"
+          placeholder="Search projects by name..."
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setPage(1);
+          }}
+          className="w-1/3"
+        />
+        <Link href="/projects/create" passHref>
+          <Button variant="primary">Create New Project</Button>
+        </Link>
+      </div>
+
+      {loading && <LoadingSpinner />}
+      {error && <Alert type="error" message={error} className="mb-4" />}
+
+      {!loading && projects.length === 0 && !error && (
+        <Alert
+          type="info"
+          message="No projects found. Start by creating one!"
+        />
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project) => (
+          <Card key={project.id} className="flex flex-col justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                {project.name}
+              </h3>
+              {project.description && (
+                <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                  {project.description}
+                </p>
+              )}
+              <p className="text-gray-700 text-sm">
+                Owner: <span className="font-medium">{project.owner.name}</span>
+              </p>
+            </div>
+            <div className="flex space-x-2 mt-4">
+              <Link href={`/projects/${project.id}`} passHref>
+                <Button variant="secondary" size="sm">
+                  View Details
+                </Button>
+              </Link>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => handleDelete(project.id)}
+              >
+                Delete
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-4 mt-8">
+          <Button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+            variant="secondary"
+          >
+            Previous
+          </Button>
+          <span className="text-gray-700">
+            Page {page} of {totalPages}
+          </span>
+          <Button
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+            variant="secondary"
+          >
+            Next
+          </Button>
+          <select
+            value={limit}
+            onChange={(e) => {
+              setLimit(Number(e.target.value));
+              setPage(1);
+            }}
+            className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+          >
+            <option value={5}>5 per page</option>
+            <option value={10}>10 per page</option>
+            <option value={20}>20 per page</option>
+          </select>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProjectsList;
