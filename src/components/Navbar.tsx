@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
   const isLoggedIn = !!user;
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-md py-4 px-6">
+    <nav className="fixed top-0 left-0 w-full bg-white shadow-md py-4 px-6 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"

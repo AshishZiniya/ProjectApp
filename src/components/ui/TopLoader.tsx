@@ -6,12 +6,12 @@ const TopLoader: React.FC = () => {
     <NextTopLoader
       color="#2299DD" // You can customize the color
       initialPosition={0.08}
-      crawlSpeed={200}
-      height={3}
+      crawlSpeed={300} // Increased speed
+      height={4} // Increased height
       crawl={true}
       showSpinner={false}
       easing="easeinout"
-      speed={200}
+      speed={300} // Increased speed
       shadow="0 0 10px #2299DD,0 0 5px #2299DD"
     />
   );

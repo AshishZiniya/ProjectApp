@@ -12,21 +12,24 @@ export default function RefreshPage() {
   );
   const [message, setMessage] = useState("");
 
+  const { showSuccess, showError } = useToast();
+
   useEffect(() => {
     const refreshTokens = async () => {
       try {
         await api.post("/auth/refresh");
         setStatus("success");
         setMessage("Tokens refreshed successfully!");
-      } catch {}
+        showSuccess("Tokens refreshed successfully!"); // Show toast on success
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        setStatus("error");
+        setMessage(err.message || "Failed to refresh tokens.");
+        showError(err.message || "Failed to refresh tokens."); // Show toast on error
+      }
     };
     refreshTokens();
-  }, []);
-
-  const { showSuccess, showError } = useToast();
-
-  if (status === "success") showSuccess(message);
-  if (status === "error") showError(message);
+  }, [showError, showSuccess]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -41,6 +44,17 @@ export default function RefreshPage() {
             </p>
           </>
         )}
+        {status === "error" && (
+          <>
+            <p className="mt-4 text-gray-600">Error: {message}</p>
+          </>
+        )}
+        {status === "success" && (
+          <>
+            <p className="mt-4 text-gray-600">Tokens refreshed successfully!</p>
+          </>
+        )}
+        {/* No need to display success/error message here, useToast handles it */}
       </Card>
     </div>
   );

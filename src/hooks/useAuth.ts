@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // hooks/useAuth.ts
 "use client";
 
@@ -16,6 +17,26 @@ interface UseAuthReturn {
   refresh: () => Promise<void>;
 }
 
+// Helper function to extract error message
+function getErrorMessage(error: unknown): string {
+  if (typeof error === "string") {
+    return error;
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  // Check for API error response structure
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as any).message === "string"
+  ) {
+    return (error as any).message;
+  }
+  return "An unknown error occurred";
+}
+
 export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,10 +48,11 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<{ user: AuthUser }>("/auth/refresh");
+      const response = await api.get<{ user: AuthUser }>("/auth/me"); // Changed to /auth/me for fetching current user
       setUser(response.user);
     } catch {
       setUser(null);
+      // Do not show error toast here, as it's expected if not logged in
     } finally {
       setLoading(false);
     }
@@ -45,9 +67,12 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       await api.post("/auth/login", { email, password });
-      await refreshUser();
+      await refreshUser(); // Refresh user data after successful login
     } catch (err: unknown) {
-      showError(getErrorMessage(err));
+      const msg = getErrorMessage(err);
+      setError(msg);
+      showError(msg);
+      throw err; // Re-throw to allow calling component to handle
     } finally {
       setLoading(false);
     }
@@ -58,9 +83,16 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       await api.post("/auth/register", { email, name, password });
-      await login(email, password);
+      // After registration, typically you'd log them in or redirect to login
+      // For this example, we'll just refresh the user state if they are auto-logged in
+      // or rely on the calling component to redirect to login.
+      // If the backend auto-logs in, refreshUser will pick it up.
+      // If not, the user will need to manually log in.
+      // For now, let's assume successful registration means they can proceed to login page.
     } catch (err: unknown) {
-      showError(getErrorMessage(err));
+      const msg = getErrorMessage(err);
+      setError(msg);
+      showError(msg);
       throw err;
     } finally {
       setLoading(false);
@@ -74,7 +106,9 @@ export function useAuth(): UseAuthReturn {
       await api.post("/auth/logout");
       setUser(null);
     } catch (err: unknown) {
-      showError(getErrorMessage(err));
+      const msg = getErrorMessage(err);
+      setError(msg);
+      showError(msg);
       throw err;
     } finally {
       setLoading(false);
@@ -90,16 +124,4 @@ export function useAuth(): UseAuthReturn {
     register,
     refresh: refreshUser,
   };
-}
-
-// Helper function to extract error message (reuse from previous answer or import)
-function getErrorMessage(error: unknown): string {
-  if (typeof error === "string") {
-    return error;
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  // Add more checks if needed
-  return "An unknown error occurred";
 }

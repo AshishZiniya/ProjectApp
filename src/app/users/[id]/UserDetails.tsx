@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import api from "@/lib/api"; // Already imported
+import api from "@/lib/api";
 import { User } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
@@ -28,13 +28,13 @@ const UserDetails: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<User>(`/users/${id}`); // Already using api.get
+      const response = await api.get<User>(`/users/${id}`);
       setUser(response);
       setEditedName(response.name);
       setEditedEmail(response.email);
-      console.log("object");
     } catch {
       showError("Failed to fetch user details.");
+      setError("Failed to load user details.");
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,6 @@ const UserDetails: React.FC = () => {
     setUpdateError(null);
     try {
       const response = await api.patch<User>(`/users/${id}`, {
-        // Already using api.patch
         name: editedName,
         email: editedEmail,
       });
@@ -62,11 +61,52 @@ const UserDetails: React.FC = () => {
       showSuccess("User updated successfully!");
     } catch {
       showError("Failed to update user.");
+      setUpdateError("Failed to update user.");
     } finally {
       setUpdateLoading(false);
     }
   };
 
+  const UserDetailsSkeleton = () => (
+    <Card className="max-w-8xl mx-auto animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
+      <div className="mb-4">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-1/2"></div> {/* Value */}
+      </div>
+      <div className="mb-4">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-3/4"></div> {/* Value */}
+      </div>
+      <div className="mb-4">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
+      </div>
+      <div className="mb-4">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-1/3"></div> {/* Value */}
+      </div>
+      <div className="mb-4">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
+      </div>
+      <div className="mb-6">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div> {/* Label */}
+        <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
+      </div>
+      <div className="flex justify-end space-x-3">
+        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Button */}
+        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Button */}
+      </div>
+    </Card>
+  );
+
+  if (loading)
+    return (
+      <div className="min-w-7xl container mx-auto p-6">
+        <UserDetailsSkeleton />
+      </div>
+    );
   if (error) return <Alert type="error" message={error} className="m-6" />;
   if (!user)
     return <Alert type="info" message="User not found." className="m-6" />;

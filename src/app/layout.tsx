@@ -23,8 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
         <TopLoader />
+        <Navbar />
         <main className="flex-grow mt-18">{children}</main>
         <Footer />
         <Toaster />

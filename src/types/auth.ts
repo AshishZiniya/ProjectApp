@@ -11,11 +11,11 @@ export interface RegisterDto {
   password: string;
 }
 
-export interface AuthUser  {
+export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: 'USER' | 'ADMIN';
+  role: "USER" | "ADMIN";
   createdAt: string;
   updatedAt: string;
 }
@@ -23,5 +23,5 @@ export interface AuthUser  {
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
-  user: AuthUser ;
+  user: AuthUser;
 }

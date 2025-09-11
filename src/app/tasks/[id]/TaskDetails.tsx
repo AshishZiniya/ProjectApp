@@ -71,12 +71,13 @@ const TaskDetails: React.FC = (): ReactNode => {
       );
 
       const commentsResponse = await api.get<Comment[]>(
-        `comments/${id}/taskId`
+        `/comments/${id}/taskId`
       );
       setComments(commentsResponse);
     } catch {
       showError("Failed to fetch task or comments. Please try again.");
       setTask(null);
+      setCommentsError("Failed to load comments.");
     } finally {
       setLoading(false);
       setCommentsLoading(false);
@@ -86,7 +87,8 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   useEffect(() => {
     fetchTaskAndComments();
-    const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
+    const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL!, {
+      // Added ! for non-null assertion
       transports: ["websocket"], // force websocket (optional but recommended)
       withCredentials: true,
     });
@@ -130,6 +132,7 @@ const TaskDetails: React.FC = (): ReactNode => {
       showSuccess("Task updated successfully!");
     } catch {
       showError("Failed to Update Task...!");
+      setUpdateError("Failed to update task.");
     } finally {
       setUpdateLoading(false);
     }
@@ -147,8 +150,10 @@ const TaskDetails: React.FC = (): ReactNode => {
       });
       setNewCommentBody("");
       showSuccess("Comment added successfully!");
+      // Socket.io will handle updating the comments list
     } catch {
       showError("Failed to Add Comment...!");
+      setPostCommentError("Failed to post comment.");
     } finally {
       setPostCommentLoading(false);
     }
@@ -158,16 +163,106 @@ const TaskDetails: React.FC = (): ReactNode => {
     if (window.confirm("Are you sure you want to delete this comment?")) {
       try {
         await api.delete(`/comments/${commentId}`);
-        setComments((prev) =>
-          prev.filter((comment) => comment.id !== commentId)
-        );
         showSuccess("Comment deleted successfully!");
+        // Socket.io will handle updating the comments list
       } catch {
         showError("Failed to delete Comment...!");
       }
     }
   };
 
+  const TaskDetailsSkeleton = () => (
+    <Card className="max-w-8xl mx-auto animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-1/2"></div> {/* Value */}
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-3/4"></div> {/* Value */}
+        </div>
+        <div className="col-span-full">
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
+        </div>
+        <div className="col-span-full">
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div> {/* Value */}
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div> {/* Value */}
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
+        </div>
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          {/* Label */}
+          <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
+        </div>
+      </div>
+      <div className="flex justify-end space-x-3 mb-8">
+        <div className="h-10 w-28 bg-gray-200 rounded"></div> {/* Button */}
+        <div className="h-10 w-28 bg-gray-200 rounded"></div> {/* Button */}
+      </div>
+      <hr className="my-8" />
+      <div className="h-7 bg-gray-200 rounded w-1/3 mb-4"></div>{" "}
+      {/* Comments title */}
+      <div className="flex justify-end mb-4">
+        <div className="h-10 w-40 bg-gray-200 rounded"></div>{" "}
+        {/* View All Comments Button */}
+      </div>
+      <div className="h-20 bg-gray-200 rounded mb-2"></div>{" "}
+      {/* New comment input */}
+      <div className="h-10 bg-gray-200 rounded w-full"></div>{" "}
+      {/* Post Comment Button */}
+      <div className="space-y-4 mt-6">
+        {[...Array(2)].map((_, index) => (
+          <Card
+            key={index}
+            className="p-4 bg-gray-50 border border-gray-200 animate-pulse"
+          >
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>{" "}
+                {/* Author Name */}
+                <div className="h-3 bg-gray-200 rounded w-40"></div>{" "}
+                {/* Date */}
+              </div>
+              <div className="h-8 w-16 bg-gray-200 rounded"></div>{" "}
+              {/* Delete Button */}
+            </div>
+            <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>{" "}
+            {/* Body line 1 */}
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>{" "}
+            {/* Body line 2 */}
+          </Card>
+        ))}
+      </div>
+    </Card>
+  );
+
+  if (loading)
+    return (
+      <div className="container mx-auto p-6">
+        <TaskDetailsSkeleton />
+      </div>
+    );
   if (!task)
     return <Alert type="info" message="Task not found." className="m-6" />;
 
@@ -281,8 +376,6 @@ const TaskDetails: React.FC = (): ReactNode => {
               className="mb-4"
             />
             <FormGroup label="Priority" htmlFor="priority">
-              {" "}
-              {/* Use FormGroup */}
               <select
                 id="priority"
                 value={editedPriority}
@@ -295,8 +388,6 @@ const TaskDetails: React.FC = (): ReactNode => {
               </select>
             </FormGroup>
             <div className="mb-4 flex items-center">
-              {" "}
-              {/* This can remain as is or be wrapped in a specific checkbox component */}
               <input
                 type="checkbox"
                 id="completed"
@@ -356,22 +447,45 @@ const TaskDetails: React.FC = (): ReactNode => {
         {commentsError && (
           <Alert type="error" message={commentsError} className="mb-4" />
         )}
-        {!commentsLoading && comments.length === 0 && !commentsError && (
-          <Alert
-            type="info"
-            message="No comments yet. Be the first to comment!"
-          />
-        )}
+        {commentsLoading ? (
+          <div className="space-y-4">
+            {[...Array(2)].map((_, index) => (
+              <Card
+                key={index}
+                className="p-4 bg-gray-50 border border-gray-200 animate-pulse"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-40"></div>
+                  </div>
+                  <div className="h-8 w-16 bg-gray-200 rounded"></div>
+                </div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <>
+            {!commentsLoading && comments.length === 0 && !commentsError && (
+              <Alert
+                type="info"
+                message="No comments yet. Be the first to comment!"
+              />
+            )}
 
-        <div className="space-y-4">
-          {comments.map((comment) => (
-            <CommentItem
-              comment={comment}
-              key={comment.id}
-              onDelete={handleDeleteComment}
-            />
-          ))}
-        </div>
+            <div className="space-y-4">
+              {comments.map((comment) => (
+                <CommentItem
+                  comment={comment}
+                  key={comment.id}
+                  onDelete={handleDeleteComment}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </Card>
     </div>
   );

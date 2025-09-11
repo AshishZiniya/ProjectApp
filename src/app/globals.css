@@ -28,7 +28,9 @@ body {
   @apply bg-gray-100 text-gray-900 min-h-screen flex flex-col;
 }
 /* Custom styles for textarea if you don't have a dedicated component */
-input[type="textarea"] {
+input[type="textarea"],
+textarea {
+  /* Added textarea to apply styles */
   min-height: 80px; /* Adjust as needed */
   resize: vertical;
 }

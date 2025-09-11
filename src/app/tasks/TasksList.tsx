@@ -53,6 +53,25 @@ const TasksList: React.FC = () => {
     }
   };
 
+  const TaskCardSkeleton = () => (
+    <Card className="flex flex-col justify-between animate-pulse">
+      <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div> {/* Title */}
+      <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>{" "}
+      {/* Description */}
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div> {/* Priority */}
+      <div className="h-4 bg-gray-200 rounded w-1/3"></div> {/* Status */}
+      <div className="h-4 bg-gray-200 rounded w-2/3"></div> {/* Due Date */}
+      <div className="h-4 bg-gray-200 rounded w-2/3"></div> {/* Assigned To */}
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div> {/* Project */}
+      <div className="flex space-x-2 mt-4">
+        <div className="h-8 w-24 bg-gray-200 rounded"></div>{" "}
+        {/* View Details Button */}
+        <div className="h-8 w-20 bg-gray-200 rounded"></div>{" "}
+        {/* Delete Button */}
+      </div>
+    </Card>
+  );
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
@@ -65,86 +84,99 @@ const TasksList: React.FC = () => {
         </Link>
       </div>
 
-      {!loading && tasks.length === 0 && (
-        <Alert type="info" message="No tasks found." />
-      )}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(limit)].map((_, index) => (
+            <TaskCardSkeleton key={index} />
+          ))}
+        </div>
+      ) : (
+        <>
+          {tasks.length === 0 && (
+            <Alert type="info" message="No tasks found." />
+          )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tasks.map((task) => (
-          <Card key={task.id} className="flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {task.title}
-              </h3>
-              {task.description && (
-                <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                  {task.description}
-                </p>
-              )}
-              <p className="text-gray-700 text-sm">
-                Priority: <span className="font-medium">{task.priority}</span>
-              </p>
-              <p className="text-gray-700 text-sm">
-                Status:{" "}
-                <span
-                  className={`font-medium ${
-                    task.completed ? "text-green-600" : "text-yellow-600"
-                  }`}
-                >
-                  {task.completed ? "Completed" : "Pending"}
-                </span>
-              </p>
-              {task.dueDate && !task.completed && (
-                <p className="text-gray-700 text-sm">
-                  Due Date:{" "}
-                  <span className="font-medium">
-                    {new Date(task.dueDate).toLocaleDateString()}
-                  </span>
-                </p>
-              )}
-              {task.assignedTo && (
-                <p className="text-gray-700 text-sm">
-                  Assigned To:{" "}
-                  <span className="font-medium">{task.assignedTo.name}</span>
-                </p>
-              )}
-              {task.project && (
-                <p className="text-gray-700 text-sm">
-                  Project:{" "}
-                  <span className="font-medium">{task.project.name}</span>
-                </p>
-              )}
-            </div>
-            <div className="flex space-x-2 mt-4">
-              <Link href={`/tasks/${task.id}`} passHref>
-                <Button variant="secondary" size="sm">
-                  View Details
-                </Button>
-              </Link>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => handleDelete(task.id)}
-              >
-                Delete
-              </Button>
-            </div>
-          </Card>
-        ))}
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tasks.map((task) => (
+              <Card key={task.id} className="flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    {task.title}
+                  </h3>
+                  {task.description && (
+                    <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                      {task.description}
+                    </p>
+                  )}
+                  <p className="text-gray-700 text-sm">
+                    Priority:{" "}
+                    <span className="font-medium">{task.priority}</span>
+                  </p>
+                  <p className="text-gray-700 text-sm">
+                    Status:{" "}
+                    <span
+                      className={`font-medium ${
+                        task.completed ? "text-green-600" : "text-yellow-600"
+                      }`}
+                    >
+                      {task.completed ? "Completed" : "Pending"}
+                    </span>
+                  </p>
+                  {task.dueDate && !task.completed && (
+                    <p className="text-gray-700 text-sm">
+                      Due Date:{" "}
+                      <span className="font-medium">
+                        {new Date(task.dueDate).toLocaleDateString()}
+                      </span>
+                    </p>
+                  )}
+                  {task.assignedTo && (
+                    <p className="text-gray-700 text-sm">
+                      Assigned To:{" "}
+                      <span className="font-medium">
+                        {task.assignedTo.name}
+                      </span>
+                    </p>
+                  )}
+                  {task.project && (
+                    <p className="text-gray-700 text-sm">
+                      Project:{" "}
+                      <span className="font-medium">{task.project.name}</span>
+                    </p>
+                  )}
+                </div>
+                <div className="flex space-x-2 mt-4">
+                  <Link href={`/tasks/${task.id}`} passHref>
+                    <Button variant="secondary" size="sm">
+                      View Details
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(task.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
 
-      {totalPages > 1 && (
-        <PaginationControls
-          currentPage={page}
-          totalPages={totalPages}
-          limit={limit}
-          onPageChange={setPage}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-          limitOptions={TASKS_PAGE_LIMIT_OPTIONS}
-        />
+          {totalPages > 1 && (
+            <PaginationControls
+              currentPage={page}
+              totalPages={totalPages}
+              limit={limit}
+              onPageChange={setPage}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+              limitOptions={TASKS_PAGE_LIMIT_OPTIONS}
+            />
+          )}
+        </>
       )}
     </div>
   );

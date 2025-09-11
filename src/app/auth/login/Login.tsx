@@ -26,8 +26,10 @@ const Login: React.FC = () => {
       await api.post("/auth/login", { email, password });
       router.push("/projects");
       showSuccess("Login Successful!");
-    } catch {
-      showError("Login Failed...!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message || "Login Failed...!");
+      showError(err.message || "Login Failed...!");
     } finally {
       setLoading(false);
     }

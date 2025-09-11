@@ -46,6 +46,7 @@ const CreateTask: React.FC = () => {
         }); // Fetch all users for dropdown
         setUsers(response.data || []);
       } catch {
+        setUsersError("Failed to load assignees.");
       } finally {
         setUsersLoading(false);
       }
@@ -121,10 +122,7 @@ const CreateTask: React.FC = () => {
             </select>
           </FormGroup>
           <FormGroup label="Assignee (Optional)" htmlFor="assignee">
-            {" "}
-            {/* Use FormGroup */}
             {usersLoading ? (
-              // Consider a skeleton loader here instead of just removing LoadingSpinner
               <div className="h-10 bg-gray-200 rounded-md animate-pulse"></div>
             ) : usersError ? (
               <Alert type="error" message={usersError} />

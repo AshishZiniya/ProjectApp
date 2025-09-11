@@ -61,7 +61,16 @@ async function fetchApi<TResponse, TBody = unknown>(
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(errorText || `HTTP error! status: ${response.status}`);
+    let errorMessage = errorText || `HTTP error! status: ${response.status}`;
+    try {
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.message) {
+        errorMessage = errorJson.message;
+      }
+    } catch {
+      // Not a JSON error, use plain text
+    }
+    throw new Error(errorMessage);
   }
 
   return (await response.json()) as TResponse;

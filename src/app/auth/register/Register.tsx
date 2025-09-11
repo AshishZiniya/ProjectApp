@@ -32,8 +32,10 @@ const Register: React.FC = () => {
       });
       router.push("/auth/login");
       showSuccess("User Registered Successfully");
-    } catch {
-      showError("Registration Failed...!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message || "Registration Failed...!");
+      showError(err.message || "Registration Failed...!");
     } finally {
       setLoading(false);
     }
