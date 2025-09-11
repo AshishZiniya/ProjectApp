@@ -5,19 +5,20 @@ import React, { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api"; // Already imported
 import { User, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
+import { DEFAULT_PAGE_LIMIT, USERS_PAGE_LIMIT_OPTIONS } from "@/constants";
+import PaginationControls from "@/components/common/PaginationControls";
 
 const UsersList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(DEFAULT_PAGE_LIMIT);
   const [totalPages, setTotalPages] = useState(1);
 
   const { showSuccess, showError } = useToast();
@@ -25,7 +26,8 @@ const UsersList: React.FC = () => {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get<PaginatedResponse<User>>("/users", { // Already using api.get
+      const response = await api.get<PaginatedResponse<User>>("/users", {
+        // Already using api.get
         params: { q, page, limit },
       });
       setUsers(response.data);
@@ -73,8 +75,6 @@ const UsersList: React.FC = () => {
         {/* <Button variant="primary">Create New User</Button> */}
       </div>
 
-      {loading && <LoadingSpinner />}
-
       {!loading && users.length === 0 && (
         <Alert type="info" message="No users found." />
       )}
@@ -111,37 +111,17 @@ const UsersList: React.FC = () => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center space-x-4 mt-8">
-          <Button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={page === 1}
-            variant="secondary"
-          >
-            Previous
-          </Button>
-          <span className="text-gray-700">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={page === totalPages}
-            variant="secondary"
-          >
-            Next
-          </Button>
-          <select
-            value={limit}
-            onChange={(e) => {
-              setLimit(Number(e.target.value));
-              setPage(1);
-            }}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-          >
-            <option value={5}>5 per page</option>
-            <option value={10}>10 per page</option>
-            <option value={20}>20 per page</option>
-          </select>
-        </div>
+        <PaginationControls
+          currentPage={page}
+          totalPages={totalPages}
+          limit={limit}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+          limitOptions={USERS_PAGE_LIMIT_OPTIONS}
+        />
       )}
     </div>
   );

@@ -1,5 +1,4 @@
-// lib/api.ts
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+import { API_BASE_URL } from "@/constants";
 
 type ParamValue =
   | string
@@ -31,7 +30,7 @@ async function fetchApi<TResponse, TBody = unknown>(
         .join("&")
     : "";
 
-  const url = `${BASE_URL}${endpoint}${queryString}`;
+  const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
   const response = await fetch(url, {
     ...rest,
@@ -46,7 +45,7 @@ async function fetchApi<TResponse, TBody = unknown>(
   // Auto refresh on 401
   if (response.status === 401 && endpoint !== "/auth/refresh") {
     try {
-      const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+      const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
         method: "POST",
         credentials: "include",
       });

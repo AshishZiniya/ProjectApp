@@ -5,8 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Toaster from "@/components/ui/Toaster";
-import { Suspense } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import TopLoader from "@/components/ui/TopLoader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <Navbar />
-          <main className="flex-grow mt-18">{children}</main>
-          <Footer />
-          <Toaster />
-        </Suspense>
+        <Navbar />
+        <TopLoader />
+        <main className="flex-grow mt-18">{children}</main>
+        <Footer />
+        <Toaster />
       </body>
     </html>
   );

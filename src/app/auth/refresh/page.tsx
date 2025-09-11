@@ -3,7 +3,6 @@
 
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Card from "@/components/ui/Card";
 import useToast from "@/hooks/useToast";
 
@@ -37,7 +36,6 @@ export default function RefreshPage() {
         </h2>
         {status === "loading" && (
           <>
-            <LoadingSpinner />
             <p className="mt-4 text-gray-600">
               Attempting to refresh tokens...
             </p>

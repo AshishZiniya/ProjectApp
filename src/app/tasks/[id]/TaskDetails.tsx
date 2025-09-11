@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { Task, Comment } from "@/types";
 import Card from "@/components/ui/Card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -13,6 +12,12 @@ import Link from "next/link";
 import CommentItem from "@/app/comments/CommentItem";
 import useToast from "@/hooks/useToast";
 import { io } from "socket.io-client";
+import {
+  TASK_PRIORITY_HIGH,
+  TASK_PRIORITY_LOW,
+  TASK_PRIORITY_MEDIUM,
+} from "@/constants";
+import FormGroup from "@/components/common/FormGroup";
 
 const TaskDetails: React.FC = (): ReactNode => {
   const { id } = useParams();
@@ -81,7 +86,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   useEffect(() => {
     fetchTaskAndComments();
-    const socket = io("http://localhost:4000", {
+    const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
       transports: ["websocket"], // force websocket (optional but recommended)
       withCredentials: true,
     });
@@ -163,7 +168,6 @@ const TaskDetails: React.FC = (): ReactNode => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
   if (!task)
     return <Alert type="info" message="Task not found." className="m-6" />;
 
@@ -276,25 +280,23 @@ const TaskDetails: React.FC = (): ReactNode => {
               onChange={(e) => setEditedDescription(e.target.value)}
               className="mb-4"
             />
-            <div className="mb-4">
-              <label
-                htmlFor="priority"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Priority
-              </label>
+            <FormGroup label="Priority" htmlFor="priority">
+              {" "}
+              {/* Use FormGroup */}
               <select
                 id="priority"
                 value={editedPriority}
                 onChange={(e) => setEditedPriority(Number(e.target.value))}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
-                <option value={1}>High</option>
-                <option value={2}>Medium</option>
-                <option value={3}>Low</option>
+                <option value={TASK_PRIORITY_HIGH}>High</option>
+                <option value={TASK_PRIORITY_MEDIUM}>Medium</option>
+                <option value={TASK_PRIORITY_LOW}>Low</option>
               </select>
-            </div>
+            </FormGroup>
             <div className="mb-4 flex items-center">
+              {" "}
+              {/* This can remain as is or be wrapped in a specific checkbox component */}
               <input
                 type="checkbox"
                 id="completed"
@@ -351,7 +353,6 @@ const TaskDetails: React.FC = (): ReactNode => {
           </Button>
         </form>
 
-        {commentsLoading && <LoadingSpinner />}
         {commentsError && (
           <Alert type="error" message={commentsError} className="mb-4" />
         )}

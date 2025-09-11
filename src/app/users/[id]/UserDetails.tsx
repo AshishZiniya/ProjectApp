@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api"; // Already imported
 import { User } from "@/types";
 import Card from "@/components/ui/Card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -68,7 +67,6 @@ const UserDetails: React.FC = () => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
   if (error) return <Alert type="error" message={error} className="m-6" />;
   if (!user)
     return <Alert type="info" message="User not found." className="m-6" />;

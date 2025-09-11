@@ -1,10 +1,16 @@
 import React from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
+import {
+  TOAST_DURATION,
+  TOAST_SUCCESS_COLOR,
+  TOAST_ERROR_COLOR,
+  TOAST_DEFAULT_COLOR,
+} from "@/constants"; // Import constants
 
 const Toaster: React.FC = () => {
   return (
     <HotToaster
-      position="top-right" // You can change the position
+      position="top-right"
       reverseOrder={false}
       gutter={10}
       containerClassName=""
@@ -13,25 +19,24 @@ const Toaster: React.FC = () => {
       }}
       toastOptions={{
         success: {
-          duration: 2000,
+          duration: TOAST_DURATION,
           style: {
             background: "white",
-            color: "#02993c",
+            color: TOAST_SUCCESS_COLOR,
           },
         },
         error: {
-          duration: 2000,
+          duration: TOAST_DURATION,
           style: {
             background: "white",
-            color: "#990202",
+            color: TOAST_ERROR_COLOR,
           },
         },
-        // Default options for all toasts
-        duration: 2000,
+        duration: TOAST_DURATION,
         className: "",
         style: {
           background: "white",
-          color: "yellow",
+          color: TOAST_DEFAULT_COLOR,
         },
       }}
     />

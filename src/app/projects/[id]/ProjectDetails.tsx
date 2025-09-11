@@ -7,7 +7,6 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { Project, Task } from "@/types";
 import Card from "@/components/ui/Card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -93,7 +92,6 @@ const ProjectDetails: React.FC = () => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
   if (!project)
     return <Alert type="info" message="Project not found." className="m-6" />;
 
@@ -193,7 +191,6 @@ const ProjectDetails: React.FC = () => {
           </Link>
         </div>
 
-        {tasksLoading && <LoadingSpinner />}
         {tasksError && (
           <Alert type="error" message={tasksError} className="mb-4" />
         )}

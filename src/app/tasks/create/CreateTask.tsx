@@ -9,8 +9,13 @@ import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import api from "@/lib/api";
 import { User } from "@/types";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import useToast from "@/hooks/useToast";
+import {
+  TASK_PRIORITY_HIGH,
+  TASK_PRIORITY_LOW,
+  TASK_PRIORITY_MEDIUM,
+} from "@/constants";
+import FormGroup from "@/components/common/FormGroup";
 
 const CreateTask: React.FC = () => {
   const router = useRouter();
@@ -86,7 +91,7 @@ const CreateTask: React.FC = () => {
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
             required
-            disabled={!!initialProjectId} // Disable if pre-filled from URL
+            disabled={!!initialProjectId}
           />
           <Input
             label="Title"
@@ -103,33 +108,24 @@ const CreateTask: React.FC = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <div className="mb-4">
-            <label
-              htmlFor="priority"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Priority
-            </label>
+          <FormGroup label="Priority" htmlFor="priority">
             <select
               id="priority"
               value={priority}
               onChange={(e) => setPriority(Number(e.target.value))}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
-              <option value={1}>High</option>
-              <option value={2}>Medium</option>
-              <option value={3}>Low</option>
+              <option value={TASK_PRIORITY_HIGH}>High</option>
+              <option value={TASK_PRIORITY_MEDIUM}>Medium</option>
+              <option value={TASK_PRIORITY_LOW}>Low</option>
             </select>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="assignee"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Assignee (Optional)
-            </label>
+          </FormGroup>
+          <FormGroup label="Assignee (Optional)" htmlFor="assignee">
+            {" "}
+            {/* Use FormGroup */}
             {usersLoading ? (
-              <LoadingSpinner />
+              // Consider a skeleton loader here instead of just removing LoadingSpinner
+              <div className="h-10 bg-gray-200 rounded-md animate-pulse"></div>
             ) : usersError ? (
               <Alert type="error" message={usersError} />
             ) : (
@@ -147,7 +143,7 @@ const CreateTask: React.FC = () => {
                 ))}
               </select>
             )}
-          </div>
+          </FormGroup>
           <Input
             label="Due Date (Optional)"
             type="date"

@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api";
 import { Comment } from "@/types";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Alert from "@/components/ui/Alert";
 import useToast from "@/hooks/useToast";
 import CommentItem from "../CommentItem";
@@ -76,7 +75,6 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
   if (error) return <Alert type="error" message={error} />;
   if (comments.length === 0)
     return <Alert type="info" message="No comments found for this task." />;
