@@ -25,8 +25,8 @@ const CreateProject: React.FC = () => {
     setError(null);
     try {
       const response = await api.post("/projects", { name, description });
-      showSuccess("Project created successfully!");
       router.push(`/projects/${response.data.id}`);
+      showSuccess("Project created successfully!");
     } catch {
       showError("Failed to Create project...!");
     } finally {

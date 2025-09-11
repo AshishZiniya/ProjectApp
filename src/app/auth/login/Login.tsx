@@ -24,8 +24,8 @@ const Login: React.FC = () => {
     setError(null);
     try {
       await api.post("/auth/login", { email, password });
-      showSuccess("Login Successfully");
       router.push("/projects");
+      showSuccess("Login Successful!");
     } catch {
       showError("Login Failed...!");
     } finally {

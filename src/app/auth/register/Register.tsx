@@ -30,10 +30,10 @@ const Register: React.FC = () => {
         name,
         password,
       });
-      showSuccess("User Registered Successfully")
       router.push("/auth/login");
+      showSuccess("User Registered Successfully");
     } catch {
-      showError("Registration Failed...!")
+      showError("Registration Failed...!");
     } finally {
       setLoading(false);
     }

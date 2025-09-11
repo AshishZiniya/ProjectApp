@@ -62,8 +62,8 @@ const CreateTask: React.FC = () => {
         dueDate: dueDate || undefined,
       };
       await api.post("/tasks", dto);
+      router.push(`/projects/${projectId}?refresh=true`);
       showSuccess("Task created successfully!");
-      router.push(`/projects/${projectId}?refresh=true`); // Go back to project details
     } catch {
       showError("Failed to Create task")
     } finally {
