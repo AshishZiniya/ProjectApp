@@ -6,7 +6,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
-import api from "@/lib/api";
+import { api } from "@/lib/api";
 import useToast from "@/hooks/useToast";
 
 const Login: React.FC = () => {
