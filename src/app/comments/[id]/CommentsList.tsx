@@ -37,7 +37,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
   useEffect(() => {
     fetchComments();
     // Initialize Socket.io connection
-    const socket = io("http://localhost:4000", {
+    const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
       transports: ["websocket"], // force websocket (optional but recommended)
       withCredentials: true,
     }); // Replace with your backend Socket.io URL
