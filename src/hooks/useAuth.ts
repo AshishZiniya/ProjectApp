@@ -28,7 +28,7 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       const response = await api.get<{ user: AuthUser }>("/auth/refresh");
-      setUser(response.data.user);
+      setUser(response.user);
     } catch {
       setUser(null);
     } finally {
