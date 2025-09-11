@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, Suspense, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -37,37 +37,35 @@ export default function CreateCommentPage() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-        <Card className="w-full max-w-md">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            Add Comment
-          </h2>
-          <form onSubmit={handleSubmit}>
-            <Input
-              label="Comment"
-              type="textarea"
-              id="body"
-              value={body}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                setBody(e.target.value)
-              }
-              required
-            />
-            <Button type="submit" loading={loading} className="w-full mt-4">
-              Post Comment
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => router.back()}
-              className="w-full mt-2"
-            >
-              Cancel
-            </Button>
-          </form>
-        </Card>
-      </div>
-    </Suspense>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      <Card className="w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Add Comment
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <Input
+            label="Comment"
+            type="textarea"
+            id="body"
+            value={body}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setBody(e.target.value)
+            }
+            required
+          />
+          <Button type="submit" loading={loading} className="w-full mt-4">
+            Post Comment
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => router.back()}
+            className="w-full mt-2"
+          >
+            Cancel
+          </Button>
+        </form>
+      </Card>
+    </div>
   );
 }

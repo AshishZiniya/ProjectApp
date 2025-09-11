@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Toaster from "@/components/ui/Toaster";
 import TopLoader from "@/components/ui/TopLoader";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <TopLoader />
         <Navbar />
-        <main className="flex-grow mt-18">{children}</main>
+        <Suspense fallback={<TopLoader />}>
+          <main className="flex-grow mt-18">{children}</main>
+        </Suspense>
         <Footer />
         <Toaster />
       </body>
