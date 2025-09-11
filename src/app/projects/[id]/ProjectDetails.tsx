@@ -2,7 +2,7 @@
 // app/projects/[id]/ProjectDetails.tsx
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { Project, Task } from "@/types";
@@ -240,7 +240,9 @@ const ProjectDetails: React.FC = () => {
               label="Description"
               type="textarea"
               value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                setEditedDescription(e.target.value)
+              }
               className="mb-6"
             />
             <div className="flex justify-end space-x-3 mb-8">

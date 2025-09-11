@@ -1,7 +1,7 @@
 // app/tasks/create/CreateTask.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -107,7 +107,7 @@ const CreateTask: React.FC = () => {
             type="textarea"
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
           />
           <FormGroup label="Priority" htmlFor="priority">
             <select

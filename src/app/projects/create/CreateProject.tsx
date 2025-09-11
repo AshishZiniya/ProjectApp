@@ -1,7 +1,7 @@
 // app/projects/create/CreateProject.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -60,7 +60,9 @@ const CreateProject: React.FC = () => {
             type="textarea" // Note: Input component needs to handle textarea type or create a separate Textarea component
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setDescription(e.target.value)
+            }
           />
           <Button type="submit" loading={loading} className="w-full mt-4">
             Create Project

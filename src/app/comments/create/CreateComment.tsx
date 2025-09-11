@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Alert from "@/components/ui/Alert";
@@ -48,7 +48,9 @@ const CreateComment: React.FC<CreateCommentProps> = ({
         type="textarea"
         id="body"
         value={body}
-        onChange={(e) => setBody(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+          setBody(e.target.value)
+        }
         required
       />
       <Button type="submit" loading={loading} className="w-full mt-4">

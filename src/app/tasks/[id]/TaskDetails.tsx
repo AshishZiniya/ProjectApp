@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useState, ReactNode } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  ReactNode,
+  ChangeEvent,
+} from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { Task, Comment } from "@/types";
@@ -372,7 +378,9 @@ const TaskDetails: React.FC = (): ReactNode => {
               label="Description"
               type="textarea"
               value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                setEditedDescription(e.target.value)
+              }
               className="mb-4"
             />
             <FormGroup label="Priority" htmlFor="priority">
@@ -436,7 +444,9 @@ const TaskDetails: React.FC = (): ReactNode => {
             type="textarea"
             placeholder="Add a new comment..."
             value={newCommentBody}
-            onChange={(e) => setNewCommentBody(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setNewCommentBody(e.target.value)
+            }
             className="mb-2"
           />
           <Button type="submit" loading={postCommentLoading} className="w-full">
