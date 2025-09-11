@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import api from "@/lib/api";
+import api from "@/lib/api"; // Already imported
 import { User, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -25,11 +25,11 @@ const UsersList: React.FC = () => {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get<PaginatedResponse<User>>("/users", {
+      const response = await api.get<PaginatedResponse<User>>("/users", { // Already using api.get
         params: { q, page, limit },
       });
-      setUsers(response.data.data);
-      setTotalPages(response.data.pages);
+      setUsers(response.data);
+      setTotalPages(response.page);
     } catch {
     } finally {
       setLoading(false);
@@ -43,7 +43,7 @@ const UsersList: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        await api.delete(`/users/${id}`);
+        await api.delete(`/users/${id}`); // Already using api.delete
         setUsers(users.filter((user) => user.id !== id));
         showSuccess("User deleted successfully!");
       } catch {

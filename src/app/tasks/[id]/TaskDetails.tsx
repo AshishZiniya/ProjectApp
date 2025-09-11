@@ -51,24 +51,24 @@ const TaskDetails: React.FC = (): ReactNode => {
 
     try {
       const taskResponse = await api.get<Task>(`/tasks/${id}`);
-      if (!taskResponse.data || !taskResponse.data.project) {
+      if (!taskResponse.project || !taskResponse) {
         showError("Task or project data is missing");
       }
-      setTask(taskResponse.data);
-      setEditedTitle(taskResponse.data.title);
-      setEditedDescription(taskResponse.data.description || "");
-      setEditedPriority(taskResponse.data.priority);
-      setEditedCompleted(taskResponse.data.completed);
+      setTask(taskResponse);
+      setEditedTitle(taskResponse.title);
+      setEditedDescription(taskResponse.description || "");
+      setEditedPriority(taskResponse.priority);
+      setEditedCompleted(taskResponse.completed);
       setEditedDueDate(
-        taskResponse.data.dueDate
-          ? new Date(taskResponse.data.dueDate).toISOString().split("T")[0]
+        taskResponse.dueDate
+          ? new Date(taskResponse.dueDate).toISOString().split("T")[0]
           : ""
       );
 
       const commentsResponse = await api.get<Comment[]>(
         `comments/${id}/taskId`
       );
-      setComments(commentsResponse.data);
+      setComments(commentsResponse);
     } catch {
       showError("Failed to fetch task or comments. Please try again.");
       setTask(null);
@@ -120,7 +120,7 @@ const TaskDetails: React.FC = (): ReactNode => {
         completed: editedCompleted,
         dueDate: editedDueDate || null,
       });
-      setTask(response.data);
+      setTask(response);
       setIsEditing(false);
       showSuccess("Task updated successfully!");
     } catch {

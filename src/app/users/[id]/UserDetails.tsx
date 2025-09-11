@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import api from "@/lib/api";
+import api from "@/lib/api"; // Already imported
 import { User } from "@/types";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -29,17 +29,17 @@ const UserDetails: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<User>(`/users/${id}`);
-      setUser(response.data);
-      setEditedName(response.data.name);
-      setEditedEmail(response.data.email);
+      const response = await api.get<User>(`/users/${id}`); // Already using api.get
+      setUser(response);
+      setEditedName(response.name);
+      setEditedEmail(response.email);
       console.log("object");
     } catch {
       showError("Failed to fetch user details.");
     } finally {
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -54,10 +54,11 @@ const UserDetails: React.FC = () => {
     setUpdateError(null);
     try {
       const response = await api.patch<User>(`/users/${id}`, {
+        // Already using api.patch
         name: editedName,
         email: editedEmail,
       });
-      setUser(response.data);
+      setUser(response);
       setIsEditing(false);
       showSuccess("User updated successfully!");
     } catch {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
-import api from "@/lib/api";
+import api from "@/lib/api"; // Already imported
 import { useState, useEffect } from "react";
 import useToast from "@/hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,8 +25,8 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await api.get("/auth/me"); // endpoint that returns logged-in user
-        setUser(data.user);
+        const { user } = await api.get<{ user: User }>("/auth/me"); // Updated
+        setUser(user);
       } catch {
         setUser(null);
       }
@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     setLogoutLoading(true);
     try {
-      await api.post("/auth/logout");
+      await api.post("/auth/logout"); // Already using api.post
       showSuccess("Logout successfully...!");
       setUser(null);
       router.push("/auth/login");

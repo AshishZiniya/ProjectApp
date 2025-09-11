@@ -25,7 +25,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
     setError(null);
     try {
       const response = await api.get<Comment[]>(`/comments/${id}/taskId`);
-      setComments(response.data);
+      setComments(response);
     } catch {
       showError("Failed to Fetch Data");
     } finally {

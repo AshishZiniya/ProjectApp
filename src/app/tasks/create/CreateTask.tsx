@@ -39,7 +39,7 @@ const CreateTask: React.FC = () => {
         const response = await api.get<{ data: User[] }>("/users", {
           params: { limit: 100 },
         }); // Fetch all users for dropdown
-        setUsers(response.data.data);
+        setUsers(response.data || []);
       } catch {
       } finally {
         setUsersLoading(false);
@@ -65,7 +65,7 @@ const CreateTask: React.FC = () => {
       router.push(`/projects/${projectId}?refresh=true`);
       showSuccess("Task created successfully!");
     } catch {
-      showError("Failed to Create task")
+      showError("Failed to Create task");
     } finally {
       setLoading(false);
     }

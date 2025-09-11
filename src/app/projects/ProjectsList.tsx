@@ -31,8 +31,8 @@ const ProjectsList: React.FC = () => {
       const response = await api.get<PaginatedResponse<Project>>("/projects", {
         params: { q, page, limit },
       });
-      setProjects(response.data.data);
-      setTotalPages(response.data.pages);
+      setProjects(response.data);
+      setTotalPages(response.pages);
     } catch {
       showError("Failed to Fetch Data...!");
     } finally {

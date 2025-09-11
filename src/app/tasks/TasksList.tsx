@@ -27,8 +27,8 @@ const TasksList: React.FC = () => {
       const response = await api.get<PaginatedResponse<Task>>("/tasks/all", {
         params: { page, limit },
       });
-      setTasks(response.data.data);
-      setTotalPages(response.data.pages);
+      setTasks(response.data);
+      setTotalPages(response.pages);
     } catch {
       showError("Failed to fetch tasks.");
     } finally {

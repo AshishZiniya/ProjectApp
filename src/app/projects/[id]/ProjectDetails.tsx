@@ -36,11 +36,11 @@ const ProjectDetails: React.FC = () => {
     setLoading(true);
     try {
       const response = await api.get<Project>(`/projects/${id}`);
-      setProject(response.data);
-      setEditedName(response.data.name);
-      setEditedDescription(response.data.description || "");
+      setProject(response);
+      setEditedName(response.name);
+      setEditedDescription(response.description || "");
     } catch {
-      showError("Failed to Fetch Data...!")
+      showError("Failed to Fetch Data...!");
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ const ProjectDetails: React.FC = () => {
       const response = await api.get<{ data: Task[] }>(`/tasks`, {
         params: { projectId: id, limit: 100 },
       });
-      setTasks(response.data.data || []);
+      setTasks(response.data || []);
     } catch {
       setTasks([]);
     } finally {
@@ -83,11 +83,11 @@ const ProjectDetails: React.FC = () => {
         name: editedName,
         description: editedDescription,
       });
-      setProject(response.data);
+      setProject(response);
       setIsEditing(false);
       showSuccess("Project updated successfully!");
     } catch {
-      showError("Failed to Update Project...!")
+      showError("Failed to Update Project...!");
     } finally {
       setUpdateLoading(false);
     }

@@ -9,6 +9,7 @@ import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import api from "@/lib/api";
 import useToast from "@/hooks/useToast";
+import { Project } from "@/types";
 
 const CreateProject: React.FC = () => {
   const [name, setName] = useState("");
@@ -24,8 +25,12 @@ const CreateProject: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post("/projects", { name, description });
-      router.push(`/projects/${response.data.id}`);
+      const response = await api.post<Project>("/projects", {
+        name,
+        description,
+      });
+      console.log(response);
+      router.push(`/projects/${response.id}`);
       showSuccess("Project created successfully!");
     } catch {
       showError("Failed to Create project...!");
