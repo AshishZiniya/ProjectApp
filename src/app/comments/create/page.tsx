@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { ChangeEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -49,7 +49,9 @@ export default function CreateCommentPage() {
               type="textarea"
               id="body"
               value={body}
-              onChange={(e) => setBody(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                setBody(e.target.value)
+              }
               required
             />
             <Button type="submit" loading={loading} className="w-full mt-4">
