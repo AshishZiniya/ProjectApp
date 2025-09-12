@@ -9,10 +9,13 @@ import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import api from "@/lib/api";
 import useToast from "@/hooks/useToast";
+import FormGroup from "@/components/common/FormGroup";
+import { ROLE } from "@/constants";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [role, seRole] = useState(`${ROLE.USER}`);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +32,7 @@ const Register: React.FC = () => {
         email,
         name,
         password,
+        role,
       });
       router.push("/auth/login");
       showSuccess("User Registered Successfully");
@@ -73,6 +77,17 @@ const Register: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <FormGroup label="Role" htmlFor="role">
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => seRole(e.target.value)}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value={ROLE.USER}>USER</option>
+              <option value={ROLE.ADMIN}>ADMIN</option>
+            </select>
+          </FormGroup>
           <Button type="submit" loading={loading} className="w-full mt-4">
             Register
           </Button>

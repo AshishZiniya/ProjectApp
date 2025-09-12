@@ -16,3 +16,8 @@ export const TASKS_PAGE_LIMIT_OPTIONS = [5, 10, 20];
 export const TASK_PRIORITY_HIGH = 1;
 export const TASK_PRIORITY_MEDIUM = 2;
 export const TASK_PRIORITY_LOW = 3;
+
+export enum ROLE {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
