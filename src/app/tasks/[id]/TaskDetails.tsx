@@ -431,7 +431,9 @@ const TaskDetails: React.FC = (): ReactNode => {
         <hr className="my-8" />
 
         <div className="flex justify-between justify-items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 align-text-bottom">Comments</h2>
+          <h2 className="text-2xl font-bold text-gray-800 align-text-bottom px-3 py-1">
+            Comments
+          </h2>
           <Button onClick={() => router.push(`/comments/${task.id}`)}>
             View All Comments
           </Button>
