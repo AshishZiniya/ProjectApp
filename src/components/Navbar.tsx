@@ -12,6 +12,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 interface User {
   name: string;
   email: string;
+  role: string;
 }
 
 const Navbar: React.FC = () => {
@@ -62,12 +63,14 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Link
-            href="/users"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
-          >
-            Users
-          </Link>
+          {user?.role === "ADMIN" && (
+            <Link
+              href="/users"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Users
+            </Link>
+          )}
           <Link
             href="/projects"
             className="text-gray-700 hover:text-blue-600 transition-colors"
