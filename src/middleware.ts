@@ -3,11 +3,15 @@ import type { NextRequest } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export function middleware(request: NextRequest) {
+  // Debug logging for production
   const { pathname } = request.nextUrl;
-  const token = request.cookies?.get("accessToken")?.value;
+  const accessToken = request.cookies.get("accessToken")?.value;
+  console.log("MIDDLEWARE: pathname:", pathname);
+  console.log("MIDDLEWARE: cookies:", request.cookies);
+  console.log("MIDDLEWARE: accessToken:", accessToken);
 
   // Not logged in: only allow access to login/register
-  if (!token) {
+  if (!accessToken) {
     if (
       pathname.startsWith("/auth/login") ||
       pathname.startsWith("/auth/register")
@@ -28,12 +32,10 @@ export function middleware(request: NextRequest) {
   // Decode token to get role
   let role: string | undefined;
   try {
-    const payload = jwt.decode(token) as JwtPayload | null;
-
+    const payload = jwt.decode(accessToken) as JwtPayload | null;
     if (!payload) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
-
     role = payload.role;
   } catch {
     return NextResponse.redirect(new URL("/auth/login", request.url));
