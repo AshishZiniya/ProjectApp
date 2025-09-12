@@ -1,4 +1,5 @@
 // app/users/[id]/page.tsx
+"use client";
 import UserDetails from "./UserDetails";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
