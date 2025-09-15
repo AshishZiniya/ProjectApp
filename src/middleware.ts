@@ -31,24 +31,34 @@ export function middleware(request: NextRequest) {
 
   // Decode token to get role
   let role: string | undefined;
-  try {
-    const payload = jwt.decode(accessToken) as JwtPayload | null;
-    if (!payload) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
-    role = payload.role;
-  } catch {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
 
   // Admin: full access
   if (role === "ADMIN") {
+    try {
+      const payload = jwt.decode(accessToken) as JwtPayload | null;
+      if (!payload) {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
+      role = payload.role;
+    } catch {
+      return NextResponse.redirect(new URL("/auth/login", request.url));
+    }
+
     return NextResponse.next();
   }
 
   // User: block /users, allow all else
   if (role === "USER") {
     if (pathname.startsWith("/users")) {
+      try {
+        const payload = jwt.decode(accessToken) as JwtPayload | null;
+        if (!payload) {
+          return NextResponse.redirect(new URL("/auth/login", request.url));
+        }
+        role = payload.role;
+      } catch {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
       return NextResponse.redirect(new URL("/projects", request.url));
     }
     return NextResponse.next();
