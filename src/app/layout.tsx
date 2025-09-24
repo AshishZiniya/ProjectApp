@@ -1,15 +1,7 @@
-// app/layout.tsx
-"use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Toaster from "@/components/ui/Toaster";
-import TopLoader from "@/components/ui/TopLoader";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { Suspense } from "react";
-import { usePathname } from "next/navigation";
+import ClientLayout from "@/components/ClientLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,21 +16,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAuthPage = pathname.startsWith('/auth');
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ErrorBoundary>
-          <TopLoader />
-          {!isAuthPage && <Navbar />}
-          <Suspense fallback={<TopLoader />}>
-            <main className={`flex-grow ${!isAuthPage ? 'mt-16' : ''}`}>{children}</main>
-          </Suspense>
-          {!isAuthPage && <Footer />}
-          <Toaster />
-        </ErrorBoundary>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
