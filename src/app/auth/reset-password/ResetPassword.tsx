@@ -17,9 +17,22 @@ const ResetPassword: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{ newPassword?: string; confirmPassword?: string }>({});
   const router = useRouter();
   const searchParams = useSearchParams();
   const { showSuccess, showError } = useToast();
+
+  const getPasswordStrength = (pwd: string) => {
+    let strength = 0;
+    if (pwd.length >= 8) strength++;
+    if (/[A-Z]/.test(pwd)) strength++;
+    if (/[a-z]/.test(pwd)) strength++;
+    if (/[0-9]/.test(pwd)) strength++;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+    return strength;
+  };
+
+  const passwordStrength = getPasswordStrength(newPassword);
 
   useEffect(() => {
     const tokenParam = searchParams.get('token');
@@ -28,12 +41,27 @@ const ResetPassword: React.FC = () => {
     }
   }, [searchParams]);
 
+  const validateForm = () => {
+    const errors: { newPassword?: string; confirmPassword?: string } = {};
+    if (!newPassword) {
+      errors.newPassword = "New password is required";
+    } else if (newPassword.length < 8) {
+      errors.newPassword = "Password must be at least 8 characters";
+    } else if (passwordStrength < 3) {
+      errors.newPassword = "Password is too weak";
+    }
+    if (!confirmPassword) {
+      errors.confirmPassword = "Please confirm your password";
+    } else if (newPassword !== confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    if (!validateForm()) return;
     setLoading(true);
     setError(null);
     try {
@@ -117,7 +145,9 @@ const ResetPassword: React.FC = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className={`block w-full px-4 py-3 pr-12 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  validationErrors.newPassword ? 'border-red-500' : 'border-gray-300'
+                }`}
                 placeholder="Enter new password"
               />
               <button
@@ -137,6 +167,30 @@ const ResetPassword: React.FC = () => {
                 )}
               </button>
             </div>
+            {newPassword && (
+              <div className="mt-2">
+                <div className="flex space-x-1">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
+                      key={level}
+                      className={`h-2 w-8 rounded ${
+                        level <= passwordStrength
+                          ? passwordStrength <= 2
+                            ? 'bg-red-500'
+                            : passwordStrength === 3
+                            ? 'bg-yellow-500'
+                            : 'bg-green-500'
+                          : 'bg-gray-200'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {passwordStrength <= 2 ? 'Weak' : passwordStrength === 3 ? 'Medium' : 'Strong'} password
+                </p>
+              </div>
+            )}
+            {validationErrors.newPassword && <p className="mt-1 text-sm text-red-600">{validationErrors.newPassword}</p>}
           </div>
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
@@ -148,9 +202,12 @@ const ResetPassword: React.FC = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                validationErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="Confirm new password"
             />
+            {validationErrors.confirmPassword && <p className="mt-1 text-sm text-red-600">{validationErrors.confirmPassword}</p>}
           </div>
           <Button type="submit" loading={loading} className="w-full py-3 text-lg font-medium">
             Reset Password
