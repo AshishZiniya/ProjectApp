@@ -45,9 +45,7 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
     try {
       await login(email, password);
-      if (user) {
-        router.push("/projects");
-      }
+      // Redirect is handled by useEffect when user state updates
     } catch {
       // Error is handled by useAuth
     }

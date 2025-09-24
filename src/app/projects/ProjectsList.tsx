@@ -34,7 +34,8 @@ const ProjectsList: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!user && !loading) {
+    // Only redirect if we're not loading and user is definitely null (not just undefined)
+    if (!loading && user === null) {
       router.push("/auth/login");
     }
   }, [user, loading, router]);
