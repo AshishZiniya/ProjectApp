@@ -116,13 +116,13 @@ const TasksList: React.FC = () => {
                     Status:{" "}
                     <span
                       className={`font-medium ${
-                        task.completed ? "text-green-600" : "text-yellow-600"
+                        task.status === 'DONE' ? "text-green-600" : "text-yellow-600"
                       }`}
                     >
-                      {task.completed ? "Completed" : "Pending"}
+                      {task.status === 'DONE' ? "Completed" : "Pending"}
                     </span>
                   </p>
-                  {task.dueDate && !task.completed && (
+                  {task.dueDate && task.status !== 'DONE' && (
                     <p className="text-gray-700 text-sm">
                       Due Date:{" "}
                       <span className="font-medium">
