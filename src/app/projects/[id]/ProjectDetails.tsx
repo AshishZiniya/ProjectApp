@@ -305,7 +305,7 @@ const ProjectDetails: React.FC = () => {
                   Priority: {task.priority}
                 </p>
                 <p className="text-sm text-gray-700">
-                  Status: {task.completed ? "Completed" : "Pending"}
+                  Status: {task.status}
                 </p>
                 {task.assignedTo && (
                   <p className="text-sm text-gray-700">
