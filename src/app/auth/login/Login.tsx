@@ -1,37 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
-import api from "@/lib/api";
-import useToast from "@/hooks/useToast";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { showSuccess, showError } = useToast();
+  const { login, loading, error, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/projects");
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
-      await api.post("/auth/login", { email, password });
-      router.push("/projects");
-      showSuccess("Login Successful!");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message || "Login Failed...!");
-      showError(err.message || "Login Failed...!");
-    } finally {
-      setLoading(false);
+      await login(email, password);
+      if (user) {
+        router.push("/projects");
+      }
+    } catch {
+      // Error is handled by useAuth
     }
   };
 
@@ -65,9 +64,9 @@ const Login: React.FC = () => {
         </form>
         <p className="mt-6 text-center text-gray-600">
           Don&#39;t have an account?{" "}
-          <a href="/auth/register" className="text-blue-600 hover:underline">
+          <Link href="/auth/register" className="text-blue-600 hover:underline">
             Register here
-          </a>
+          </Link>
         </p>
       </Card>
     </div>

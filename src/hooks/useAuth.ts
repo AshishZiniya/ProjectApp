@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
 import type { AuthUser } from "@/types/auth";
+import type { UserRole } from "@/types";
 import useToast from "./useToast";
 
 interface UseAuthReturn {
@@ -13,7 +14,7 @@ interface UseAuthReturn {
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (email: string, name: string, password: string) => Promise<void>;
+  register: (email: string, name: string, password: string, role?: UserRole) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -78,11 +79,11 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  const register = async (email: string, name: string, password: string) => {
+  const register = async (email: string, name: string, password: string, role?: UserRole) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/auth/register", { email, name, password });
+      await api.post("/auth/register", { email, name, password, role });
       // After registration, typically you'd log them in or redirect to login
       // For this example, we'll just refresh the user state if they are auto-logged in
       // or rely on the calling component to redirect to login.

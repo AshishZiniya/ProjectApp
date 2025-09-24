@@ -3,45 +3,31 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
-import api from "@/lib/api";
-import useToast from "@/hooks/useToast";
 import FormGroup from "@/components/common/FormGroup";
-import { ROLE } from "@/constants";
+import type { UserRole } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [role, seRole] = useState(`${ROLE.USER}`);
+  const [role, setRole] = useState<UserRole>("USER");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { showSuccess, showError } = useToast();
+  const { register, loading, error } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
-      await api.post("/auth/register", {
-        email,
-        name,
-        password,
-        role,
-      });
+      await register(email, name, password, role);
       router.push("/auth/login");
-      showSuccess("User Registered Successfully");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message || "Registration Failed...!");
-      showError(err.message || "Registration Failed...!");
-    } finally {
-      setLoading(false);
+    } catch {
+      // Error is handled by useAuth
     }
   };
 
@@ -81,11 +67,11 @@ const Register: React.FC = () => {
             <select
               id="role"
               value={role}
-              onChange={(e) => seRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value as UserRole)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
-              <option value={ROLE.USER}>USER</option>
-              <option value={ROLE.ADMIN}>ADMIN</option>
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
           </FormGroup>
           <Button type="submit" loading={loading} className="w-full mt-4">
@@ -94,9 +80,9 @@ const Register: React.FC = () => {
         </form>
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-blue-600 hover:underline">
+          <Link href="/auth/login" className="text-blue-600 hover:underline">
             Login here
-          </a>
+          </Link>
         </p>
       </Card>
     </div>

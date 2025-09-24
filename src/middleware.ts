@@ -1,71 +1,34 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
 
+/**
+ * Auth middleware
+ * - JWT is validated by the backend. We only gate routes by cookie presence.
+ * - If no accessToken: allow auth pages, block protected pages.
+ * - If accessToken exists: block auth pages, allow others.
+ */
 export function middleware(request: NextRequest) {
-  // Debug logging for production
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
-  console.log("MIDDLEWARE: pathname:", pathname);
-  console.log("MIDDLEWARE: cookies:", request.cookies);
-  console.log("MIDDLEWARE: accessToken:", accessToken);
 
-  // Not logged in: only allow access to login/register
+  const isAuthRoute =
+    pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register");
+
+  // Not logged in: only allow login/register
   if (!accessToken) {
-    if (
-      pathname.startsWith("/auth/login") ||
-      pathname.startsWith("/auth/register")
-    ) {
+    if (isAuthRoute) {
       return NextResponse.next();
     }
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Logged in: prevent access to login/register
-  if (
-    pathname.startsWith("/auth/login") ||
-    pathname.startsWith("/auth/register")
-  ) {
+  if (isAuthRoute) {
     return NextResponse.redirect(new URL("/projects", request.url));
   }
 
-  // Decode token to get role
-  let role: string | undefined;
-
-  // Admin: full access
-  if (role === "ADMIN") {
-    try {
-      const payload = jwt.decode(accessToken) as JwtPayload | null;
-      if (!payload) {
-        return NextResponse.redirect(new URL("/auth/login", request.url));
-      }
-      role = payload.role;
-    } catch {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
-
-    return NextResponse.next();
-  }
-
-  // User: block /users, allow all else
-  if (role === "USER") {
-    if (pathname.startsWith("/users")) {
-      try {
-        const payload = jwt.decode(accessToken) as JwtPayload | null;
-        if (!payload) {
-          return NextResponse.redirect(new URL("/auth/login", request.url));
-        }
-        role = payload.role;
-      } catch {
-        return NextResponse.redirect(new URL("/auth/login", request.url));
-      }
-      return NextResponse.redirect(new URL("/projects", request.url));
-    }
-    return NextResponse.next();
-  }
-
-  // Fallback: redirect to login
-  return NextResponse.redirect(new URL("/auth/login", request.url));
+  // Logged in and not an auth route: allow
+  return NextResponse.next();
 }
 
 export const config = {
@@ -73,7 +36,9 @@ export const config = {
     "/users/:path*",
     "/projects/:path*",
     "/tasks/:path*",
+    "/comments/:path*",
     "/auth/login",
     "/auth/register",
+    "/auth/refresh",
   ],
 };
