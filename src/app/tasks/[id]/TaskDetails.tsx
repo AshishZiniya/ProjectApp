@@ -178,10 +178,10 @@ const TaskDetails: React.FC = (): ReactNode => {
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => {
+  const handleDeleteComment = async (comment: Comment) => {
     if (window.confirm("Are you sure you want to delete this comment?")) {
       try {
-        await api.delete(`/comments/${commentId}`);
+        await api.delete(`/comments/${comment.id}`);
         showSuccess("Comment deleted successfully!");
         // Socket.io will handle updating the comments list
       } catch {
