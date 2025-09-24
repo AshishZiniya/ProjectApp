@@ -45,9 +45,8 @@ async function parseJsonMaybe(res: Response) {
 
 /**
  * Centralized fetch wrapper
- * - Sends cookies with 'credentials: include'
- * - On 401 (except refresh endpoint), calls /auth/refresh once and retries the original request
- * - Does not attach Authorization headers; backend handles JWT via cookies
+ * - Sends Authorization header with access token from localStorage
+ * - On 401 (except refresh endpoint), calls refresh and retries the original request
  */
 async function fetchApi<TResponse, TBody = unknown>(
   endpoint: string,
@@ -60,12 +59,13 @@ async function fetchApi<TResponse, TBody = unknown>(
   const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
   const hasBody = body !== undefined;
+  const accessToken = localStorage.getItem('accessToken');
 
   const response = await fetch(url, {
     ...rest,
-    credentials: "include",
     headers: {
       ...(hasBody ? { "Content-Type": "application/json" } : {}),
+      ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
       ...headers,
     },
     body: hasBody ? JSON.stringify(body) : undefined,
@@ -74,15 +74,26 @@ async function fetchApi<TResponse, TBody = unknown>(
   // Attempt one refresh-retry cycle on 401
   if (response.status === 401 && endpoint !== "/auth/refresh" && !internalRetry) {
     try {
-      const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-      if (refreshRes.ok) {
-        return fetchApi<TResponse, TBody>(endpoint, options, true);
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refreshToken }),
+        });
+        if (refreshRes.ok) {
+          const refreshData = await refreshRes.json();
+          localStorage.setItem('accessToken', refreshData.accessToken);
+          localStorage.setItem('refreshToken', refreshData.refreshToken);
+          return fetchApi<TResponse, TBody>(endpoint, options, true);
+        }
       }
     } catch (err) {
       console.error("Failed to refresh session:", err);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       throw err;
     }
   }

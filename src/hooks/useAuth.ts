@@ -49,7 +49,7 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<{ user: AuthUser }>("/auth/me"); // Changed to /auth/me for fetching current user
+      const response = await api.get<{ user: AuthUser }>("/auth/me");
       setUser(response.user);
     } catch {
       setUser(null);
@@ -59,16 +59,41 @@ export function useAuth(): UseAuthReturn {
     }
   }, []);
 
+  const refreshTokens = useCallback(async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      setUser(null);
+      return;
+    }
+    try {
+      const response = await api.post<{ accessToken: string; refreshToken: string; user: AuthUser }>("/auth/refresh", { refreshToken });
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setUser(response.user);
+    } catch {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setUser(null);
+    }
+  }, []);
+
   useEffect(() => {
-    refreshUser();
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      refreshUser();
+    } else {
+      setLoading(false);
+    }
   }, [refreshUser]);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/auth/login", { email, password });
-      await refreshUser(); // Refresh user data after successful login
+      const response = await api.post<{ accessToken: string; refreshToken: string; user: AuthUser }>("/auth/login", { email, password });
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setUser(response.user);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
@@ -83,13 +108,10 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/auth/register", { email, name, password, role });
-      // After registration, typically you'd log them in or redirect to login
-      // For this example, we'll just refresh the user state if they are auto-logged in
-      // or rely on the calling component to redirect to login.
-      // If the backend auto-logs in, refreshUser will pick it up.
-      // If not, the user will need to manually log in.
-      // For now, let's assume successful registration means they can proceed to login page.
+      const response = await api.post<{ accessToken: string; refreshToken: string; user: AuthUser }>("/auth/register", { email, name, password, role });
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setUser(response.user);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
@@ -105,6 +127,8 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       await api.post("/auth/logout");
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       setUser(null);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
@@ -123,6 +147,6 @@ export function useAuth(): UseAuthReturn {
     login,
     logout,
     register,
-    refresh: refreshUser,
+    refresh: refreshTokens,
   };
 }
