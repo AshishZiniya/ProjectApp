@@ -100,9 +100,12 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-center">
-        Comments for Task {id}
-      </h2>
+      <div className="text-center mb-12">
+        <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Comments
+        </h2>
+        <p className="text-xl text-gray-600">All comments for Task {id}</p>
+      </div>
       <div className="space-y-4">
         {loading ? (
           <>

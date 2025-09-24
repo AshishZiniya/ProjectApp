@@ -287,10 +287,13 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   return (
     <div className="container mx-auto p-6">
-      <Card className="max-w-8xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Task Details: {task.title}
-        </h1>
+      <Card className="max-w-8xl mx-auto shadow-2xl">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Task Details
+          </h1>
+          <p className="text-2xl text-gray-600 font-medium">{task.title}</p>
+        </div>
 
         {updateError && (
           <Alert type="error" message={updateError} className="mb-4" />

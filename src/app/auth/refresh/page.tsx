@@ -32,11 +32,16 @@ export default function RefreshPage() {
   }, [showError, showSuccess]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Token Refresh Status
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <Card className="w-full max-w-md text-center shadow-2xl">
+        <div className="mb-6">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-bold text-2xl">P</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Token Refresh Status
+          </h2>
+        </div>
         {status === "loading" && (
           <>
             <p className="mt-4 text-gray-600">

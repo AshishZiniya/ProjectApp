@@ -171,10 +171,13 @@ const ProjectDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <Card className="max-w-8xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Project Details: {project.name}
-        </h1>
+      <Card className="max-w-8xl mx-auto shadow-2xl">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Project Details
+          </h1>
+          <p className="text-2xl text-gray-600 font-medium">{project.name}</p>
+        </div>
 
         {updateError && (
           <Alert type="error" message={updateError} className="mb-4" />
@@ -256,11 +259,14 @@ const ProjectDetails: React.FC = () => {
           </>
         )}
 
-        <hr className="my-8" />
+        <hr className="my-8 border-gray-200" />
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Tasks for this Project
-        </h2>
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Tasks for this Project
+          </h2>
+          <p className="text-gray-600">Manage and track all tasks associated with this project</p>
+        </div>
         <div className="flex justify-end mb-4">
           <Link href={`/tasks/create?projectId=${project.id}`}>
             <Button variant="primary">Add New Task</Button>

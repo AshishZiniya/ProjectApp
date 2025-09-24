@@ -32,11 +32,17 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Register
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <Card className="w-full max-w-md shadow-2xl">
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-bold text-2xl">P</span>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            Create Account
+          </h2>
+          <p className="text-gray-600">Join our project management platform</p>
+        </div>
         {error && <Alert type="error" message={error} className="mb-4" />}
         <form onSubmit={handleSubmit}>
           <Input

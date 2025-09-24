@@ -26,12 +26,15 @@ const Navbar: React.FC = () => {
   const isLoggedIn = !!user;
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-md py-4 px-6 z-50">
+    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-sm shadow-lg py-4 px-6 z-50 border-b border-gray-100">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"
-          className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
+          className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-all duration-300 flex items-center gap-2"
         >
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">P</span>
+          </div>
           ProjectApp
         </Link>
 

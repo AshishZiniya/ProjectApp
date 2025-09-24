@@ -113,10 +113,16 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="min-w-7xl container mx-auto p-6">
-      <Card className="max-w-8xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          User Details
-        </h1>
+      <Card className="max-w-8xl mx-auto shadow-2xl">
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-bold text-3xl">{user.name.charAt(0).toUpperCase()}</span>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            User Details
+          </h1>
+          <p className="text-2xl text-gray-600 font-medium">{user.name}</p>
+        </div>
 
         {updateError && (
           <Alert type="error" message={updateError} className="mb-4" />
