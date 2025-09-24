@@ -69,15 +69,17 @@ const ProjectsList: React.FC = () => {
 
   const ProjectCardSkeleton = () => (
     <Card className="flex flex-col justify-between animate-pulse">
-      <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div> {/* Name */}
-      <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>{" "}
-      {/* Description */}
-      <div className="h-4 bg-gray-200 rounded w-1/2"></div> {/* Owner */}
+      <div>
+        <div className="flex items-center mb-3">
+          <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
+          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+        </div>
+        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+      </div>
       <div className="flex space-x-2 mt-4">
-        <div className="h-8 w-24 bg-gray-200 rounded"></div>{" "}
-        {/* View Details Button */}
-        <div className="h-8 w-20 bg-gray-200 rounded"></div>{" "}
-        {/* Delete Button */}
+        <div className="h-8 w-24 bg-gray-200 rounded flex-1"></div>
+        <div className="h-8 w-20 bg-gray-200 rounded flex-1"></div>
       </div>
     </Card>
   );
@@ -126,24 +128,33 @@ const ProjectsList: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
-              <Card key={project.id} className="flex flex-col justify-between">
+              <Card key={project.id} className="flex flex-col justify-between hover:scale-105 transition-transform">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                    {project.name}
-                  </h3>
+                  <div className="flex items-center mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800 truncate">
+                      {project.name}
+                    </h3>
+                  </div>
                   {project.description && (
-                    <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {project.description}
                     </p>
                   )}
-                  <p className="text-gray-700 text-sm">
-                    Owner:{" "}
+                  <div className="flex items-center text-gray-700 text-sm">
+                    <svg className="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                     <span className="font-medium">{project.owner.name}</span>
-                  </p>
+                  </div>
                 </div>
                 <div className="flex space-x-2 mt-4">
                   <Link href={`/projects/${project.id}`} passHref>
-                    <Button variant="secondary" size="sm">
+                    <Button variant="secondary" size="sm" className="flex-1">
                       View Details
                     </Button>
                   </Link>
@@ -151,6 +162,7 @@ const ProjectsList: React.FC = () => {
                     variant="danger"
                     size="sm"
                     onClick={() => handleDelete(project.id)}
+                    className="flex-1"
                   >
                     Delete
                   </Button>

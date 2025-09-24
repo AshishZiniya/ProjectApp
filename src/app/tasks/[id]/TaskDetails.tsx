@@ -300,80 +300,142 @@ const TaskDetails: React.FC = (): ReactNode => {
         )}
 
         {!isEditing ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <p className="text-gray-600 text-sm">ID:</p>
-                <p className="text-lg font-medium text-gray-900">{task.id}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Project:</p>
-                {task.project ? (
-                  <Link
-                    href={`/projects/${task.project.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    <p className="text-lg font-medium text-gray-900">
-                      {task.project.name}
-                    </p>
-                  </Link>
-                ) : (
-                  <p className="text-lg font-medium text-gray-900">
-                    No project assigned
-                  </p>
-                )}
-              </div>
-              <div className="col-span-full">
-                <p className="text-gray-600 text-sm">Title:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {task.title}
-                </p>
-              </div>
-              <div className="col-span-full">
-                <p className="text-gray-600 text-sm">Description:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {task.description || "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Priority:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {getPriorityLabel(task.priority)}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Status:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {task.status.replace('_', ' ')}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Due Date:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {task.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString()
-                    : "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Assigned To:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {task.assignedTo?.name || "Unassigned"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Created At:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {new Date(task.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Updated At:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {new Date(task.updatedAt).toLocaleString()}
-                </p>
-              </div>
-            </div>
+           <>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-blue-600 font-bold">#</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Task ID</h3>
+                 </div>
+                 <p className="text-gray-600 font-mono text-sm">{task.id}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-green-600 font-bold">📁</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Project</h3>
+                 </div>
+                 {task.project ? (
+                   <Link
+                     href={`/projects/${task.project.id}`}
+                     className="text-blue-600 hover:underline"
+                   >
+                     <p className="text-gray-600">{task.project.name}</p>
+                   </Link>
+                 ) : (
+                   <p className="text-gray-600">No project assigned</p>
+                 )}
+               </div>
+               <div className="col-span-full bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-purple-600 font-bold">📝</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Title</h3>
+                 </div>
+                 <p className="text-gray-600">{task.title}</p>
+               </div>
+               <div className="col-span-full bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-indigo-600 font-bold">📖</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Description</h3>
+                 </div>
+                 <p className="text-gray-600">{task.description || "No description provided"}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-red-600 font-bold">⚡</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Priority</h3>
+                 </div>
+                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                   task.priority === TASK_PRIORITY_HIGH ? 'bg-red-100 text-red-800' :
+                   task.priority === TASK_PRIORITY_MEDIUM ? 'bg-yellow-100 text-yellow-800' :
+                   'bg-green-100 text-green-800'
+                 }`}>
+                   {getPriorityLabel(task.priority)}
+                 </span>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-teal-600 font-bold">📊</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Status</h3>
+                 </div>
+                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                   task.status === 'DONE' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                 }`}>
+                   {task.status === 'DONE' ? 'Completed' : 'In Progress'}
+                 </span>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-orange-600 font-bold">📅</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Due Date</h3>
+                 </div>
+                 <p className="text-gray-600">
+                   {task.dueDate
+                     ? new Date(task.dueDate).toLocaleDateString('en-US', {
+                         year: 'numeric',
+                         month: 'long',
+                         day: 'numeric'
+                       })
+                     : "No due date"}
+                 </p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-pink-600 font-bold">👤</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Assigned To</h3>
+                 </div>
+                 <p className="text-gray-600">{task.assignedTo?.name || "Unassigned"}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-cyan-600 font-bold">🕒</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Created At</h3>
+                 </div>
+                 <p className="text-gray-600 text-sm">
+                   {new Date(task.createdAt).toLocaleDateString('en-US', {
+                     year: 'numeric',
+                     month: 'long',
+                     day: 'numeric',
+                     hour: '2-digit',
+                     minute: '2-digit'
+                   })}
+                 </p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-lime-600 font-bold">🔄</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Last Updated</h3>
+                 </div>
+                 <p className="text-gray-600 text-sm">
+                   {new Date(task.updatedAt).toLocaleDateString('en-US', {
+                     year: 'numeric',
+                     month: 'long',
+                     day: 'numeric',
+                     hour: '2-digit',
+                     minute: '2-digit'
+                   })}
+                 </p>
+               </div>
+             </div>
             <div className="flex justify-end space-x-3 mb-8">
               <Button variant="secondary" onClick={() => router.back()}>
                 Back to Project
@@ -443,14 +505,19 @@ const TaskDetails: React.FC = (): ReactNode => {
 
         <hr className="my-8" />
 
-        <div className="flex justify-between justify-items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 align-text-bottom px-3 py-1">
-            Comments
-          </h2>
-          <Button onClick={() => router.push(`/comments/${task.id}`)}>
-            View All Comments
-          </Button>
-        </div>
+        <div className="flex justify-between items-center mb-6">
+           <div className="flex items-center">
+             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+               <span className="text-blue-600 font-bold">💬</span>
+             </div>
+             <h2 className="text-2xl font-bold text-gray-800">
+               Comments
+             </h2>
+           </div>
+           <Button onClick={() => router.push(`/comments/${task.id}`)}>
+             View All Comments
+           </Button>
+         </div>
         {postCommentError && (
           <Alert type="error" message={postCommentError} className="mb-4" />
         )}

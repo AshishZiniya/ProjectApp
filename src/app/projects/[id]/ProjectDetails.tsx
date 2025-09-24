@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
+import { TASK_PRIORITY_HIGH, TASK_PRIORITY_MEDIUM, TASK_PRIORITY_LOW } from "@/constants";
 
 const ProjectDetails: React.FC = () => {
   const { id } = useParams();
@@ -140,19 +141,21 @@ const ProjectDetails: React.FC = () => {
         <div className="h-10 w-32 bg-gray-200 rounded"></div>{" "}
         {/* Add New Task Button */}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[...Array(2)].map((_, index) => (
           <Card key={index} className="p-4 animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>{" "}
-            {/* Task Title */}
-            <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>{" "}
-            {/* Description */}
-            <div className="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>{" "}
-            {/* Priority */}
-            <div className="h-4 bg-gray-200 rounded w-1/3"></div> {/* Status */}
+            <div className="flex items-center mb-3">
+              <div className="w-8 h-8 bg-gray-200 rounded-lg mr-3"></div>
+              <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+            </div>
+            <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
+            <div className="flex gap-2 mb-2">
+              <div className="h-5 bg-gray-200 rounded w-16"></div>
+              <div className="h-5 bg-gray-200 rounded w-20"></div>
+            </div>
+            <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
             <div className="flex justify-end mt-3">
-              <div className="h-8 w-24 bg-gray-200 rounded"></div>{" "}
-              {/* View Task Button */}
+              <div className="h-8 w-24 bg-gray-200 rounded"></div>
             </div>
           </Card>
         ))}
@@ -184,45 +187,80 @@ const ProjectDetails: React.FC = () => {
         )}
 
         {!isEditing ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <p className="text-gray-600 text-sm">ID:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {project.id}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Name:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {project.name}
-                </p>
-              </div>
-              <div className="col-span-full">
-                <p className="text-gray-600 text-sm">Description:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {project.description || "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Owner:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {project.owner.name} ({project.owner.email})
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Created At:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {new Date(project.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Updated At:</p>
-                <p className="text-lg font-medium text-gray-900">
-                  {new Date(project.updatedAt).toLocaleString()}
-                </p>
-              </div>
-            </div>
+           <>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-blue-600 font-bold">#</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Project ID</h3>
+                 </div>
+                 <p className="text-gray-600 font-mono text-sm">{project.id}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-green-600 font-bold">📁</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Project Name</h3>
+                 </div>
+                 <p className="text-gray-600">{project.name}</p>
+               </div>
+               <div className="col-span-full bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-purple-600 font-bold">📝</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Description</h3>
+                 </div>
+                 <p className="text-gray-600">{project.description || "No description provided"}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-indigo-600 font-bold">👤</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Owner</h3>
+                 </div>
+                 <p className="text-gray-600">{project.owner.name}</p>
+                 <p className="text-gray-500 text-sm">{project.owner.email}</p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-orange-600 font-bold">📅</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Created At</h3>
+                 </div>
+                 <p className="text-gray-600 text-sm">
+                   {new Date(project.createdAt).toLocaleDateString('en-US', {
+                     year: 'numeric',
+                     month: 'long',
+                     day: 'numeric',
+                     hour: '2-digit',
+                     minute: '2-digit'
+                   })}
+                 </p>
+               </div>
+               <div className="bg-gray-50 rounded-lg p-4">
+                 <div className="flex items-center mb-2">
+                   <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mr-3">
+                     <span className="text-teal-600 font-bold">🔄</span>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800">Last Updated</h3>
+                 </div>
+                 <p className="text-gray-600 text-sm">
+                   {new Date(project.updatedAt).toLocaleDateString('en-US', {
+                     year: 'numeric',
+                     month: 'long',
+                     day: 'numeric',
+                     hour: '2-digit',
+                     minute: '2-digit'
+                   })}
+                 </p>
+               </div>
+             </div>
             <div className="flex justify-end space-x-3 mb-8">
               <Button variant="secondary" onClick={() => router.back()}>
                 Back to Projects
@@ -283,52 +321,83 @@ const ProjectDetails: React.FC = () => {
             <Alert type="info" message="No tasks found for this project." />
           )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {tasksLoading ? (
-            <>
-              {[...Array(2)].map((_, index) => (
-                <Card key={index} className="p-4 animate-pulse">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-                  <div className="flex justify-end mt-3">
-                    <div className="h-8 w-24 bg-gray-200 rounded"></div>
-                  </div>
-                </Card>
-              ))}
-            </>
-          ) : (
-            (tasks ?? []).map((task) => (
-              <Card key={task.id} className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {task.title}
-                </h3>
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {task.description || "No description"}
-                </p>
-                <p className="text-sm text-gray-700 mt-2">
-                  Priority: {task.priority}
-                </p>
-                <p className="text-sm text-gray-700">
-                  Status: {task.status}
-                </p>
-                {task.assignedTo && (
-                  <p className="text-sm text-gray-700">
-                    Assigned To: {task.assignedTo.name}
-                  </p>
-                )}
-                <div className="flex justify-end mt-3">
-                  <Link href={`/tasks/${task.id}`} passHref>
-                    <Button variant="secondary" size="sm">
-                      View Task
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            ))
-          )}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           {tasksLoading ? (
+             <>
+               {[...Array(2)].map((_, index) => (
+                 <Card key={index} className="p-4 animate-pulse">
+                   <div className="flex items-center mb-3">
+                     <div className="w-8 h-8 bg-gray-200 rounded-lg mr-3"></div>
+                     <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+                   </div>
+                   <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
+                   <div className="flex gap-2 mb-2">
+                     <div className="h-5 bg-gray-200 rounded w-16"></div>
+                     <div className="h-5 bg-gray-200 rounded w-20"></div>
+                   </div>
+                   <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
+                   <div className="flex justify-end mt-3">
+                     <div className="h-8 w-24 bg-gray-200 rounded"></div>
+                   </div>
+                 </Card>
+               ))}
+             </>
+           ) : (
+             (tasks ?? []).map((task) => (
+               <Card key={task.id} className="p-4 hover:scale-105 transition-transform">
+                 <div className="flex items-center mb-3">
+                   <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                     </svg>
+                   </div>
+                   <h3 className="text-lg font-semibold text-gray-800 truncate">
+                     {task.title}
+                   </h3>
+                 </div>
+                 <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                   {task.description || "No description"}
+                 </p>
+                 <div className="flex flex-wrap gap-2 mb-2">
+                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                     task.priority === TASK_PRIORITY_HIGH ? 'bg-red-100 text-red-800' :
+                     task.priority === TASK_PRIORITY_MEDIUM ? 'bg-yellow-100 text-yellow-800' :
+                     task.priority === TASK_PRIORITY_LOW ? 'bg-green-100 text-green-800' :
+                     'bg-gray-100 text-gray-800'
+                   }`}>
+                     <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                     </svg>
+                     {task.priority === TASK_PRIORITY_HIGH ? 'High' : task.priority === TASK_PRIORITY_MEDIUM ? 'Medium' : task.priority === TASK_PRIORITY_LOW ? 'Low' : 'Unknown'}
+                   </span>
+                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                     task.status === 'DONE' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                   }`}>
+                     <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                     </svg>
+                     {task.status === 'DONE' ? 'Completed' : 'Pending'}
+                   </span>
+                 </div>
+                 {task.assignedTo && (
+                   <div className="flex items-center text-gray-700 text-sm">
+                     <svg className="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                     </svg>
+                     <span className="font-medium">{task.assignedTo.name}</span>
+                   </div>
+                 )}
+                 <div className="flex justify-end mt-3">
+                   <Link href={`/tasks/${task.id}`} passHref>
+                     <Button variant="secondary" size="sm">
+                       View Task
+                     </Button>
+                   </Link>
+                 </div>
+               </Card>
+             ))
+           )}
+         </div>
       </Card>
     </div>
   );
