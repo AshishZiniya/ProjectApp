@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
 import { DEFAULT_PAGE_LIMIT, USERS_PAGE_LIMIT_OPTIONS } from "@/constants";
@@ -20,6 +21,9 @@ const UsersList: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(DEFAULT_PAGE_LIMIT);
   const [totalPages, setTotalPages] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
 
@@ -43,16 +47,31 @@ const UsersList: React.FC = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await api.delete(`/users/${id}`);
-        setUsers(users.filter((user) => user.id !== id));
-        showSuccess("User deleted successfully!");
-      } catch {
-        showError("Failed to Delete User...!");
-      }
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return;
+
+    setDeleting(true);
+    try {
+      await api.delete(`/users/${userToDelete.id}`);
+      setUsers(users.filter((user) => user.id !== userToDelete.id));
+      showSuccess("User deleted successfully!");
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+    } catch {
+      showError("Failed to Delete User...!");
+    } finally {
+      setDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);
   };
 
   const UserCardSkeleton = () => (
@@ -145,7 +164,7 @@ const UsersList: React.FC = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(user.id)}
+                    onClick={() => handleDeleteClick(user)}
                     className="flex-1"
                   >
                     Delete
@@ -170,6 +189,16 @@ const UsersList: React.FC = () => {
           )}
         </>
       )}
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteCancel}
+        title="Delete User"
+        message={`Are you sure you want to delete user "${userToDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete User"
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
     </div>
   );
 };

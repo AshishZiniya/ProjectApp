@@ -10,6 +10,7 @@ import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
 import { useAuth } from "@/hooks/useAuth";
@@ -24,6 +25,9 @@ const ProjectsList: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
   const { user } = useAuth();
@@ -55,16 +59,31 @@ const ProjectsList: React.FC = () => {
     fetchProjects();
   }, [fetchProjects]);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      try {
-        await api.delete(`/projects/${id}`);
-        setProjects(projects.filter((project) => project.id !== id));
-        showSuccess("Project deleted successfully!");
-      } catch {
-        showError("Failed to Delete project...!");
-      }
+  const handleDeleteClick = (project: Project) => {
+    setProjectToDelete(project);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!projectToDelete) return;
+
+    setDeleting(true);
+    try {
+      await api.delete(`/projects/${projectToDelete.id}`);
+      setProjects(projects.filter((project) => project.id !== projectToDelete.id));
+      showSuccess("Project deleted successfully!");
+      setShowDeleteModal(false);
+      setProjectToDelete(null);
+    } catch {
+      showError("Failed to Delete project...!");
+    } finally {
+      setDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setProjectToDelete(null);
   };
 
   const ProjectCardSkeleton = () => (
@@ -161,7 +180,7 @@ const ProjectsList: React.FC = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(project.id)}
+                    onClick={() => handleDeleteClick(project)}
                     className="flex-1"
                   >
                     Delete
@@ -186,6 +205,16 @@ const ProjectsList: React.FC = () => {
           )}
         </>
       )}
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteCancel}
+        title="Delete Project"
+        message={`Are you sure you want to delete project "${projectToDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete Project"
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
     </div>
   );
 };

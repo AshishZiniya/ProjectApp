@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api";
 import { Comment } from "@/types";
 import Alert from "@/components/ui/Alert";
+import Modal from "@/components/ui/Modal";
 import useToast from "@/hooks/useToast";
 import CommentItem from "../CommentItem";
 import { io } from "socket.io-client";
@@ -17,6 +18,9 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<Comment | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
 
@@ -67,16 +71,31 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
     };
   }, [fetchComments, id]);
 
-  const handleDelete = async (commentId: string) => {
-    if (window.confirm("Are you sure you want to delete this comment?")) {
-      try {
-        await api.delete(`/comments/${commentId}`);
-        showSuccess("Comment deleted successfully!");
-        // Socket.io will handle updating the list, no need to manually filter here
-      } catch {
-        showError("Failed to Delete Comment");
-      }
+  const handleDeleteClick = (comment: Comment) => {
+    setCommentToDelete(comment);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!commentToDelete) return;
+
+    setDeleting(true);
+    try {
+      await api.delete(`/comments/${commentToDelete.id}`);
+      showSuccess("Comment deleted successfully!");
+      setShowDeleteModal(false);
+      setCommentToDelete(null);
+      // Socket.io will handle updating the list, no need to manually filter here
+    } catch {
+      showError("Failed to Delete Comment");
+    } finally {
+      setDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setCommentToDelete(null);
   };
 
   const CommentItemSkeleton = () => (
@@ -127,12 +146,22 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
               <CommentItem
                 comment={comment}
                 key={comment.id}
-                onDelete={handleDelete}
+                onDelete={handleDeleteClick}
               />
             ))}
           </>
         )}
       </div>
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteCancel}
+        title="Delete Comment"
+        message={`Are you sure you want to delete this comment by "${commentToDelete?.author.name}"? This action cannot be undone.`}
+        confirmText="Delete Comment"
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { Task, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
+import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
 import { DEFAULT_PAGE_LIMIT, TASKS_PAGE_LIMIT_OPTIONS, TASK_PRIORITY_HIGH, TASK_PRIORITY_MEDIUM } from "@/constants";
@@ -19,6 +20,9 @@ const TasksList: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(DEFAULT_PAGE_LIMIT);
   const [totalPages, setTotalPages] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
 
@@ -41,16 +45,31 @@ const TasksList: React.FC = () => {
     fetchTasks();
   }, [fetchTasks]);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this task?")) {
-      try {
-        await api.delete(`/tasks/${id}`);
-        setTasks(tasks.filter((task) => task.id !== id));
-        showSuccess("Task deleted successfully!");
-      } catch {
-        showError("Failed to delete Task...!");
-      }
+  const handleDeleteClick = (task: Task) => {
+    setTaskToDelete(task);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!taskToDelete) return;
+
+    setDeleting(true);
+    try {
+      await api.delete(`/tasks/${taskToDelete.id}`);
+      setTasks(tasks.filter((task) => task.id !== taskToDelete.id));
+      showSuccess("Task deleted successfully!");
+      setShowDeleteModal(false);
+      setTaskToDelete(null);
+    } catch {
+      showError("Failed to delete Task...!");
+    } finally {
+      setDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setTaskToDelete(null);
   };
 
   const TaskCardSkeleton = () => (
@@ -180,7 +199,7 @@ const TasksList: React.FC = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(task.id)}
+                    onClick={() => handleDeleteClick(task)}
                     className="flex-1"
                   >
                     Delete
@@ -205,6 +224,16 @@ const TasksList: React.FC = () => {
           )}
         </>
       )}
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteCancel}
+        title="Delete Task"
+        message={`Are you sure you want to delete task "${taskToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete Task"
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
     </div>
   );
 };
