@@ -3,7 +3,7 @@ import Login from "./Login";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-700 via-purple-700 to-pink-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
       <Login />
     </div>
   );

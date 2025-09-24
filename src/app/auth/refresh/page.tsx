@@ -32,7 +32,7 @@ export default function RefreshPage() {
   }, [showError, showSuccess]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-700 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-6">
       <Card className="w-full max-w-md text-center shadow-2xl">
         <div className="mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
