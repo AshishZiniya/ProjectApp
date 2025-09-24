@@ -3,11 +3,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
-import { User } from "@/types";
+import { User, UserRole } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import FormGroup from "@/components/common/FormGroup";
 import useToast from "@/hooks/useToast";
 
 const UserDetails: React.FC = () => {
@@ -19,6 +20,7 @@ const UserDetails: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState("");
   const [editedEmail, setEditedEmail] = useState("");
+  const [editedRole, setEditedRole] = useState<UserRole>("USER");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
@@ -32,6 +34,7 @@ const UserDetails: React.FC = () => {
       setUser(response);
       setEditedName(response.name);
       setEditedEmail(response.email);
+      setEditedRole(response.role);
     } catch {
       showError("Failed to fetch user details.");
       setError("Failed to load user details.");
@@ -52,10 +55,14 @@ const UserDetails: React.FC = () => {
     setUpdateLoading(true);
     setUpdateError(null);
     try {
-      const response = await api.patch<User>(`/users/${id}`, {
+      const updateData: Partial<User> = {
         name: editedName,
         email: editedEmail,
-      });
+      };
+      if (user?.role === "ADMIN") {
+        updateData.role = editedRole;
+      }
+      const response = await api.patch<User>(`/users/${id}`, updateData);
       setUser(response);
       setIsEditing(false);
       showSuccess("User updated successfully!");
@@ -118,7 +125,7 @@ const UserDetails: React.FC = () => {
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-3xl">{user.name.charAt(0).toUpperCase()}</span>
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             User Details
           </h1>
           <p className="text-2xl text-gray-600 font-medium">{user.name}</p>
@@ -179,8 +186,21 @@ const UserDetails: React.FC = () => {
               type="email"
               value={editedEmail}
               onChange={(e) => setEditedEmail(e.target.value)}
-              className="mb-6"
+              className="mb-4"
             />
+            {user?.role === "ADMIN" && (
+              <FormGroup label="Role" htmlFor="role">
+                <select
+                  id="role"
+                  value={editedRole}
+                  onChange={(e) => setEditedRole(e.target.value as UserRole)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="USER">USER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </FormGroup>
+            )}
             <div className="flex justify-end space-x-3">
               <Button variant="secondary" onClick={() => setIsEditing(false)}>
                 Cancel

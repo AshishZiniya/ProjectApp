@@ -62,10 +62,10 @@ const Navbar: React.FC = () => {
 
           {isLoggedIn ? (
             <>
-              <span className="flex text-gray-700 items-center gap-3">
+              <Link href={`/users/${user?.id}`} className="flex text-gray-700 items-center gap-3 hover:text-blue-600 transition-colors cursor-pointer">
                 <FontAwesomeIcon icon={faUser} className="text-blue-600" />
                 <strong>{user?.name || user?.email}</strong>
-              </span>
+              </Link>
               <Button
                 onClick={handleLogout}
                 loading={authLoading}
