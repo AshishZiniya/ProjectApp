@@ -59,7 +59,7 @@ const UserDetails: React.FC = () => {
         name: editedName,
         email: editedEmail,
       };
-      if (user?.role === "ADMIN") {
+      if (user?.role === "ADMIN" || user?.role === "SUPERADMIN") {
         updateData.role = editedRole;
       }
       const response = await api.patch<User>(`/users/${id}`, updateData);
@@ -129,7 +129,9 @@ const UserDetails: React.FC = () => {
             <p className="text-2xl text-gray-600 font-medium">{user.name}</p>
             <div className="mt-2">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                user.role === 'ADMIN'
+                user.role === 'SUPERADMIN'
+                  ? 'bg-red-100 text-red-800'
+                  : user.role === 'ADMIN'
                   ? 'bg-purple-100 text-purple-800'
                   : 'bg-blue-100 text-blue-800'
               }`}>
@@ -173,7 +175,9 @@ const UserDetails: React.FC = () => {
                   <h3 className="text-lg font-semibold text-gray-800">Role</h3>
                 </div>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  user.role === 'ADMIN'
+                  user.role === 'SUPERADMIN'
+                    ? 'bg-red-100 text-red-800'
+                    : user.role === 'ADMIN'
                     ? 'bg-purple-100 text-purple-800'
                     : 'bg-blue-100 text-blue-800'
                 }`}>
@@ -239,7 +243,7 @@ const UserDetails: React.FC = () => {
                 />
               </div>
 
-              {user?.role === "ADMIN" && (
+              {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
                 <div className="mb-4">
                   <FormGroup label="User Role" htmlFor="role">
                     <select
@@ -250,6 +254,7 @@ const UserDetails: React.FC = () => {
                     >
                       <option value="USER">USER</option>
                       <option value="ADMIN">ADMIN</option>
+                      <option value="SUPERADMIN">SUPERADMIN</option>
                     </select>
                   </FormGroup>
                 </div>

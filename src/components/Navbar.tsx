@@ -39,13 +39,23 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          {user?.role === "ADMIN" && (
-            <Link
-              href="/users"
-              className="text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              Users
-            </Link>
+          {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
+            <>
+              <Link
+                href="/users"
+                className="text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Users
+              </Link>
+              {user?.role === "SUPERADMIN" && (
+                <Link
+                  href="/admin/add-admin"
+                  className="text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Add Admin
+                </Link>
+              )}
+            </>
           )}
           <Link
             href="/projects"

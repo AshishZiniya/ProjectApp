@@ -19,14 +19,14 @@ export default function UserDetailsPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     if (!loading && userId && user) {
       const isOwnProfile = user.id === userId;
-      const isAdmin = user.role === "ADMIN";
-      if (!isOwnProfile && !isAdmin) {
+      const isAdminOrSuper = user.role === "ADMIN" || user.role === "SUPERADMIN";
+      if (!isOwnProfile && !isAdminOrSuper) {
         router.replace("/projects");
       }
     }
   }, [user, loading, router, userId]);
 
-  if (loading || !userId || (user && user.id !== userId && user.role !== "ADMIN")) {
+  if (loading || !userId || (user && user.id !== userId && user.role !== "ADMIN" && user.role !== "SUPERADMIN")) {
     return null;
   }
 

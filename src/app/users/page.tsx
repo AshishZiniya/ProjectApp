@@ -10,12 +10,12 @@ export default function UsersListPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user?.role !== "ADMIN") {
+    if (!loading && user?.role !== "ADMIN" && user?.role !== "SUPERADMIN") {
       router.replace("/projects");
     }
   }, [user, loading, router]);
 
-  if (loading || user?.role !== "ADMIN") {
+  if (loading || (user?.role !== "ADMIN" && user?.role !== "SUPERADMIN")) {
     return null;
   }
 
