@@ -61,28 +61,53 @@ async function fetchApi<TResponse, TBody = unknown>(
   const hasBody = body !== undefined;
   const accessToken = localStorage.getItem('accessToken');
 
-  const response = await fetch(url, {
-    ...rest,
-    headers: {
-      ...(hasBody ? { "Content-Type": "application/json" } : {}),
-      ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
-      ...headers,
-    },
-    body: hasBody ? JSON.stringify(body) : undefined,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
+  try {
+    const response = await fetch(url, {
+      ...rest,
+      headers: {
+        ...(hasBody ? { "Content-Type": "application/json" } : {}),
+        ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
+        ...headers,
+      },
+      body: hasBody ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return await processResponse(response, endpoint, options, internalRetry);
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out');
+    }
+    throw error;
+  }
+}
+
+async function processResponse<TResponse, TBody>(
+  response: Response,
+  endpoint: string,
+  options: FetchOptions<TBody>,
+  internalRetry: boolean
+): Promise<TResponse> {
   // Attempt one refresh-retry cycle on 401
   if (response.status === 401 && endpoint !== "/auth/refresh" && !internalRetry) {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
+        const refreshController = new AbortController();
+        const refreshTimeoutId = setTimeout(() => refreshController.abort(), 10000);
         const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ refreshToken }),
+          signal: refreshController.signal,
         });
+        clearTimeout(refreshTimeoutId);
         if (refreshRes.ok) {
           const refreshData = await refreshRes.json();
           localStorage.setItem('accessToken', refreshData.accessToken);
