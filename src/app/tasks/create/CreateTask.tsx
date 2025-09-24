@@ -26,6 +26,7 @@ const CreateTask: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(2);
+  const [status, setStatus] = useState<'TODO' | 'IN_PROGRESS' | 'DONE'>('TODO');
   const [assigneeId, setAssigneeId] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,6 +65,7 @@ const CreateTask: React.FC = () => {
         title,
         description: description || undefined,
         priority: Number(priority),
+        status,
         assigneeId: assigneeId || undefined,
         dueDate: dueDate || undefined,
       };
@@ -119,6 +121,18 @@ const CreateTask: React.FC = () => {
               <option value={TASK_PRIORITY_HIGH}>High</option>
               <option value={TASK_PRIORITY_MEDIUM}>Medium</option>
               <option value={TASK_PRIORITY_LOW}>Low</option>
+            </select>
+          </FormGroup>
+          <FormGroup label="Status" htmlFor="status">
+            <select
+              id="status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE')}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="TODO">To Do</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="DONE">Done</option>
             </select>
           </FormGroup>
           <FormGroup label="Assignee (Optional)" htmlFor="assignee">

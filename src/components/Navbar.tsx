@@ -3,50 +3,23 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
-import api from "@/lib/api"; // Already imported
-import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import useToast from "@/hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-interface User {
-  name: string;
-  email: string;
-  role: string;
-}
-
 const Navbar: React.FC = () => {
   const router = useRouter();
-  const [logoutLoading, setLogoutLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
+  const { user, logout, loading: authLoading } = useAuth();
   const { showSuccess, showError } = useToast();
 
-  // Fetch logged-in user info
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { user } = await api.get<{ user: User }>("/auth/me"); // Updated
-        setUser(user);
-      } catch {
-        setUser(null);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
   const handleLogout = async () => {
-    setLogoutLoading(true);
     try {
-      await api.post("/auth/logout"); // Already using api.post
+      await logout();
       showSuccess("Logout successfully...!");
-      setUser(null);
       router.push("/auth/login");
     } catch {
       showError("Logout failed. Please try again.");
-    } finally {
-      setLogoutLoading(false);
     }
   };
 
@@ -92,7 +65,7 @@ const Navbar: React.FC = () => {
               </span>
               <Button
                 onClick={handleLogout}
-                loading={logoutLoading}
+                loading={authLoading}
                 variant="secondary"
                 size="sm"
               >

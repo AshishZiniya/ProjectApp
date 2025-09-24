@@ -25,6 +25,19 @@ import {
 } from "@/constants";
 import FormGroup from "@/components/common/FormGroup";
 
+const getPriorityLabel = (priority: number) => {
+  switch (priority) {
+    case TASK_PRIORITY_HIGH:
+      return "High";
+    case TASK_PRIORITY_MEDIUM:
+      return "Medium";
+    case TASK_PRIORITY_LOW:
+      return "Low";
+    default:
+      return "Unknown";
+  }
+};
+
 const TaskDetails: React.FC = (): ReactNode => {
   const { id } = useParams();
   const router = useRouter();
@@ -34,7 +47,7 @@ const TaskDetails: React.FC = (): ReactNode => {
   const [editedTitle, setEditedTitle] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
   const [editedPriority, setEditedPriority] = useState(2);
-  const [editedCompleted, setEditedCompleted] = useState(false);
+  const [editedStatus, setEditedStatus] = useState<'TODO' | 'IN_PROGRESS' | 'DONE'>('TODO');
   const [editedDueDate, setEditedDueDate] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
@@ -69,7 +82,7 @@ const TaskDetails: React.FC = (): ReactNode => {
       setEditedTitle(taskResponse.title);
       setEditedDescription(taskResponse.description || "");
       setEditedPriority(taskResponse.priority);
-      setEditedCompleted(taskResponse.completed);
+      setEditedStatus(taskResponse.status);
       setEditedDueDate(
         taskResponse.dueDate
           ? new Date(taskResponse.dueDate).toISOString().split("T")[0]
@@ -130,7 +143,7 @@ const TaskDetails: React.FC = (): ReactNode => {
         title: editedTitle,
         description: editedDescription,
         priority: Number(editedPriority),
-        completed: editedCompleted,
+        status: editedStatus,
         dueDate: editedDueDate || null,
       });
       setTask(response);
@@ -322,13 +335,13 @@ const TaskDetails: React.FC = (): ReactNode => {
               <div>
                 <p className="text-gray-600 text-sm">Priority:</p>
                 <p className="text-lg font-medium text-gray-900">
-                  {task.priority}
+                  {getPriorityLabel(task.priority)}
                 </p>
               </div>
               <div>
-                <p className="text-gray-600 text-sm">Completed:</p>
+                <p className="text-gray-600 text-sm">Status:</p>
                 <p className="text-lg font-medium text-gray-900">
-                  {task.completed ? "Yes" : "No"}
+                  {task.status.replace('_', ' ')}
                 </p>
               </div>
               <div>
@@ -395,21 +408,18 @@ const TaskDetails: React.FC = (): ReactNode => {
                 <option value={TASK_PRIORITY_LOW}>Low</option>
               </select>
             </FormGroup>
-            <div className="mb-4 flex items-center">
-              <input
-                type="checkbox"
-                id="completed"
-                checked={editedCompleted}
-                onChange={(e) => setEditedCompleted(e.target.checked)}
-                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <label
-                htmlFor="completed"
-                className="ml-2 block text-sm text-gray-900"
+            <FormGroup label="Status" htmlFor="status">
+              <select
+                id="status"
+                value={editedStatus}
+                onChange={(e) => setEditedStatus(e.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE')}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
-                Completed
-              </label>
-            </div>
+                <option value="TODO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+              </select>
+            </FormGroup>
             <Input
               label="Due Date"
               type="date"

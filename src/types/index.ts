@@ -21,16 +21,16 @@ export interface Project {
 }
 
 export interface Task {
-  id: string;
-  project?: Project;
-  title: string;
-  description?: string;
-  priority: number;
-  completed: boolean;
-  dueDate?: string;
-  assignedTo?: User;
-  createdAt: string;
-  updatedAt: string;
+   id: string;
+   project?: Project;
+   title: string;
+   description?: string;
+   priority: number;
+   status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+   dueDate?: string;
+   assignedTo?: User;
+   createdAt: string;
+   updatedAt: string;
 }
 
 export interface Comment {

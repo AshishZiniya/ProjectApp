@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Toaster from "@/components/ui/Toaster";
 import TopLoader from "@/components/ui/TopLoader";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TopLoader />
-        <Navbar />
-        <Suspense fallback={<TopLoader />}>
-          <main className="flex-grow mt-18">{children}</main>
-        </Suspense>
-        <Footer />
-        <Toaster />
+        <ErrorBoundary>
+          <TopLoader />
+          <Navbar />
+          <Suspense fallback={<TopLoader />}>
+            <main className="flex-grow mt-16">{children}</main>
+          </Suspense>
+          <Footer />
+          <Toaster />
+        </ErrorBoundary>
       </body>
     </html>
   );

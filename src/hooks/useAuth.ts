@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// hooks/useAuth.ts
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -7,6 +5,7 @@ import api from "@/lib/api";
 import type { AuthUser } from "@/types/auth";
 import type { UserRole } from "@/types";
 import useToast from "./useToast";
+import { getErrorMessage } from "@/utils";
 
 interface UseAuthReturn {
   user: AuthUser | null;
@@ -16,26 +15,6 @@ interface UseAuthReturn {
   logout: () => Promise<void>;
   register: (email: string, name: string, password: string, role?: UserRole) => Promise<void>;
   refresh: () => Promise<void>;
-}
-
-// Helper function to extract error message
-function getErrorMessage(error: unknown): string {
-  if (typeof error === "string") {
-    return error;
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  // Check for API error response structure
-  if (
-    typeof error === "object" &&
-    error !== null &&
-    "message" in error &&
-    typeof (error as any).message === "string"
-  ) {
-    return (error as any).message;
-  }
-  return "An unknown error occurred";
 }
 
 export function useAuth(): UseAuthReturn {
