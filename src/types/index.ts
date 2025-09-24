@@ -1,6 +1,6 @@
 // types/index.ts
 
-export type UserRole = "USER" | "ADMIN";
+export type UserRole = "USER" | "ADMIN" | "SUPERADMIN";
 
 export interface User {
   id: string;

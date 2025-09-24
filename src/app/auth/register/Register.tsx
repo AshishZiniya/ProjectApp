@@ -7,13 +7,11 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
-import type { UserRole } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState<UserRole>("USER");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{ email?: string; name?: string; password?: string }>({});
@@ -60,7 +58,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (!validateForm()) return;
     try {
-      await register(email, name, password, role);
+      await register(email, name, password);
       router.push("/auth/login");
     } catch {
       // Error is handled by useAuth
@@ -184,25 +182,6 @@ const Register: React.FC = () => {
               </div>
             )}
             {validationErrors.password && <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>}
-          </div>
-          <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-              Account Type
-            </label>
-            <div className="relative">
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value as UserRole)}
-                className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors appearance-none"
-              >
-                <option value="USER">👤 Regular User</option>
-                <option value="ADMIN">👑 Administrator</option>
-              </select>
-              <svg className="absolute right-3 top-3.5 h-5 w-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
           </div>
           <Button type="submit" loading={loading} className="w-full py-3 text-lg font-medium">
             Create Account

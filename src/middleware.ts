@@ -27,6 +27,7 @@ export const config = {
     "/projects/:path*",
     "/tasks/:path*",
     "/comments/:path*",
+    "/admin/:path*",
     "/auth/login",
     "/auth/register",
     "/auth/refresh",
