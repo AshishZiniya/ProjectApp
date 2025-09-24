@@ -103,9 +103,9 @@ const Login: React.FC = () => {
           </div>
           <div className="flex items-center justify-between">
             <div className="text-sm">
-              <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link href="/auth/forgot-password" className="text-blue-600 hover:text-blue-500 font-medium">
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
           <Button type="submit" loading={loading} className="w-full py-3 text-lg font-medium">

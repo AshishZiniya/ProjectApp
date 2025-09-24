@@ -91,7 +91,6 @@ async function fetchApi<TResponse, TBody = unknown>(
         }
       }
     } catch (err) {
-      console.error("Failed to refresh session:", err);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       throw err;
