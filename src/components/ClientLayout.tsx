@@ -20,7 +20,7 @@ export default function ClientLayout({
       <TopLoader />
       {!isAuthPage && <Navbar />}
       <Suspense fallback={<TopLoader />}>
-        <main className={`${!isAuthPage ? 'mt-16' : ''}`}>{children}</main>
+        <main className={`flex-1 ${!isAuthPage ? 'mt-16' : ''}`}>{children}</main>
       </Suspense>
       {!isAuthPage && <Footer />}
       <Toaster />
