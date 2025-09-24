@@ -20,7 +20,7 @@ export default function AddAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+    <div className="flex min-h-screen items-center justify-center">
       <AddAdmin />
     </div>
   );
