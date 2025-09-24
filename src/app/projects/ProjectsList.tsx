@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { Project, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
@@ -11,6 +12,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
+import { useAuth } from "@/hooks/useAuth";
 import { PROJECTS_PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 
@@ -24,6 +26,14 @@ const ProjectsList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const { showSuccess, showError } = useToast();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user && !loading) {
+      router.push("/auth/login");
+    }
+  }, [user, loading, router]);
 
   const fetchProjects = useCallback(async () => {
     setLoading(true);

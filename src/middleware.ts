@@ -3,31 +3,21 @@ import type { NextRequest } from "next/server";
 
 /**
  * Auth middleware
- * - JWT is validated by the backend. We only gate routes by cookie presence.
- * - If no accessToken: allow auth pages, block protected pages.
- * - If accessToken exists: block auth pages, allow others.
+ * - Since JWT is now handled by frontend, middleware only prevents access to auth pages when logged in.
+ * - Backend guards protect API routes.
  */
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const accessToken = request.cookies.get("accessToken")?.value;
 
   const isAuthRoute =
     pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register");
 
-  // Not logged in: only allow login/register
-  if (!accessToken) {
-    if (isAuthRoute) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
-
-  // Logged in: prevent access to login/register
+  // For auth routes, allow access (frontend will handle redirects if logged in)
   if (isAuthRoute) {
-    return NextResponse.redirect(new URL("/projects", request.url));
+    return NextResponse.next();
   }
 
-  // Logged in and not an auth route: allow
+  // For other routes, allow (backend will reject if not authenticated)
   return NextResponse.next();
 }
 
