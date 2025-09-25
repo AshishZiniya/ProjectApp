@@ -20,6 +20,8 @@ interface UseAuthReturn {
     role?: UserRole,
   ) => Promise<void>;
   refresh: () => Promise<void>;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
 }
 
 export function useAuth(): UseAuthReturn {
@@ -145,5 +147,7 @@ export function useAuth(): UseAuthReturn {
     logout,
     register,
     refresh: refreshTokens,
+    setLoading,
+    setError,
   };
 }

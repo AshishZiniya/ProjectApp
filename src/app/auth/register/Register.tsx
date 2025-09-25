@@ -21,7 +21,7 @@ const Register: React.FC = () => {
   }>({});
   const router = useRouter();
 
-  const { register, loading, error } = useAuth();
+  const { register, loading, error, setLoading, setError } = useAuth();
 
   const getPasswordStrength = (pwd: string) => {
     let strength = 0;
@@ -61,6 +61,10 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    setLoading(true);
+    setError(null);
+
     try {
       await register(email, name, password);
       router.push("/auth/login");

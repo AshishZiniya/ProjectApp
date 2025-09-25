@@ -5,19 +5,17 @@ import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
-import api from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 import useToast from "@/hooks/useToast";
-import { getErrorMessage } from "@/utils";
 
 const AddAdmin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
     name?: string;
   }>({});
+  const { register, loading, error } = useAuth();
   const { showSuccess } = useToast();
 
   const validateForm = () => {
@@ -39,22 +37,14 @@ const AddAdmin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-    setLoading(true);
-    setError(null);
+
     try {
-      await api.post("/auth/register", {
-        email,
-        name,
-        password: "Admin@123",
-        role: "ADMIN",
-      });
+      await register(email, name, "Admin@123", "ADMIN");
       showSuccess("Admin created successfully");
       setEmail("");
       setName("");
-      setLoading(false);
-    } catch (err: unknown) {
-      const msg = getErrorMessage(err);
-      setError(msg);
+    } catch {
+      // Error is handled by useAuth hook
     }
   };
 
