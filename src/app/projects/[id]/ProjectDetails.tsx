@@ -39,10 +39,9 @@ const ProjectDetails: React.FC = () => {
       setProject(response);
       setEditedName(response.name);
       setEditedDescription(response.description || "");
+      setLoading(false);
     } catch {
       showError("Failed to Fetch Project Data...!");
-    } finally {
-      setLoading(false);
     }
   }, [id]);
 

@@ -43,11 +43,10 @@ const AddAdmin: React.FC = () => {
       showSuccess("Admin created successfully");
       setEmail("");
       setName("");
+      setLoading(false);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
-    } finally {
-      setLoading(false);
     }
   };
 

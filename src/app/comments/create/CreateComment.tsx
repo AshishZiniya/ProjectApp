@@ -33,10 +33,9 @@ const CreateComment: React.FC<CreateCommentProps> = ({
       if (onCommentPosted) {
         onCommentPosted();
       }
+      setLoading(false);
     } catch {
       showError("Failed to Post Comment...!");
-    } finally {
-      setLoading(false);
     }
   };
 

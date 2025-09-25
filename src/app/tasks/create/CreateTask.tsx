@@ -46,10 +46,9 @@ const CreateTask: React.FC = () => {
           params: { limit: 100 },
         }); // Fetch all users for dropdown
         setUsers(response.data || []);
+        setUsersLoading(false);
       } catch {
         setUsersError("Failed to load assignees.");
-      } finally {
-        setUsersLoading(false);
       }
     };
     fetchUsers();
@@ -72,10 +71,9 @@ const CreateTask: React.FC = () => {
       await api.post("/tasks", dto);
       router.push(`/projects/${projectId}?refresh=true`);
       showSuccess("Task created successfully!");
+      setLoading(false);
     } catch {
       showError("Failed to Create task");
-    } finally {
-      setLoading(false);
     }
   };
 

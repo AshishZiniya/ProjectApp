@@ -93,13 +93,12 @@ const TaskDetails: React.FC = (): ReactNode => {
         `/comments/${id}/taskId`
       );
       setComments(commentsResponse);
+      setLoading(false);
+      setCommentsLoading(false);
     } catch {
       showError("Failed to fetch task or comments. Please try again.");
       setTask(null);
       setCommentsError("Failed to load comments.");
-    } finally {
-      setLoading(false);
-      setCommentsLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -149,11 +148,10 @@ const TaskDetails: React.FC = (): ReactNode => {
       setTask(response);
       setIsEditing(false);
       showSuccess("Task updated successfully!");
+      setUpdateLoading(false);
     } catch {
       showError("Failed to Update Task...!");
       setUpdateError("Failed to update task.");
-    } finally {
-      setUpdateLoading(false);
     }
   };
 
@@ -170,11 +168,10 @@ const TaskDetails: React.FC = (): ReactNode => {
       setNewCommentBody("");
       showSuccess("Comment added successfully!");
       // Socket.io will handle updating the comments list
+      setCommentsLoading(false);
     } catch {
       showError("Failed to Add Comment...!");
       setPostCommentError("Failed to post comment.");
-    } finally {
-      setPostCommentLoading(false);
     }
   };
 

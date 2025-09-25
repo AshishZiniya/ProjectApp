@@ -35,11 +35,10 @@ const UserDetails: React.FC = () => {
       setEditedName(response.name);
       setEditedEmail(response.email);
       setEditedRole(response.role);
+      setLoading(false);
     } catch {
       showError("Failed to fetch user details.");
       setError("Failed to load user details.");
-    } finally {
-      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -66,11 +65,10 @@ const UserDetails: React.FC = () => {
       setUser(response);
       setIsEditing(false);
       showSuccess("User updated successfully!");
+      setUpdateLoading(false);
     } catch {
       showError("Failed to update user.");
       setUpdateError("Failed to update user.");
-    } finally {
-      setUpdateLoading(false);
     }
   };
 

@@ -32,10 +32,9 @@ const CreateProject: React.FC = () => {
       console.log(response);
       router.push(`/projects/${response.id}`);
       showSuccess("Project created successfully!");
+      setLoading(false);
     } catch {
       showError("Failed to Create project...!");
-    } finally {
-      setLoading(false);
     }
   };
 

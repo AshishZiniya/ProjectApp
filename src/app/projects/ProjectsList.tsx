@@ -49,6 +49,7 @@ const ProjectsList: React.FC = () => {
       });
       setProjects(response.data);
       setTotalPages(response.pages);
+      setLoading(false);
     } catch {
       showError("Failed to Fetch Projects...!");
     } finally {

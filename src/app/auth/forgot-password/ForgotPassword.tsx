@@ -23,12 +23,11 @@ const ForgotPassword: React.FC = () => {
       await api.post("/auth/forgot-password", { email });
       setSuccess(true);
       showSuccess("Password reset email sent successfully!");
+      setLoading(false);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to send reset email";
       setError(msg);
       showError(msg);
-    } finally {
-      setLoading(false);
     }
   };
 

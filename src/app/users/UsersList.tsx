@@ -35,10 +35,9 @@ const UsersList: React.FC = () => {
       });
       setUsers(response.data);
       setTotalPages(response.pages); // Assuming response.pages holds total pages
+      setLoading(false);
     } catch {
       showError("Failed to fetch users.");
-    } finally {
-      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, q]);
@@ -62,10 +61,9 @@ const UsersList: React.FC = () => {
       showSuccess("User deleted successfully!");
       setShowDeleteModal(false);
       setUserToDelete(null);
+      setDeleting(false);
     } catch {
       showError("Failed to Delete User...!");
-    } finally {
-      setDeleting(false);
     }
   };
 

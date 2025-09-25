@@ -34,10 +34,9 @@ const TasksList: React.FC = () => {
       });
       setTasks(response.data);
       setTotalPages(response.pages);
+      setLoading(false);
     } catch {
       showError("Failed to fetch tasks.");
-    } finally {
-      setLoading(false);
     }
   }, [limit, page]);
 
@@ -60,10 +59,9 @@ const TasksList: React.FC = () => {
       showSuccess("Task deleted successfully!");
       setShowDeleteModal(false);
       setTaskToDelete(null);
+      setDeleting(false);
     } catch {
       showError("Failed to delete Task...!");
-    } finally {
-      setDeleting(false);
     }
   };
 

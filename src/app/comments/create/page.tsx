@@ -29,10 +29,9 @@ export default function CreateCommentPage() {
       await api.post(`/comments/${taskId}`, { body });
       showSuccess("Comment posted successfully!");
       setBody("");
+      setLoading(false);
     } catch {
       showError("Failed to Post Comment...!");
-    } finally {
-      setLoading(false);
     }
   };
 
