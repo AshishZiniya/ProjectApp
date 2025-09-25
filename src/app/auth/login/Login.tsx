@@ -19,7 +19,7 @@ const Login: React.FC = () => {
   }>({});
   const router = useRouter();
 
-  const { login, loading, error, user, setLoading, setError } = useAuth();
+  const { login, loading, error, user, setLoading } = useAuth();
 
   const validateForm = () => {
     const errors: { email?: string; password?: string } = {};
@@ -48,8 +48,6 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      setLoading(true);
-      setError(null);
       await login(email, password);
       setLoading(false);
       // Redirect is handled by useEffect when user state updates
