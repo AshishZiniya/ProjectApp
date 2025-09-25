@@ -67,6 +67,7 @@ const Register: React.FC = () => {
 
     try {
       await register(email, name, password);
+      setLoading(false);
       router.push("/auth/login");
     } catch {
       // Error is handled by useAuth

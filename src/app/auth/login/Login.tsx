@@ -52,6 +52,7 @@ const Login: React.FC = () => {
 
     try {
       await login(email, password);
+      setLoading(false);
       // Redirect is handled by useEffect when user state updates
     } catch {
       // Error is handled by useAuth
