@@ -40,6 +40,7 @@ export function useAuth(): UseAuthReturn {
       setLoading(false);
     } catch {
       setUser(null);
+      setLoading(false); // Set loading to false on error as well
       // Do not show error toast here, as it's expected if not logged in
     }
   }, []);
