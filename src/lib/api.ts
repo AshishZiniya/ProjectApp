@@ -1,5 +1,8 @@
 import { API_BASE_URL } from "@/constants";
 
+/**
+ * Supported parameter value types for API requests
+ */
 type ParamValue =
   | string
   | number
@@ -7,11 +10,31 @@ type ParamValue =
   | undefined
   | Array<string | number | boolean>;
 
+/**
+ * Extended fetch options with support for query parameters and typed body
+ */
 interface FetchOptions<TBody> extends Omit<RequestInit, "body"> {
   params?: Record<string, ParamValue>;
-  body?: TBody;
+  body?: TBody | undefined;
 }
 
+class ApiError extends Error {
+  public readonly status: number;
+  public readonly code?: string | undefined;
+
+  constructor(message: string, status: number, code?: string | undefined) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
+/**
+ * Builds a query string from parameters object
+ * @param params - Object containing query parameters
+ * @returns URL-encoded query string
+ */
 function buildQueryString(params?: Record<string, ParamValue>) {
   if (!params) return "";
   const pairs: string[] = [];
@@ -76,7 +99,7 @@ async function fetchApi<TResponse, TBody = unknown>(
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         ...headers,
       },
-      body: hasBody ? JSON.stringify(body) : undefined,
+      body: hasBody ? JSON.stringify(body) : null,
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
@@ -136,10 +159,18 @@ async function processResponse<TResponse, TBody>(
   if (!response.ok) {
     // Try to extract a meaningful error message
     let message = `HTTP error! status: ${response.status}`;
+    let code: string | undefined;
+
     try {
       const json = await parseJsonMaybe(response);
-      if (json && typeof json === "object" && "message" in json) {
-        message = (json as { message: string }).message || message;
+      if (json && typeof json === "object") {
+        const errorData = json as Record<string, unknown>;
+        if ("message" in errorData && typeof errorData.message === "string") {
+          message = errorData.message;
+        }
+        if ("code" in errorData && typeof errorData.code === "string") {
+          code = errorData.code;
+        }
       } else {
         const text = await response.text();
         if (text) message = text;
@@ -147,35 +178,73 @@ async function processResponse<TResponse, TBody>(
     } catch {
       // ignore parsing errors and fall back to default message
     }
-    throw new Error(message);
+
+    throw new ApiError(message, response.status, code);
   }
 
   const data = await parseJsonMaybe(response);
   return data as TResponse;
 }
 
+/**
+ * API client with methods for all HTTP verbs
+ * Automatically handles authentication tokens and token refresh
+ */
 const api = {
+  /**
+   * Perform GET request
+   * @param endpoint - API endpoint path
+   * @param options - Additional fetch options
+   * @returns Promise with typed response data
+   */
   get: <T>(endpoint: string, options?: FetchOptions<never>) =>
     fetchApi<T>(endpoint, { method: "GET", ...options }),
 
+  /**
+   * Perform POST request
+   * @param endpoint - API endpoint path
+   * @param body - Request body data
+   * @param options - Additional fetch options
+   * @returns Promise with typed response data
+   */
   post: <T, B = unknown>(
     endpoint: string,
     body?: B,
     options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "POST", body, ...options }),
 
+  /**
+   * Perform PUT request
+   * @param endpoint - API endpoint path
+   * @param body - Request body data
+   * @param options - Additional fetch options
+   * @returns Promise with typed response data
+   */
   put: <T, B = unknown>(
     endpoint: string,
     body?: B,
     options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "PUT", body, ...options }),
 
+  /**
+   * Perform PATCH request
+   * @param endpoint - API endpoint path
+   * @param body - Request body data
+   * @param options - Additional fetch options
+   * @returns Promise with typed response data
+   */
   patch: <T, B = unknown>(
     endpoint: string,
     body?: B,
     options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "PATCH", body, ...options }),
 
+  /**
+   * Perform DELETE request
+   * @param endpoint - API endpoint path
+   * @param options - Additional fetch options
+   * @returns Promise with typed response data
+   */
   delete: <T>(endpoint: string, options?: FetchOptions<never>) =>
     fetchApi<T>(endpoint, { method: "DELETE", ...options }),
 };

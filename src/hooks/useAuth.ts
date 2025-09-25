@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
 import type { AuthUser } from "@/types/auth";
 import type { UserRole } from "@/types";
@@ -28,21 +28,36 @@ export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const refreshPromiseRef = useRef<Promise<void> | null>(null);
 
   const { showError } = useToast();
 
   const refreshUser = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get<{ user: AuthUser }>("/auth/me");
-      setUser(response.user);
-      setLoading(false);
-    } catch {
-      setUser(null);
-      setLoading(false); // Set loading to false on error as well
-      // Do not show error toast here, as it's expected if not logged in
+    // Prevent duplicate requests
+    if (refreshPromiseRef.current) {
+      return refreshPromiseRef.current;
     }
+
+    const refreshPromise = (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await api.get<{ user: AuthUser }>("/auth/me");
+        setUser(response.user);
+      } catch (err) {
+        setUser(null);
+        // Only set error if it's not a 401 (unauthorized) which is expected when not logged in
+        if (err instanceof Error && !err.message.includes("401")) {
+          setError(err.message);
+        }
+      } finally {
+        setLoading(false);
+        refreshPromiseRef.current = null;
+      }
+    })();
+
+    refreshPromiseRef.current = refreshPromise;
+    return refreshPromise;
   }, []);
 
   const refreshTokens = useCallback(async () => {
