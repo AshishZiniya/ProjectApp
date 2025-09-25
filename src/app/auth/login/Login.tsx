@@ -47,10 +47,9 @@ const Login: React.FC = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setLoading(true);
-    setError(null);
-
     try {
+      setLoading(true);
+      setError(null);
       await login(email, password);
       setLoading(false);
       // Redirect is handled by useEffect when user state updates
