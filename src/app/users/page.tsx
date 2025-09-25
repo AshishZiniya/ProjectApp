@@ -3,19 +3,19 @@
 import { useEffect } from "react";
 import UsersList from "./UsersList";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthorization } from "@/hooks/useAuthorization";
 
 export default function UsersListPage() {
-  const { user, loading } = useAuth();
+  const { loading, canViewUsers } = useAuthorization();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user?.role !== "ADMIN" && user?.role !== "SUPERADMIN") {
+    if (!loading && !canViewUsers) {
       router.replace("/projects");
     }
-  }, [user, loading, router]);
+  }, [canViewUsers, loading, router]);
 
-  if (loading || (user?.role !== "ADMIN" && user?.role !== "SUPERADMIN")) {
+  if (loading || !canViewUsers) {
     return null;
   }
 

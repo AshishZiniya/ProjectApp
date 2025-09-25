@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import { useAuth } from "@/hooks/useAuth";
+import { useAuthorization } from "@/hooks/useAuthorization";
 import useToast from "@/hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +12,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 const Navbar: React.FC = () => {
   const router = useRouter();
   const { user, logout, loading: authLoading } = useAuth();
+  const { canViewUsers, canAddAdmin } = useAuthorization();
   const { showSuccess, showError } = useToast();
 
   const handleLogout = async () => {
@@ -39,7 +41,7 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
+          {canViewUsers && (
             <>
               <Link
                 href="/users"
@@ -47,7 +49,7 @@ const Navbar: React.FC = () => {
               >
                 Users
               </Link>
-              {user?.role === "SUPERADMIN" && (
+              {canAddAdmin && (
                 <Link
                   href="/admin/add-admin"
                   className="text-gray-700 hover:text-blue-600 transition-colors"

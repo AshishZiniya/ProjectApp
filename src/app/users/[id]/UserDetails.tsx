@@ -10,6 +10,7 @@ import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import FormGroup from "@/components/common/FormGroup";
+import { useAuthorization } from "@/hooks/useAuthorization";
 import useToast from "@/hooks/useToast";
 
 const UserDetails: React.FC = () => {
@@ -25,6 +26,7 @@ const UserDetails: React.FC = () => {
   const [updateError, setUpdateError] = useState<string | null>(null);
 
   const { showSuccess, showError } = useToast();
+  const { canManageUsers } = useAuthorization();
 
   const fetchUser = useCallback(async () => {
     setLoading(true);
@@ -58,7 +60,7 @@ const UserDetails: React.FC = () => {
         name: editedName,
         email: editedEmail,
       };
-      if (user?.role === "ADMIN" || user?.role === "SUPERADMIN") {
+      if (canManageUsers) {
         updateData.role = editedRole;
       }
       const response = await api.patch<User>(`/users/${id}`, updateData);
@@ -260,7 +262,7 @@ const UserDetails: React.FC = () => {
                   />
                 </div>
 
-                {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
+                {canManageUsers && (
                   <div className="mb-4">
                     <FormGroup label="User Role" htmlFor="role">
                       <select
