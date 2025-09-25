@@ -48,8 +48,8 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      await login(email, password);
       setLoading(false);
+      await login(email, password);
       // Redirect is handled by useEffect when user state updates
     } catch {
       // Error is handled by useAuth
