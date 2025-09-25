@@ -3,6 +3,7 @@
 
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -26,7 +27,7 @@ const CreateTask: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(2);
-  const [status, setStatus] = useState<'TODO' | 'IN_PROGRESS' | 'DONE'>('TODO');
+  const [status, setStatus] = useState<"TODO" | "IN_PROGRESS" | "DONE">("TODO");
   const [assigneeId, setAssigneeId] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -87,7 +88,9 @@ const CreateTask: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Create New Task
           </h2>
-          <p className="text-gray-600">Add a new task to your project and assign it to team members</p>
+          <p className="text-gray-600">
+            Add a new task to your project and assign it to team members
+          </p>
         </div>
         {error && <Alert type="error" message={error} className="mb-4" />}
         <form onSubmit={handleSubmit}>
@@ -113,7 +116,9 @@ const CreateTask: React.FC = () => {
             type="textarea"
             id="description"
             value={description}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setDescription(e.target.value)
+            }
           />
           <FormGroup label="Priority" htmlFor="priority">
             <select
@@ -131,7 +136,9 @@ const CreateTask: React.FC = () => {
             <select
               id="status"
               value={status}
-              onChange={(e) => setStatus(e.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE')}
+              onChange={(e) =>
+                setStatus(e.target.value as "TODO" | "IN_PROGRESS" | "DONE")
+              }
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
               <option value="TODO">To Do</option>
@@ -170,14 +177,12 @@ const CreateTask: React.FC = () => {
           <Button type="submit" loading={loading} className="w-full mt-4">
             Create Task
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => router.back()}
-            className="w-full mt-2"
+          <Link
+            href={`/projects/${projectId}`}
+            className="w-full mt-2 inline-block text-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
           >
             Cancel
-          </Button>
+          </Link>
         </form>
       </Card>
     </div>

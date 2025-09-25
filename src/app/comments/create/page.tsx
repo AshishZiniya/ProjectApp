@@ -1,7 +1,8 @@
 "use client";
 
 import React, { ChangeEvent, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -9,7 +10,6 @@ import api from "@/lib/api";
 import useToast from "@/hooks/useToast";
 
 export default function CreateCommentPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId") || "";
 
@@ -42,9 +42,7 @@ export default function CreateCommentPage() {
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-2xl">💬</span>
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Add Comment
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Add Comment</h2>
           <p className="text-gray-600">Share your thoughts on this task</p>
         </div>
         <form onSubmit={handleSubmit}>
@@ -61,14 +59,12 @@ export default function CreateCommentPage() {
           <Button type="submit" loading={loading} className="w-full mt-4">
             Post Comment
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => router.back()}
-            className="w-full mt-2"
+          <Link
+            href={`/tasks/${taskId}`}
+            className="w-full mt-2 inline-block text-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
           >
             Cancel
-          </Button>
+          </Link>
         </form>
       </Card>
     </div>

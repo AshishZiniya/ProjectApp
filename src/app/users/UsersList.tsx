@@ -97,7 +97,9 @@ const UsersList: React.FC = () => {
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           User Management
         </h1>
-        <p className="text-xl text-gray-600">Manage user accounts and permissions</p>
+        <p className="text-xl text-gray-600">
+          Manage user accounts and permissions
+        </p>
       </div>
 
       <div className="flex justify-between items-center mb-6">
@@ -129,7 +131,10 @@ const UsersList: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {users.map((user) => (
-              <Card key={user.id} className="flex flex-col justify-between hover:scale-105 transition-transform">
+              <Card
+                key={user.id}
+                className="flex flex-col justify-between hover:scale-105 transition-transform"
+              >
                 <div>
                   <div className="flex items-center mb-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-lg">
@@ -139,16 +144,30 @@ const UsersList: React.FC = () => {
                       <h3 className="text-xl font-semibold text-gray-800">
                         {user.name}
                       </h3>
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-                        user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
-                      }`}>
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
+                          user.role === "ADMIN"
+                            ? "bg-purple-100 text-purple-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
                         {user.role}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center text-gray-600 text-sm">
-                    <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <svg
+                      className="w-4 h-4 mr-2 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
                     </svg>
                     {user.email}
                   </div>

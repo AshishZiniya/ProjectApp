@@ -8,7 +8,7 @@ import useToast from "@/hooks/useToast";
 
 export default function RefreshPage() {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
+    "loading",
   );
   const [message, setMessage] = useState("");
 

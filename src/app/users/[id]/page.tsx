@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
-export default function UserDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+export default function UserDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
@@ -19,14 +23,22 @@ export default function UserDetailsPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     if (!loading && userId && user) {
       const isOwnProfile = user.id === userId;
-      const isAdminOrSuper = user.role === "ADMIN" || user.role === "SUPERADMIN";
+      const isAdminOrSuper =
+        user.role === "ADMIN" || user.role === "SUPERADMIN";
       if (!isOwnProfile && !isAdminOrSuper) {
         router.replace("/projects");
       }
     }
   }, [user, loading, router, userId]);
 
-  if (loading || !userId || (user && user.id !== userId && user.role !== "ADMIN" && user.role !== "SUPERADMIN")) {
+  if (
+    loading ||
+    !userId ||
+    (user &&
+      user.id !== userId &&
+      user.role !== "ADMIN" &&
+      user.role !== "SUPERADMIN")
+  ) {
     return null;
   }
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import Button from './Button';
+import React from "react";
+import Button from "./Button";
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface ModalProps {
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
-  confirmVariant?: 'primary' | 'secondary' | 'danger';
+  confirmVariant?: "primary" | "secondary" | "danger";
   loading?: boolean;
 }
 
@@ -18,10 +18,10 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText = "Confirm",
+  cancelText = "Cancel",
   onConfirm,
-  confirmVariant = 'danger',
+  confirmVariant = "danger",
   loading = false,
 }) => {
   if (!isOpen) return null;
@@ -43,11 +43,7 @@ const Modal: React.FC<ModalProps> = ({
           <p className="text-gray-600">{message}</p>
         </div>
         <div className="flex justify-end space-x-3">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-          >
+          <Button variant="secondary" onClick={onClose} disabled={loading}>
             {cancelText}
           </Button>
           <Button
@@ -55,7 +51,7 @@ const Modal: React.FC<ModalProps> = ({
             onClick={onConfirm}
             disabled={loading}
           >
-            {loading ? 'Processing...' : confirmText}
+            {loading ? "Processing..." : confirmText}
           </Button>
         </div>
       </div>

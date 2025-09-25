@@ -13,14 +13,16 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isAuthPage = pathname.startsWith('/auth');
+  const isAuthPage = pathname.startsWith("/auth");
 
   return (
     <ErrorBoundary>
       <TopLoader />
       {!isAuthPage && <Navbar />}
       <Suspense fallback={<TopLoader />}>
-        <main className={`flex-1 ${!isAuthPage ? 'mt-16' : ''}`}>{children}</main>
+        <main className={`flex-1 ${!isAuthPage ? "mt-16" : ""}`}>
+          {children}
+        </main>
       </Suspense>
       {!isAuthPage && <Footer />}
       <Toaster />

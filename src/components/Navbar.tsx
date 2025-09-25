@@ -72,7 +72,10 @@ const Navbar: React.FC = () => {
 
           {isLoggedIn ? (
             <>
-              <Link href={`/users/${user?.id}`} className="flex text-gray-700 items-center gap-3 hover:text-blue-600 transition-colors cursor-pointer">
+              <Link
+                href={`/users/${user?.id}`}
+                className="flex text-gray-700 items-center gap-3 hover:text-blue-600 transition-colors cursor-pointer"
+              >
                 <FontAwesomeIcon icon={faUser} className="text-blue-600" />
                 <strong>{user?.name || user?.email}</strong>
               </Link>

@@ -3,6 +3,7 @@
 
 import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -48,7 +49,9 @@ const CreateProject: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Create New Project
           </h2>
-          <p className="text-gray-600">Start a new project and organize your tasks</p>
+          <p className="text-gray-600">
+            Start a new project and organize your tasks
+          </p>
         </div>
         {error && <Alert type="error" message={error} className="mb-4" />}
         <form onSubmit={handleSubmit}>
@@ -72,14 +75,12 @@ const CreateProject: React.FC = () => {
           <Button type="submit" loading={loading} className="w-full mt-4">
             Create Project
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => router.back()}
-            className="w-full mt-2"
+          <Link
+            href="/projects"
+            className="w-full mt-2 inline-block text-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
           >
             Cancel
-          </Button>
+          </Link>
         </form>
       </Card>
     </div>

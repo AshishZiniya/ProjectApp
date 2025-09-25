@@ -19,10 +19,14 @@ function buildQueryString(params?: Record<string, ParamValue>) {
     if (value === undefined) continue;
     if (Array.isArray(value)) {
       for (const v of value) {
-        pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(v))}`);
+        pairs.push(
+          `${encodeURIComponent(key)}=${encodeURIComponent(String(v))}`,
+        );
       }
     } else {
-      pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+      pairs.push(
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
+      );
     }
   }
   return pairs.length ? `?${pairs.join("&")}` : "";
@@ -51,7 +55,7 @@ async function parseJsonMaybe(res: Response) {
 async function fetchApi<TResponse, TBody = unknown>(
   endpoint: string,
   options: FetchOptions<TBody> = {},
-  internalRetry = false
+  internalRetry = false,
 ): Promise<TResponse> {
   const { params, body, headers, ...rest } = options;
 
@@ -59,7 +63,7 @@ async function fetchApi<TResponse, TBody = unknown>(
   const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
   const hasBody = body !== undefined;
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
@@ -69,7 +73,7 @@ async function fetchApi<TResponse, TBody = unknown>(
       ...rest,
       headers: {
         ...(hasBody ? { "Content-Type": "application/json" } : {}),
-        ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         ...headers,
       },
       body: hasBody ? JSON.stringify(body) : undefined,
@@ -79,8 +83,8 @@ async function fetchApi<TResponse, TBody = unknown>(
     return await processResponse(response, endpoint, options, internalRetry);
   } catch (error) {
     clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Request timed out');
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("Request timed out");
     }
     throw error;
   }
@@ -90,15 +94,22 @@ async function processResponse<TResponse, TBody>(
   response: Response,
   endpoint: string,
   options: FetchOptions<TBody>,
-  internalRetry: boolean
+  internalRetry: boolean,
 ): Promise<TResponse> {
   // Attempt one refresh-retry cycle on 401
-  if (response.status === 401 && endpoint !== "/auth/refresh" && !internalRetry) {
+  if (
+    response.status === 401 &&
+    endpoint !== "/auth/refresh" &&
+    !internalRetry
+  ) {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = localStorage.getItem("refreshToken");
       if (refreshToken) {
         const refreshController = new AbortController();
-        const refreshTimeoutId = setTimeout(() => refreshController.abort(), 10000);
+        const refreshTimeoutId = setTimeout(
+          () => refreshController.abort(),
+          10000,
+        );
         const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
           method: "POST",
           headers: {
@@ -110,14 +121,14 @@ async function processResponse<TResponse, TBody>(
         clearTimeout(refreshTimeoutId);
         if (refreshRes.ok) {
           const refreshData = await refreshRes.json();
-          localStorage.setItem('accessToken', refreshData.accessToken);
-          localStorage.setItem('refreshToken', refreshData.refreshToken);
+          localStorage.setItem("accessToken", refreshData.accessToken);
+          localStorage.setItem("refreshToken", refreshData.refreshToken);
           return fetchApi<TResponse, TBody>(endpoint, options, true);
         }
       }
     } catch (err) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       throw err;
     }
   }
@@ -150,19 +161,19 @@ const api = {
   post: <T, B = unknown>(
     endpoint: string,
     body?: B,
-    options?: FetchOptions<B>
+    options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "POST", body, ...options }),
 
   put: <T, B = unknown>(
     endpoint: string,
     body?: B,
-    options?: FetchOptions<B>
+    options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "PUT", body, ...options }),
 
   patch: <T, B = unknown>(
     endpoint: string,
     body?: B,
-    options?: FetchOptions<B>
+    options?: FetchOptions<B>,
   ) => fetchApi<T, B>(endpoint, { method: "PATCH", body, ...options }),
 
   delete: <T>(endpoint: string, options?: FetchOptions<never>) =>

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import api from "@/lib/api";
 import { User, UserRole } from "@/types";
 import Card from "@/components/ui/Card";
@@ -13,7 +14,6 @@ import useToast from "@/hooks/useToast";
 
 const UserDetails: React.FC = () => {
   const { id } = useParams();
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -119,156 +119,180 @@ const UserDetails: React.FC = () => {
         <Card className="shadow-2xl">
           <div className="text-center mb-8">
             <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <span className="text-white font-bold text-4xl">{user.name.charAt(0).toUpperCase()}</span>
+              <span className="text-white font-bold text-4xl">
+                {user.name.charAt(0).toUpperCase()}
+              </span>
             </div>
             <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               User Profile
             </h1>
             <p className="text-2xl text-gray-600 font-medium">{user.name}</p>
             <div className="mt-2">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                user.role === 'SUPERADMIN'
-                  ? 'bg-red-100 text-red-800'
-                  : user.role === 'ADMIN'
-                  ? 'bg-purple-100 text-purple-800'
-                  : 'bg-blue-100 text-blue-800'
-              }`}>
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                  user.role === "SUPERADMIN"
+                    ? "bg-red-100 text-red-800"
+                    : user.role === "ADMIN"
+                      ? "bg-purple-100 text-purple-800"
+                      : "bg-blue-100 text-blue-800"
+                }`}
+              >
                 {user.role}
               </span>
             </div>
           </div>
 
-        {updateError && (
-          <Alert type="error" message={updateError} className="mb-4" />
-        )}
+          {updateError && (
+            <Alert type="error" message={updateError} className="mb-4" />
+          )}
 
-        {!isEditing ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-blue-600 font-bold">#</span>
+          {!isEditing ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-blue-600 font-bold">#</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      User ID
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800">User ID</h3>
+                  <p className="text-gray-600 font-mono text-sm">{user.id}</p>
                 </div>
-                <p className="text-gray-600 font-mono text-sm">{user.id}</p>
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-green-600 font-bold">@</span>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-green-600 font-bold">@</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Email
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800">Email</h3>
+                  <p className="text-gray-600">{user.email}</p>
                 </div>
-                <p className="text-gray-600">{user.email}</p>
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-purple-600 font-bold">👤</span>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-purple-600 font-bold">👤</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Role
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800">Role</h3>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      user.role === "SUPERADMIN"
+                        ? "bg-red-100 text-red-800"
+                        : user.role === "ADMIN"
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {user.role}
+                  </span>
                 </div>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  user.role === 'SUPERADMIN'
-                    ? 'bg-red-100 text-red-800'
-                    : user.role === 'ADMIN'
-                    ? 'bg-purple-100 text-purple-800'
-                    : 'bg-blue-100 text-blue-800'
-                }`}>
-                  {user.role}
-                </span>
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-orange-600 font-bold">📅</span>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-orange-600 font-bold">📅</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Member Since
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800">Member Since</h3>
-                </div>
-                <p className="text-gray-600 text-sm">
-                  {new Date(user.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-200 pt-6">
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-500">
-                  Last updated: {new Date(user.updatedAt).toLocaleString()}
-                </div>
-                <div className="flex space-x-3">
-                  <Button variant="secondary" onClick={() => router.back()}>
-                    Back to List
-                  </Button>
-                  <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                  <p className="text-gray-600 text-sm">
+                    {new Date(user.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
                 </div>
               </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="bg-blue-50 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-blue-600 font-bold">✏️</span>
-                </div>
-                Edit Profile Information
-              </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <Input
-                  label="Full Name"
-                  type="text"
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  placeholder="Enter your full name"
-                />
-                <Input
-                  label="Email Address"
-                  type="email"
-                  value={editedEmail}
-                  onChange={(e) => setEditedEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                />
-              </div>
-
-              {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
-                <div className="mb-4">
-                  <FormGroup label="User Role" htmlFor="role">
-                    <select
-                      id="role"
-                      value={editedRole}
-                      onChange={(e) => setEditedRole(e.target.value as UserRole)}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              <div className="border-t border-gray-200 pt-6">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-gray-500">
+                    Last updated: {new Date(user.updatedAt).toLocaleString()}
+                  </div>
+                  <div className="flex space-x-3">
+                    <Link
+                      href="/users"
+                      className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
                     >
-                      <option value="USER">USER</option>
-                      <option value="ADMIN">ADMIN</option>
-                      <option value="SUPERADMIN">SUPERADMIN</option>
-                    </select>
-                  </FormGroup>
+                      Back to List
+                    </Link>
+                    <Button onClick={() => setIsEditing(true)}>
+                      Edit Profile
+                    </Button>
+                  </div>
                 </div>
-              )}
-
-              <div className="flex justify-end space-x-3 pt-4 border-t border-blue-200">
-                <Button variant="secondary" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleUpdate} loading={updateLoading}>
-                  Save Changes
-                </Button>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          ) : (
+            <>
+              <div className="bg-blue-50 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-blue-600 font-bold">✏️</span>
+                  </div>
+                  Edit Profile Information
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <Input
+                    label="Full Name"
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                    placeholder="Enter your full name"
+                  />
+                  <Input
+                    label="Email Address"
+                    type="email"
+                    value={editedEmail}
+                    onChange={(e) => setEditedEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                  />
+                </div>
+
+                {(user?.role === "ADMIN" || user?.role === "SUPERADMIN") && (
+                  <div className="mb-4">
+                    <FormGroup label="User Role" htmlFor="role">
+                      <select
+                        id="role"
+                        value={editedRole}
+                        onChange={(e) =>
+                          setEditedRole(e.target.value as UserRole)
+                        }
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      >
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="SUPERADMIN">SUPERADMIN</option>
+                      </select>
+                    </FormGroup>
+                  </div>
+                )}
+
+                <div className="flex justify-end space-x-3 pt-4 border-t border-blue-200">
+                  <Button
+                    variant="secondary"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handleUpdate} loading={updateLoading}>
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
         </Card>
       </div>
     </div>

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import api from '@/lib/api';
-import type { AuthUser } from '@/types/auth';
-import type { UserRole } from '@/types';
-import useToast from './useToast';
-import { getErrorMessage } from '@/utils';
+import { useState, useEffect, useCallback } from "react";
+import api from "@/lib/api";
+import type { AuthUser } from "@/types/auth";
+import type { UserRole } from "@/types";
+import useToast from "./useToast";
+import { getErrorMessage } from "@/utils";
 
 interface UseAuthReturn {
   user: AuthUser | null;
@@ -17,7 +17,7 @@ interface UseAuthReturn {
     email: string,
     name: string,
     password: string,
-    role?: UserRole
+    role?: UserRole,
   ) => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -33,7 +33,7 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<{ user: AuthUser }>('/auth/me');
+      const response = await api.get<{ user: AuthUser }>("/auth/me");
       setUser(response.user);
       setLoading(false);
     } catch {
@@ -43,7 +43,7 @@ export function useAuth(): UseAuthReturn {
   }, []);
 
   const refreshTokens = useCallback(async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) {
       setUser(null);
       return;
@@ -53,19 +53,19 @@ export function useAuth(): UseAuthReturn {
         accessToken: string;
         refreshToken: string;
         user: AuthUser;
-      }>('/auth/refresh', { refreshToken });
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      }>("/auth/refresh", { refreshToken });
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       setUser(response.user);
     } catch {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       setUser(null);
     }
   }, []);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       refreshUser();
     } else {
@@ -81,9 +81,9 @@ export function useAuth(): UseAuthReturn {
         accessToken: string;
         refreshToken: string;
         user: AuthUser;
-      }>('/auth/login', { email, password });
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      }>("/auth/login", { email, password });
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       setUser(response.user);
       setLoading(false);
     } catch (err: unknown) {
@@ -98,7 +98,7 @@ export function useAuth(): UseAuthReturn {
     email: string,
     name: string,
     password: string,
-    role?: UserRole
+    role?: UserRole,
   ) => {
     setLoading(true);
     setError(null);
@@ -107,9 +107,9 @@ export function useAuth(): UseAuthReturn {
         accessToken: string;
         refreshToken: string;
         user: AuthUser;
-      }>('/auth/register', { email, name, password, role });
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      }>("/auth/register", { email, name, password, role });
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       setUser(response.user);
       setLoading(false);
     } catch (err: unknown) {
@@ -124,9 +124,9 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
-      await api.post('/auth/logout');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      await api.post("/auth/logout");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       setUser(null);
       setLoading(false);
     } catch (err: unknown) {
