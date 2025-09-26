@@ -38,9 +38,7 @@ export default function CommentsLayout({ children }: CommentsLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Comments | Task Manager",
     template: "%s | Comments | Task Manager",
   },
-  description: "View and manage comments across all tasks and projects. Collaborate effectively with your team through contextual discussions.",
+  description:
+    "View and manage comments across all tasks and projects. Collaborate effectively with your team through contextual discussions.",
   keywords: [
     "comments",
     "collaboration",
@@ -75,7 +74,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/comments",
   },

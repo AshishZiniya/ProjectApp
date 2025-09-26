@@ -38,9 +38,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Authentication | Task Manager",
     template: "%s | Auth | Task Manager",
   },
-  description: "Secure authentication system for Task Manager. Login, register, and manage your account with confidence.",
+  description:
+    "Secure authentication system for Task Manager. Login, register, and manage your account with confidence.",
   keywords: [
     "login",
     "register",
@@ -76,7 +75,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/auth/login",
   },
@@ -85,7 +86,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/auth/login",
     title: "Authentication | Task Manager",
-    description: "Secure authentication system for Task Manager. Login, register, and manage your account.",
+    description:
+      "Secure authentication system for Task Manager. Login, register, and manage your account.",
     siteName: "Task Manager",
     images: [
       {

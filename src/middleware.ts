@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { hasPermission } from '@/utils/auth';
-import type { UserRole } from '@/types';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { hasPermission } from "@/utils/auth";
+import type { UserRole } from "@/types";
 
 /**
  * Enhanced auth middleware with authorization
@@ -16,23 +16,28 @@ export async function middleware(request: NextRequest) {
 
   // Define route categories for better maintainability
   const isAuthRoute =
-    pathname.startsWith('/auth/login') ||
-    pathname.startsWith('/auth/register') ||
-    pathname.startsWith('/auth/forgot-password') ||
-    pathname.startsWith('/auth/reset-password');
+    pathname.startsWith("/auth/login") ||
+    pathname.startsWith("/auth/register") ||
+    pathname.startsWith("/auth/forgot-password") ||
+    pathname.startsWith("/auth/reset-password");
 
   // All routes except auth routes are protected
   const isProtectedRoute = !isAuthRoute;
 
-  const isAdminRoute = pathname.startsWith('/admin');
-  const isUsersRoute = pathname.startsWith('/users');
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isUsersRoute = pathname.startsWith("/users");
 
   // Get NextAuth session token with error handling and secret validation
-  let user: { id: string; email?: string | null; name?: string | null; role?: UserRole } | null = null;
+  let user: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    role?: UserRole;
+  } | null = null;
   try {
     const secret = process.env.NEXTAUTH_SECRET;
     if (!secret) {
-      console.error('NEXTAUTH_SECRET is not defined');
+      console.error("NEXTAUTH_SECRET is not defined");
     } else {
       const token = await getToken({
         req: request,
@@ -50,17 +55,17 @@ export async function middleware(request: NextRequest) {
     }
   } catch (error) {
     // Log error but continue with user = null for security
-    console.error('Middleware session check failed:', error);
+    console.error("Middleware session check failed:", error);
   }
 
   // If user is logged in and trying to access auth pages, redirect to projects
   if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/projects', request.url));
+    return NextResponse.redirect(new URL("/projects", request.url));
   }
 
   // If user is not logged in and trying to access protected routes, redirect to login
   if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // For admin routes, check permissions
@@ -69,7 +74,10 @@ export async function middleware(request: NextRequest) {
     if (!hasAdminPermission) {
       const projectsUrl = new URL("/projects", request.url);
       projectsUrl.searchParams.set("error", "access_denied");
-      projectsUrl.searchParams.set("message", "You don't have permission to access admin features.");
+      projectsUrl.searchParams.set(
+        "message",
+        "You don't have permission to access admin features.",
+      );
       return NextResponse.redirect(projectsUrl);
     }
   }
@@ -80,7 +88,10 @@ export async function middleware(request: NextRequest) {
     if (!hasUsersPermission) {
       const projectsUrl = new URL("/projects", request.url);
       projectsUrl.searchParams.set("error", "access_denied");
-      projectsUrl.searchParams.set("message", "You don't have permission to access user management features.");
+      projectsUrl.searchParams.set(
+        "message",
+        "You don't have permission to access user management features.",
+      );
       return NextResponse.redirect(projectsUrl);
     }
   }
@@ -99,6 +110,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public files with extensions
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)",
   ],
 };

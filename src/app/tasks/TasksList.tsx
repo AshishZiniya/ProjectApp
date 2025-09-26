@@ -9,10 +9,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
-import {
-  DEFAULT_PAGE_LIMIT,
-  PAGE_LIMIT_OPTIONS,
-} from "@/constants";
+import { DEFAULT_PAGE_LIMIT, PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import SkeletonCard from "@/components/ui/SkeletonCard";
@@ -71,26 +68,24 @@ const TasksList: React.FC = () => {
     setTaskToDelete(null);
   };
 
-  const TaskCardSkeleton = () => (
-    <SkeletonCard variant="task" />
-  );
+  const TaskCardSkeleton = () => <SkeletonCard variant="task" />;
 
   return (
     <div
       className="container mx-auto p-6"
       style={{
-        contain: 'layout style paint',
-        containIntrinsicSize: 'auto 100vh',
-        willChange: 'auto',
-        minHeight: '100vh'
+        contain: "layout style paint",
+        containIntrinsicSize: "auto 100vh",
+        willChange: "auto",
+        minHeight: "100vh",
       }}
     >
       <div
         className="text-center mb-12"
         style={{
-          minHeight: '120px',
-          contain: 'layout style',
-          containIntrinsicSize: 'auto 120px'
+          minHeight: "120px",
+          contain: "layout style",
+          containIntrinsicSize: "auto 120px",
         }}
       >
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -104,9 +99,9 @@ const TasksList: React.FC = () => {
       <div
         className="flex justify-end items-center mb-6"
         style={{
-          minHeight: '40px',
-          contain: 'layout style',
-          containIntrinsicSize: 'auto 40px'
+          minHeight: "40px",
+          contain: "layout style",
+          containIntrinsicSize: "auto 40px",
         }}
       >
         <Link href="/tasks/create" passHref>
@@ -118,9 +113,9 @@ const TasksList: React.FC = () => {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           style={{
-            contain: 'layout style',
-            containIntrinsicSize: 'auto 600px',
-            minHeight: '400px'
+            contain: "layout style",
+            containIntrinsicSize: "auto 600px",
+            minHeight: "400px",
           }}
         >
           {[...Array(limit)].map((_, index) => (
@@ -136,9 +131,9 @@ const TasksList: React.FC = () => {
           <div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             style={{
-              contain: 'layout style',
-              containIntrinsicSize: 'auto 600px',
-              minHeight: '400px'
+              contain: "layout style",
+              containIntrinsicSize: "auto 600px",
+              minHeight: "400px",
             }}
           >
             {tasks.map((task) => (
@@ -146,10 +141,10 @@ const TasksList: React.FC = () => {
                 key={task.id}
                 className="flex flex-col justify-between transition-transform"
                 style={{
-                  minHeight: '280px',
-                  contain: 'layout style paint',
-                  containIntrinsicSize: 'auto 280px',
-                  willChange: 'auto'
+                  minHeight: "280px",
+                  contain: "layout style paint",
+                  containIntrinsicSize: "auto 280px",
+                  willChange: "auto",
                 }}
               >
                 <div>
@@ -169,12 +164,28 @@ const TasksList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <h3
+                      className="text-xl font-semibold text-gray-800"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
                       {task.title}
                     </h3>
                   </div>
                   {task.description && (
-                    <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <p
+                      className="text-gray-600 text-sm mb-3"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
                       {task.description}
                     </p>
                   )}

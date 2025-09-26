@@ -18,9 +18,7 @@ import Input from "@/components/ui/Input";
 import CommentItem from "@/app/comments/CommentItem";
 import useToast from "@/hooks/useToast";
 import { io } from "socket.io-client";
-import {
-  TASK_PRIORITY,
-} from "@/constants";
+import { TASK_PRIORITY } from "@/constants";
 import FormGroup from "@/components/common/FormGroup";
 
 const getPriorityLabel = (priority: number) => {
@@ -88,9 +86,7 @@ const TaskDetails: React.FC = (): ReactNode => {
         : "";
       setEditedDueDate(dueDateString ?? "");
 
-      const commentsResponse = await api.get<Comment[]>(
-        `/comments/task/${id}`,
-      );
+      const commentsResponse = await api.get<Comment[]>(`/comments/task/${id}`);
       setComments(commentsResponse);
       setLoading(false);
       setCommentsLoading(false);

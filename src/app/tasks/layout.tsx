@@ -38,9 +38,7 @@ export default function TasksLayout({ children }: TasksLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Tasks Dashboard | Task Manager",
     template: "%s | Tasks | Task Manager",
   },
-  description: "Manage and track all your tasks efficiently. Create, assign, and monitor task progress with powerful collaboration tools.",
+  description:
+    "Manage and track all your tasks efficiently. Create, assign, and monitor task progress with powerful collaboration tools.",
   keywords: [
     "tasks",
     "dashboard",
@@ -76,7 +75,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/tasks",
   },
@@ -85,7 +86,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/tasks",
     title: "Tasks Dashboard | Task Manager",
-    description: "Manage and track all your tasks efficiently with powerful collaboration tools.",
+    description:
+      "Manage and track all your tasks efficiently with powerful collaboration tools.",
     siteName: "Task Manager",
     images: [
       {
@@ -99,7 +101,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Tasks Dashboard | Task Manager",
-    description: "Manage and track all your tasks efficiently with powerful collaboration tools.",
+    description:
+      "Manage and track all your tasks efficiently with powerful collaboration tools.",
     images: ["/og-tasks.png"],
     creator: "@taskmanager",
   },

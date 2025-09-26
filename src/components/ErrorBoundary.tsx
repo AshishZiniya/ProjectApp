@@ -61,10 +61,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({
         <Button onClick={resetError} variant="primary">
           Try Again
         </Button>
-        <Button
-          onClick={() => window.location.reload()}
-          variant="secondary"
-        >
+        <Button onClick={() => window.location.reload()} variant="secondary">
           Refresh Page
         </Button>
       </div>

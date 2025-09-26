@@ -38,9 +38,7 @@ export default function UsersLayout({ children }: UsersLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Users | Task Manager",
     template: "%s | Users | Task Manager",
   },
-  description: "Manage and view user profiles across your organization. Connect with team members and track user activity.",
+  description:
+    "Manage and view user profiles across your organization. Connect with team members and track user activity.",
   keywords: [
     "users",
     "profiles",
@@ -76,7 +75,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/users",
   },

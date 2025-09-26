@@ -19,7 +19,10 @@ class ApiService {
     page?: number;
     limit?: number;
   }): Promise<PaginatedResponse<Project>> {
-    return api.get<PaginatedResponse<Project>>("/projects", params ? { params } : {});
+    return api.get<PaginatedResponse<Project>>(
+      "/projects",
+      params ? { params } : {},
+    );
   }
 
   static async getProject(id: string): Promise<Project> {
@@ -30,7 +33,10 @@ class ApiService {
     return api.post<Project>("/projects", data);
   }
 
-  static async updateProject(id: string, data: Partial<ProjectFormData>): Promise<Project> {
+  static async updateProject(
+    id: string,
+    data: Partial<ProjectFormData>,
+  ): Promise<Project> {
     return api.patch<Project>(`/projects/${id}`, data);
   }
 
@@ -46,7 +52,10 @@ class ApiService {
     status?: string;
     priority?: number;
   }): Promise<PaginatedResponse<Task>> {
-    return api.get<PaginatedResponse<Task>>("/tasks/all", params ? { params } : {});
+    return api.get<PaginatedResponse<Task>>(
+      "/tasks/all",
+      params ? { params } : {},
+    );
   }
 
   static async getTask(id: string): Promise<Task> {
@@ -57,7 +66,8 @@ class ApiService {
     // Transform assignedToId to assigneeId for backend compatibility
     const { assignedToId, priority, ...taskData } = data;
     // Transform string priority to numeric priority for backend
-    const numericPriority = priority === 'HIGH' ? 1 : priority === 'MEDIUM' ? 2 : 3;
+    const numericPriority =
+      priority === "HIGH" ? 1 : priority === "MEDIUM" ? 2 : 3;
     return api.post<Task>("/tasks", {
       ...taskData,
       assigneeId: assignedToId,
@@ -65,13 +75,18 @@ class ApiService {
     });
   }
 
-  static async updateTask(id: string, data: Partial<TaskFormData>): Promise<Task> {
+  static async updateTask(
+    id: string,
+    data: Partial<TaskFormData>,
+  ): Promise<Task> {
     // Transform priority if present
     const { priority, ...taskData } = data;
-    const updateData = priority ? {
-      ...taskData,
-      priority: priority === 'HIGH' ? 1 : priority === 'MEDIUM' ? 2 : 3,
-    } : taskData;
+    const updateData = priority
+      ? {
+          ...taskData,
+          priority: priority === "HIGH" ? 1 : priority === "MEDIUM" ? 2 : 3,
+        }
+      : taskData;
     return api.patch<Task>(`/tasks/${id}`, updateData);
   }
 
@@ -96,13 +111,16 @@ class ApiService {
     return api.post<User>("/auth/register", data);
   }
 
-  static async updateUser(id: string, data: Partial<UserFormData>): Promise<User> {
+  static async updateUser(
+    id: string,
+    data: Partial<UserFormData>,
+  ): Promise<User> {
     return api.patch<User>(`/users/${id}`, data);
   }
 
   static async deleteUser(id: string): Promise<void> {
-   return api.delete<void>(`/users/${id}`);
- }
+    return api.delete<void>(`/users/${id}`);
+  }
 
   // Comment operations
   static async getComments(taskId: string): Promise<Comment[]> {
@@ -134,7 +152,10 @@ class ApiService {
     return api.post("/auth/forgot-password", { email });
   }
 
-  static async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+  static async resetPassword(
+    token: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
     return api.post("/auth/reset-password", { token, newPassword });
   }
 

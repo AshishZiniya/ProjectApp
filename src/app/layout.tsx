@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
-const inter = Inter({ subsets: ["latin"], display: 'swap' });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -31,7 +32,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/",
   },
@@ -40,7 +43,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     title: "Task Manager - Project Management Made Simple",
-    description: "A comprehensive project management application. Manage projects, tasks, users, and collaborate with your team efficiently.",
+    description:
+      "A comprehensive project management application. Manage projects, tasks, users, and collaborate with your team efficiently.",
     siteName: "Task Manager",
     images: [
       {
@@ -54,7 +58,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Task Manager - Project Management Made Simple",
-    description: "A comprehensive project management application. Manage projects, tasks, users, and collaborate with your team efficiently.",
+    description:
+      "A comprehensive project management application. Manage projects, tasks, users, and collaborate with your team efficiently.",
     images: ["/og-homepage.png"],
     creator: "@taskmanager",
   },
@@ -86,10 +91,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <head>
         {/* Preconnect to external domains for faster resource loading */}
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
@@ -101,8 +103,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
       <body className="flex flex-col min-h-screen antialiased pt-20">
-        <div style={{ contain: 'layout style paint' }}>
+        <div style={{ contain: "layout style paint" }}>
           <SpeedInsights />
+          <Analytics />
           <ClientLayout>{children}</ClientLayout>
         </div>
       </body>

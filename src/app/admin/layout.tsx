@@ -38,9 +38,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Admin Dashboard | Task Manager",
     template: "%s | Admin | Task Manager",
   },
-  description: "Administrative dashboard for managing users, projects, and system settings. Access powerful tools for platform administration.",
+  description:
+    "Administrative dashboard for managing users, projects, and system settings. Access powerful tools for platform administration.",
   keywords: [
     "admin",
     "dashboard",
@@ -75,7 +74,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/admin",
   },
@@ -84,7 +85,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/admin",
     title: "Admin Dashboard | Task Manager",
-    description: "Administrative dashboard for managing users, projects, and system settings.",
+    description:
+      "Administrative dashboard for managing users, projects, and system settings.",
     siteName: "Task Manager",
     images: [
       {
@@ -98,7 +100,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Admin Dashboard | Task Manager",
-    description: "Administrative dashboard for managing users, projects, and system settings.",
+    description:
+      "Administrative dashboard for managing users, projects, and system settings.",
     images: ["/og-admin.png"],
     creator: "@taskmanager",
   },

@@ -38,9 +38,7 @@ export default function ProjectsLayout({ children }: ProjectsLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main content area */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
@@ -57,7 +55,8 @@ export const metadata: Metadata = {
     default: "Projects Dashboard | Task Manager",
     template: "%s | Projects | Task Manager",
   },
-  description: "Manage and track all your projects in one comprehensive dashboard. Create, edit, and monitor project progress with ease.",
+  description:
+    "Manage and track all your projects in one comprehensive dashboard. Create, edit, and monitor project progress with ease.",
   keywords: [
     "projects",
     "dashboard",
@@ -75,7 +74,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   alternates: {
     canonical: "/projects",
   },
@@ -84,7 +85,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/projects",
     title: "Projects Dashboard | Task Manager",
-    description: "Manage and track all your projects in one comprehensive dashboard. Create, edit, and monitor project progress with ease.",
+    description:
+      "Manage and track all your projects in one comprehensive dashboard. Create, edit, and monitor project progress with ease.",
     siteName: "Task Manager",
     images: [
       {
@@ -98,7 +100,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Projects Dashboard | Task Manager",
-    description: "Manage and track all your projects in one comprehensive dashboard.",
+    description:
+      "Manage and track all your projects in one comprehensive dashboard.",
     images: ["/og-projects.png"],
     creator: "@taskmanager",
   },

@@ -1,8 +1,5 @@
 import { Toaster as HotToaster } from "react-hot-toast";
-import {
-  TOAST_DURATION,
-  TOAST_COLORS,
-} from "@/constants"; // Import constants
+import { TOAST_DURATION, TOAST_COLORS } from "@/constants"; // Import constants
 
 const Toaster: React.FC = () => {
   return (

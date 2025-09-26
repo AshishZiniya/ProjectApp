@@ -42,7 +42,6 @@ const ProjectsList: React.FC = () => {
   const projects = response?.data || [];
   const totalPages = response?.pages || 1;
 
-
   const handleDeleteClick = (project: Project) => {
     setProjectToDelete(project);
     setShowDeleteModal(true);
@@ -72,9 +71,7 @@ const ProjectsList: React.FC = () => {
     setProjectToDelete(null);
   };
 
-  const ProjectCardSkeleton = memo(() => (
-    <SkeletonCard variant="project" />
-  ));
+  const ProjectCardSkeleton = memo(() => <SkeletonCard variant="project" />);
   ProjectCardSkeleton.displayName = "ProjectCardSkeleton";
 
   // Memoized project card component for better performance
@@ -147,7 +144,7 @@ const ProjectsList: React.FC = () => {
   ProjectCard.displayName = "ProjectCard";
 
   return (
-    <div className="container mx-auto p-6" style={{ contain: 'layout' }}>
+    <div className="container mx-auto p-6" style={{ contain: "layout" }}>
       <div className="text-center mb-12">
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Project Dashboard
@@ -176,7 +173,10 @@ const ProjectsList: React.FC = () => {
       {error && <Alert type="error" message={error.message} className="mb-4" />}
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ contain: 'layout' }}>
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          style={{ contain: "layout" }}
+        >
           {[...Array(limit)].map((_, index) => (
             <ProjectCardSkeleton key={index} />
           ))}
@@ -240,7 +240,9 @@ const ProjectsList: React.FC = () => {
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                       />
                     </svg>
-                    <span className="font-medium truncate">{project.owner.name}</span>
+                    <span className="font-medium truncate">
+                      {project.owner.name}
+                    </span>
                   </div>
                 </div>
                 <div className="flex space-x-2 mt-auto">

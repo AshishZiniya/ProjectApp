@@ -21,57 +21,63 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
         name: { label: "Name", type: "text" },
         role: { label: "Role", type: "text" },
-        isRegister: { label: "Is Register", type: "text" }
+        isRegister: { label: "Is Register", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.error('Missing credentials');
+          console.error("Missing credentials");
           return null;
         }
 
         try {
           // Check if this is a registration request
-          const isRegister = credentials.isRegister === 'true';
+          const isRegister = credentials.isRegister === "true";
           const apiUrl = isRegister
             ? `${API_BASE_URL}/auth/register`
             : `${API_BASE_URL}/auth/login`;
 
-          console.log(`Attempting ${isRegister ? 'registration' : 'login'} to:`, apiUrl);
+          console.log(
+            `Attempting ${isRegister ? "registration" : "login"} to:`,
+            apiUrl,
+          );
 
           const response = await fetch(apiUrl, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+              "Content-Type": "application/json",
+              Accept: "application/json",
             },
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
-              ...(credentials.isRegister === 'true' && {
+              ...(credentials.isRegister === "true" && {
                 name: credentials.name,
-                role: credentials.role || 'USER',
+                role: credentials.role || "USER",
               }),
             }),
           });
 
-          console.log('Response status:', response.status);
-          console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+          console.log("Response status:", response.status);
+          console.log(
+            "Response headers:",
+            Object.fromEntries(response.headers.entries()),
+          );
 
           if (!response.ok) {
             let errorMessage = `HTTP ${response.status}`;
             try {
               const errorData = await response.json();
               errorMessage = errorData.message || errorMessage;
-              console.error('API error response:', errorData);
+              console.error("API error response:", errorData);
             } catch (parseError) {
-              console.error('Failed to parse error response:', parseError);
+              console.error("Failed to parse error response:", parseError);
             }
-            console.error('Authentication failed:', errorMessage);
+            console.error("Authentication failed:", errorMessage);
             return null;
           }
 
           const data = await response.json();
-          console.log('Login successful for user:', data.user?.email);
+          console.log("Login successful for user:", data.user?.email);
 
           return {
             id: data.user.id,
@@ -84,11 +90,11 @@ export const authOptions: NextAuthOptions = {
             refreshToken: data.refreshToken,
           } as const;
         } catch (error) {
-          console.error('Auth error:', error);
+          console.error("Auth error:", error);
           return null;
         }
-      }
-    })
+      },
+    }),
   ],
   session: {
     strategy: "jwt",
@@ -123,8 +129,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/auth/login',
-    signOut: '/auth/login',
+    signIn: "/auth/login",
+    signOut: "/auth/login",
   },
-  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development',
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
 };

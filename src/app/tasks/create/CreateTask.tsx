@@ -11,9 +11,7 @@ import Alert from "@/components/ui/Alert";
 import api from "@/lib/api";
 import { User } from "@/types";
 import useToast from "@/hooks/useToast";
-import {
-  TASK_PRIORITY,
-} from "@/constants";
+import { TASK_PRIORITY } from "@/constants";
 import FormGroup from "@/components/common/FormGroup";
 
 const CreateTask: React.FC = () => {

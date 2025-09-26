@@ -130,7 +130,12 @@ async function fetchApi<TResponse, TBody = unknown>(
   });
 
   // If no session and trying to access protected endpoint, throw error early
-  if (!session && endpoint !== "/auth/login" && endpoint !== "/auth/register" && endpoint !== "/auth/refresh") {
+  if (
+    !session &&
+    endpoint !== "/auth/login" &&
+    endpoint !== "/auth/register" &&
+    endpoint !== "/auth/refresh"
+  ) {
     console.warn("No active session found for protected endpoint:", endpoint);
   }
 
@@ -201,9 +206,7 @@ async function processResponse<TResponse, TBody>(
         if (refreshRes.ok) {
           // Note: Since we can't update session here, the refresh might not persist
           // NextAuth handles session updates, but for now, we'll retry the request
-          console.log(
-            "✅ Token refresh successful, retrying original request",
-          );
+          console.log("✅ Token refresh successful, retrying original request");
           return fetchApi<TResponse, TBody>(endpoint, options, true);
         } else {
           console.log("❌ Token refresh failed:", refreshRes.status);

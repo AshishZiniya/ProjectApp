@@ -39,7 +39,8 @@ export default function AuthGuard({
       // If authentication is not required (e.g., auth pages)
       if (user) {
         // If user is logged in, redirect to the stored path or projects page
-        const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/projects";
+        const redirectPath =
+          sessionStorage.getItem("redirectAfterLogin") || "/projects";
         sessionStorage.removeItem("redirectAfterLogin");
         router.push(redirectPath);
         return;

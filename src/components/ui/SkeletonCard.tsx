@@ -1,20 +1,20 @@
-import React from 'react';
-import Card from './Card';
+import React from "react";
+import Card from "./Card";
 
 interface SkeletonCardProps {
-  variant?: 'default' | 'project' | 'task' | 'user';
+  variant?: "default" | "project" | "task" | "user";
   className?: string;
   style?: React.CSSProperties;
 }
 
 const SkeletonCard: React.FC<SkeletonCardProps> = ({
-  variant = 'default',
-  className = '',
-  style = {}
+  variant = "default",
+  className = "",
+  style = {},
 }) => {
   const getSkeletonContent = () => {
     switch (variant) {
-      case 'project':
+      case "project":
         return (
           <>
             <div>
@@ -37,7 +37,7 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
           </>
         );
 
-      case 'task':
+      case "task":
         return (
           <>
             <div>
@@ -61,7 +61,7 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
           </>
         );
 
-      case 'user':
+      case "user":
         return (
           <>
             <div>
@@ -104,10 +104,10 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
 
   const getCardHeight = () => {
     switch (variant) {
-      case 'user':
-        return '200px';
+      case "user":
+        return "200px";
       default:
-        return '280px';
+        return "280px";
     }
   };
 
@@ -115,12 +115,12 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
     <Card
       className={`flex flex-col justify-between animate-pulse min-h-[${getCardHeight()}] min-w-[280px] max-w-[400px] w-full ${className}`}
       style={{
-        contain: 'layout style paint',
+        contain: "layout style paint",
         containIntrinsicSize: `auto ${getCardHeight()}`,
-        willChange: 'auto',
-        transform: 'translateZ(0)',
-        backfaceVisibility: 'hidden',
-        ...style
+        willChange: "auto",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+        ...style,
       }}
     >
       {getSkeletonContent()}

@@ -26,6 +26,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 **Important**: Generate a secure `NEXTAUTH_SECRET` using:
+
 ```bash
 openssl rand -base64 32
 ```
@@ -118,9 +119,9 @@ The existing authorization utilities in `src/utils/auth.ts` remain compatible:
 import { hasPermission, hasRoleLevel, canAccessResource } from "@/utils/auth";
 
 function checkPermissions(userRole: UserRole) {
-  const canViewUsers = hasPermission(userRole, 'VIEW_USERS');
-  const canManageUsers = hasPermission(userRole, 'MANAGE_USERS');
-  const isAdmin = hasRoleLevel(userRole, 'ADMIN');
+  const canViewUsers = hasPermission(userRole, "VIEW_USERS");
+  const canManageUsers = hasPermission(userRole, "MANAGE_USERS");
+  const isAdmin = hasRoleLevel(userRole, "ADMIN");
 
   return { canViewUsers, canManageUsers, isAdmin };
 }

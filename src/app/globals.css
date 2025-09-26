@@ -54,7 +54,10 @@ img[loading="lazy"] {
 }
 
 /* Logo and icon stability */
-.logo, .icon, [class*="logo"], [class*="icon"] {
+.logo,
+.icon,
+[class*="logo"],
+[class*="icon"] {
   contain: layout style size;
   contain-intrinsic-size: auto 40px;
   flex-shrink: 0;
@@ -80,7 +83,9 @@ img[loading="lazy"] {
 }
 
 /* Enhanced card containment for maximum layout stability */
-.card, [class*="card"], [class*="Card"] {
+.card,
+[class*="card"],
+[class*="Card"] {
   contain: layout style paint;
   contain-intrinsic-size: auto 200px;
   will-change: auto;
@@ -100,13 +105,19 @@ nav {
 }
 
 /* Additional CLS prevention for common elements */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   contain: layout style;
   line-height: 1.2;
 }
 
 /* List stability */
-ul, ol {
+ul,
+ol {
   contain: layout style;
   list-style-position: inside;
 }
@@ -118,7 +129,8 @@ table {
 }
 
 /* Modal and overlay stability */
-.modal, .overlay {
+.modal,
+.overlay {
   contain: layout style size;
   max-width: 90vw;
   max-height: 90vh;
