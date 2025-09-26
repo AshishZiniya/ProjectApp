@@ -1,7 +1,6 @@
 "use client";
 
 import React, { Suspense, lazy, memo } from "react";
-import { Metadata } from "next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const ProjectsList = lazy(() => import("./ProjectsList"));
@@ -52,18 +51,3 @@ const ProjectsPage: React.FC = memo(() => {
 ProjectsPage.displayName = "ProjectsPage";
 
 export default ProjectsPage;
-
-export const metadata: Metadata = {
-  title: "Projects Dashboard | Task Manager",
-  description: "Manage and track all your projects in one comprehensive dashboard. Create, edit, and monitor project progress with ease.",
-  keywords: ["projects", "dashboard", "project management", "task manager"],
-  openGraph: {
-    title: "Projects Dashboard | Task Manager",
-    description: "Manage and track all your projects in one comprehensive dashboard.",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
