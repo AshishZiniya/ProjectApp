@@ -72,7 +72,7 @@ const ProjectsList: React.FC = () => {
   };
 
   const ProjectCardSkeleton = memo(() => (
-    <Card className="flex flex-col justify-between animate-pulse min-h-[280px]">
+    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '280px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex-shrink-0"></div>
@@ -96,7 +96,7 @@ const ProjectsList: React.FC = () => {
 
   // Memoized project card component for better performance
   const ProjectCard = memo(({ project }: { project: Project }) => (
-    <Card className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg min-h-[280px]">
+    <Card className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg" style={{ minHeight: '280px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
@@ -116,12 +116,12 @@ const ProjectsList: React.FC = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
+          <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {project.name}
           </h3>
         </div>
         {project.description && (
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {project.description}
           </p>
         )}
@@ -211,7 +211,8 @@ const ProjectsList: React.FC = () => {
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="flex flex-col justify-between transition-shadow duration-200 min-h-[280px]"
+                className="flex flex-col justify-between transition-shadow duration-200"
+                style={{ minHeight: '280px', contain: 'layout style' }}
               >
                 <div>
                   <div className="flex items-center mb-3">
@@ -232,12 +233,12 @@ const ProjectsList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
+                    <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {project.name}
                     </h3>
                   </div>
                   {project.description && (
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {project.description}
                     </p>
                   )}

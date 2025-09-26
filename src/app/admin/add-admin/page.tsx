@@ -6,7 +6,7 @@ export default function AddAdminPage() {
   // Authentication and authorization are now handled entirely in middleware
   // This page will only be accessible to users with admin permissions
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center" style={{ contain: 'layout style' }}>
       <AddAdmin />
     </div>
   );

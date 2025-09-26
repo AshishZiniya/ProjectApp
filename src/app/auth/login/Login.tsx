@@ -58,8 +58,8 @@ const Login: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center p-6" style={{ contain: 'layout style' }}>
+      <Card className="w-full max-w-md shadow-2xl" style={{ contain: 'layout style' }}>
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <svg
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
           <p className="text-gray-600 text-lg">Sign in to your account</p>
         </div>
         {error && <Alert type="error" message={error} className="mb-4" />}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" style={{ contain: 'layout style' }}>
           <div>
             <label
               htmlFor="email"
@@ -101,6 +101,7 @@ const Login: React.FC = () => {
                   validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your email"
+                style={{ minHeight: '48px' }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -142,6 +143,7 @@ const Login: React.FC = () => {
                     : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
+                style={{ minHeight: '48px' }}
               />
               <button
                 type="button"
@@ -191,7 +193,7 @@ const Login: React.FC = () => {
               </p>
             )}
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between" style={{ minHeight: '40px' }}>
             <div className="flex items-center">
               <input
                 id="remember-me"
@@ -222,11 +224,12 @@ const Login: React.FC = () => {
             loading={loginLoading}
             className="w-full py-3 text-lg font-medium"
             disabled={loginLoading}
+            style={{ minHeight: '48px' }}
           >
             {loginLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
-        <p className="mt-6 text-center text-gray-600">
+        <p className="mt-6 text-center text-gray-600" style={{ minHeight: '20px' }}>
           Don&#39;t have an account?{" "}
           <Link href="/auth/register" className="text-blue-600 hover:underline">
             Register here

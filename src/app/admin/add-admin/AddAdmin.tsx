@@ -52,8 +52,8 @@ const AddAdmin: React.FC = () => {
   );
 
   return (
-    <div className="flex items-center justify-center p-6">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="flex items-center justify-center p-6" style={{ contain: 'layout style' }}>
+      <Card className="w-full max-w-md shadow-2xl" style={{ contain: 'layout style' }}>
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <svg
@@ -78,7 +78,7 @@ const AddAdmin: React.FC = () => {
           </p>
         </div>
         {error && <Alert type="error" message={error} className="mb-4" />}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" style={{ contain: 'layout style' }}>
           <div>
             <label
               htmlFor="email"
@@ -97,6 +97,7 @@ const AddAdmin: React.FC = () => {
                   validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter admin email"
+                style={{ minHeight: '48px' }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -136,6 +137,7 @@ const AddAdmin: React.FC = () => {
                   validationErrors.name ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter admin full name"
+                style={{ minHeight: '48px' }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -157,7 +159,7 @@ const AddAdmin: React.FC = () => {
               </p>
             )}
           </div>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4" style={{ minHeight: '60px' }}>
             <p className="text-sm text-yellow-800">
               <strong>Note:</strong> The admin password will be set to{" "}
               <code className="bg-yellow-100 px-1 rounded">Admin@123</code>
@@ -167,6 +169,7 @@ const AddAdmin: React.FC = () => {
             type="submit"
             loading={loading}
             className="w-full py-3 text-lg font-medium"
+            style={{ minHeight: '48px' }}
           >
             Create Admin
           </Button>

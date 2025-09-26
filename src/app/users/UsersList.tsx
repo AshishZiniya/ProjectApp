@@ -90,7 +90,7 @@ const UsersList: React.FC<UsersListProps> = ({
 
   // Loading skeleton component
   const UserCardSkeleton = () => (
-    <Card className="flex flex-col justify-between animate-pulse">
+    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '200px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-12 h-12 bg-gray-200 rounded-full mr-3"></div>
@@ -125,7 +125,7 @@ const UsersList: React.FC<UsersListProps> = ({
 
   // User card component
   const UserCard = ({ user }: { user: User }) => (
-    <Card className="flex flex-col justify-between hover:scale-105 transition-transform">
+    <Card className="flex flex-col justify-between hover:scale-105 transition-transform" style={{ minHeight: '200px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-lg">

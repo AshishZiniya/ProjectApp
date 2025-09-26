@@ -71,7 +71,7 @@ const TasksList: React.FC = () => {
   };
 
   const TaskCardSkeleton = () => (
-    <Card className="flex flex-col justify-between animate-pulse">
+    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '280px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
@@ -127,6 +127,7 @@ const TasksList: React.FC = () => {
               <Card
                 key={task.id}
                 className="flex flex-col justify-between hover:scale-105 transition-transform"
+                style={{ minHeight: '280px', contain: 'layout style' }}
               >
                 <div>
                   <div className="flex items-center mb-3">
@@ -145,12 +146,12 @@ const TasksList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800 truncate">
+                    <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {task.title}
                     </h3>
                   </div>
                   {task.description && (
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {task.description}
                     </p>
                   )}
