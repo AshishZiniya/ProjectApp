@@ -164,7 +164,7 @@ const ProjectsList: React.FC = () => {
   ProjectCard.displayName = "ProjectCard";
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" style={{ contain: 'layout' }}>
       <div className="text-center mb-12">
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Project Dashboard
@@ -193,7 +193,7 @@ const ProjectsList: React.FC = () => {
       {error && <Alert type="error" message={error.message} className="mb-4" />}
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ contain: 'layout' }}>
           {[...Array(limit)].map((_, index) => (
             <ProjectCardSkeleton key={index} />
           ))}
@@ -207,11 +207,11 @@ const ProjectsList: React.FC = () => {
             />
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ contain: 'layout' }}>
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg min-h-[280px]"
+                className="flex flex-col justify-between transition-shadow duration-200 min-h-[280px]"
               >
                 <div>
                   <div className="flex items-center mb-3">

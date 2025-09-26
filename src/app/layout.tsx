@@ -108,8 +108,10 @@ export default function RootLayout({
         }} />
       </head>
       <body className="flex flex-col min-h-screen antialiased">
-        <SpeedInsights />
-        <ClientLayout>{children}</ClientLayout>
+        <div style={{ contain: 'layout style paint' }}>
+          <SpeedInsights />
+          <ClientLayout>{children}</ClientLayout>
+        </div>
       </body>
     </html>
   );

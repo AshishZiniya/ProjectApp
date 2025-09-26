@@ -48,9 +48,11 @@ ProjectsPageSkeleton.displayName = "ProjectsPageSkeleton";
 const ProjectsPage: React.FC = memo(() => {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<ProjectsPageSkeleton />}>
-        <ProjectsList />
-      </Suspense>
+      <div style={{ contain: 'layout style' }}>
+        <Suspense fallback={<ProjectsPageSkeleton />}>
+          <ProjectsList />
+        </Suspense>
+      </div>
     </ErrorBoundary>
   );
 });
