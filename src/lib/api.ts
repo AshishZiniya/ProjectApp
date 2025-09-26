@@ -166,7 +166,7 @@ async function processResponse<TResponse, TBody>(
         const refreshController = new AbortController();
         const refreshTimeoutId = setTimeout(
           () => refreshController.abort(),
-          10000,
+          30000,
         );
 
         const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
