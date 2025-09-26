@@ -94,7 +94,7 @@ const TasksList: React.FC = () => {
   );
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" style={{ contain: 'layout style' }}>
       <div className="text-center mb-12">
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           All Tasks

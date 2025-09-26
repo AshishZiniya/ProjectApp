@@ -4,7 +4,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
@@ -94,18 +94,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            @font-face {
-              font-family: 'Inter';
-              font-style: normal;
-              font-weight: 100 900;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
-              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-            }
-          `
-        }} />
       </head>
       <body className="flex flex-col min-h-screen antialiased">
         <div style={{ contain: 'layout style paint' }}>
