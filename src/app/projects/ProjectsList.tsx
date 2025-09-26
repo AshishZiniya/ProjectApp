@@ -13,6 +13,7 @@ import useToast from "@/hooks/useToast";
 import { PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
+import SkeletonCard from "@/components/ui/SkeletonCard";
 
 const ProjectsList: React.FC = () => {
   const [q, setQ] = useState("");
@@ -72,25 +73,7 @@ const ProjectsList: React.FC = () => {
   };
 
   const ProjectCardSkeleton = memo(() => (
-    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '280px', contain: 'layout style' }}>
-      <div>
-        <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex-shrink-0"></div>
-          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-        </div>
-        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
-        <div className="flex items-center text-gray-700 text-sm mb-3">
-          <div className="w-4 h-4 bg-gray-200 rounded mr-1 flex-shrink-0"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-        </div>
-      </div>
-      <div className="flex space-x-2 mt-auto">
-        <div className="h-8 bg-gray-200 rounded flex-1"></div>
-        <div className="h-8 bg-gray-200 rounded flex-1"></div>
-      </div>
-    </Card>
+    <SkeletonCard variant="project" />
   ));
   ProjectCardSkeleton.displayName = "ProjectCardSkeleton";
 

@@ -13,6 +13,7 @@ import useToast from "@/hooks/useToast";
 import { useApiQuery, useApiMutation } from "@/hooks/useApiQuery";
 import { DEFAULT_PAGE_LIMIT, PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
+import SkeletonCard from "@/components/ui/SkeletonCard";
 
 interface UsersListProps {
   searchQuery?: string;
@@ -90,22 +91,7 @@ const UsersList: React.FC<UsersListProps> = ({
 
   // Loading skeleton component
   const UserCardSkeleton = () => (
-    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '200px', contain: 'layout style' }}>
-      <div>
-        <div className="flex items-center mb-3">
-          <div className="w-12 h-12 bg-gray-200 rounded-full mr-3"></div>
-          <div>
-            <div className="h-6 bg-gray-200 rounded w-3/4 mb-1"></div>
-            <div className="h-5 bg-gray-200 rounded w-16"></div>
-          </div>
-        </div>
-        <div className="h-4 bg-gray-200 rounded w-full"></div>
-      </div>
-      <div className="flex space-x-2 mt-4">
-        <div className="h-8 w-24 bg-gray-200 rounded flex-1"></div>
-        <div className="h-8 w-20 bg-gray-200 rounded flex-1"></div>
-      </div>
-    </Card>
+    <SkeletonCard variant="user" />
   );
 
   // User role badge component

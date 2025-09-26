@@ -15,6 +15,7 @@ import {
 } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
+import SkeletonCard from "@/components/ui/SkeletonCard";
 
 const TasksList: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -71,26 +72,7 @@ const TasksList: React.FC = () => {
   };
 
   const TaskCardSkeleton = () => (
-    <Card className="flex flex-col justify-between animate-pulse" style={{ minHeight: '280px', contain: 'layout style' }}>
-      <div>
-        <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
-          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-        </div>
-        <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
-        <div className="flex gap-2 mb-2">
-          <div className="h-5 bg-gray-200 rounded w-16"></div>
-          <div className="h-5 bg-gray-200 rounded w-20"></div>
-        </div>
-        <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
-        <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-      </div>
-      <div className="flex space-x-2 mt-4">
-        <div className="h-8 w-24 bg-gray-200 rounded flex-1"></div>
-        <div className="h-8 w-20 bg-gray-200 rounded flex-1"></div>
-      </div>
-    </Card>
+    <SkeletonCard variant="task" />
   );
 
   return (
