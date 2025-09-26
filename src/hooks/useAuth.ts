@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import api from "@/lib/api";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useCallback } from "react";
 import type { AuthUser } from "@/types/auth";
 import type { UserRole } from "@/types";
 import useToast from "./useToast";
@@ -25,107 +25,41 @@ interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: session, status, update } = useSession();
   const [error, setError] = useState<string | null>(null);
-  const refreshPromiseRef = useRef<Promise<void> | null>(null);
-  const initializationAttemptedRef = useRef(false);
-
   const { showError } = useToast();
 
-  const refreshUser = useCallback(async () => {
-    // Prevent duplicate requests
-    if (refreshPromiseRef.current) {
-      return refreshPromiseRef.current;
-    }
+  const user = session?.user as AuthUser | null;
+  const loading = status === "loading";
 
-    const refreshPromise = (async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.get<{ user: AuthUser }>("/auth/me");
-        setUser(response.user);
-      } catch (err) {
-        setUser(null);
-        // Only set error if it's not a 401 (unauthorized) which is expected when not logged in
-        if (err instanceof Error && !err.message.includes("401")) {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false);
-        refreshPromiseRef.current = null;
-      }
-    })();
-
-    refreshPromiseRef.current = refreshPromise;
-    return refreshPromise;
-  }, []);
-
-  const refreshTokens = useCallback(async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-      setUser(null);
-      return;
-    }
+  const refresh = useCallback(async () => {
     try {
-      const response = await api.post<{
-        accessToken: string;
-        refreshToken: string;
-        user: AuthUser;
-      }>("/auth/refresh", { refreshToken });
-      localStorage.setItem("accessToken", response.accessToken);
-      localStorage.setItem("refreshToken", response.refreshToken);
-      setUser(response.user);
-    } catch {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      setUser(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      if (initializationAttemptedRef.current) return;
-      initializationAttemptedRef.current = true;
-
-      const accessToken = localStorage.getItem("accessToken");
-      if (accessToken) {
-        try {
-          await refreshUser();
-        } catch {
-          // If refresh fails, clear tokens and set loading to false
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          setUser(null);
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, [refreshUser]);
-
-  const login = async (email: string, password: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.post<{
-        accessToken: string;
-        refreshToken: string;
-        user: AuthUser;
-      }>("/auth/login", { email, password });
-      localStorage.setItem("accessToken", response.accessToken);
-      localStorage.setItem("refreshToken", response.refreshToken);
-      setUser(response.user);
+      await update();
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
       showError(msg);
       throw err;
-    } finally {
-      setLoading(false);
+    }
+  }, [update, showError]);
+
+  const login = async (email: string, password: string) => {
+    setError(null);
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+    } catch (err: unknown) {
+      const msg = getErrorMessage(err);
+      setError(msg);
+      showError(msg);
+      throw err;
     }
   };
 
@@ -135,40 +69,40 @@ export function useAuth(): UseAuthReturn {
     password: string,
     role?: UserRole,
   ) => {
-    setLoading(true);
     setError(null);
     try {
-      const response = await api.post<{
-        accessToken: string;
-        refreshToken: string;
-        user: AuthUser;
-      }>("/auth/register", { email, name, password, role });
-      localStorage.setItem("accessToken", response.accessToken);
-      localStorage.setItem("refreshToken", response.refreshToken);
-      setUser(response.user);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, name, password, role }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Registration failed');
+      }
+
+      // After successful registration, log the user in
+      await login(email, password);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
       showError(msg);
       throw err;
-    } finally {
-      setLoading(false);
     }
   };
 
   const logout = async () => {
-    setLoading(true);
     setError(null);
     try {
-      await api.post("/auth/logout");
+      await signOut({ callbackUrl: "/auth/login" });
     } catch (err: unknown) {
-      // Don't show error for logout failures
-      console.warn("Logout API call failed:", err);
-    } finally {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      setUser(null);
-      setLoading(false);
+      const msg = getErrorMessage(err);
+      setError(msg);
+      showError(msg);
+      throw err;
     }
   };
 
@@ -179,8 +113,8 @@ export function useAuth(): UseAuthReturn {
     login,
     logout,
     register,
-    refresh: refreshTokens,
-    setLoading,
+    refresh,
+    setLoading: () => {}, // NextAuth handles loading state internally
     setError,
   };
 }

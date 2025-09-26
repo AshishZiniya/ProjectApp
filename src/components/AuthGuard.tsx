@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useSession } from "next-auth/react";
+import type { AuthUser } from "@/types/auth";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -15,9 +16,12 @@ export default function AuthGuard({
   redirectTo = "/auth/login",
   requireAuth = true,
 }: AuthGuardProps) {
-  const { user, loading } = useAuth();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+
+  const user = session?.user as AuthUser | null;
+  const loading = status === "loading";
 
   useEffect(() => {
     // Don't redirect while still loading
