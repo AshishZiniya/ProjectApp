@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} ProjectApp. All rights reserved.
           </p>
           <p className="text-sm text-gray-500 mt-2">
-            Built with ❤️ using NestJS and Next.js
+            Built with ❤️ using NestJS, Next.js, and Yarn
           </p>
         </div>
       </div>
