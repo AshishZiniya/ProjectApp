@@ -39,17 +39,8 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (user && !loading) {
-      // Get the redirect path from URL params or session storage
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectPath = urlParams.get("redirect") ||
-                          sessionStorage.getItem("redirectAfterLogin") ||
-                          "/projects";
-
-      // Clear the stored redirect path
-      sessionStorage.removeItem("redirectAfterLogin");
-
-      // Redirect to the appropriate page
-      router.push(redirectPath);
+      // Always redirect to projects page after login
+      router.push("/projects");
     }
   }, [user, loading, router]);
 
