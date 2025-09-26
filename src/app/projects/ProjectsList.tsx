@@ -96,7 +96,7 @@ const ProjectsList: React.FC = () => {
 
   // Memoized project card component for better performance
   const ProjectCard = memo(({ project }: { project: Project }) => (
-    <Card className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg" style={{ minHeight: '280px', contain: 'layout style' }}>
+    <Card className="flex flex-col justify-between transition-all duration-200" style={{ minHeight: '280px', contain: 'layout style' }}>
       <div>
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">

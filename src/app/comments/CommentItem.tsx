@@ -11,7 +11,7 @@ interface CommentItemProps {
 
 const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
   return (
-    <Card className="group p-4 bg-gray-50 border border-gray-200 hover:shadow-md transition-shadow">
+    <Card className="group p-4 bg-gray-50 border border-gray-200 transition-shadow">
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-sm">

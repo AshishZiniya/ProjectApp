@@ -126,7 +126,7 @@ const TasksList: React.FC = () => {
             {tasks.map((task) => (
               <Card
                 key={task.id}
-                className="flex flex-col justify-between hover:scale-105 transition-transform"
+                className="flex flex-col justify-between transition-transform"
                 style={{ minHeight: '280px', contain: 'layout style' }}
               >
                 <div>
