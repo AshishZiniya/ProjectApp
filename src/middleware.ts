@@ -1,37 +1,8 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import type { UserRole } from "@/types";
-import { hasPermission } from "@/utils/auth";
-
-// JWT secret - should match backend JWT_ACCESS_SECRET
-const JWT_SECRET = process.env.JWT_ACCESS_SECRET || "your-secret-key";
-
-interface JWTPayload {
-  sub: string; // User ID (matches backend)
-  email: string;
-  role: UserRole;
-  iat: number;
-  exp: number;
-}
-
-/**
- * Check if a user role has a specific permission
- * (imported from @/utils/auth)
- */
-
-/**
- * Verify JWT token and return user payload
- */
-function verifyToken(token: string): JWTPayload | null {
-  try {
-    const payload = jwt.verify(token, JWT_SECRET) as JWTPayload;
-    return payload;
-  } catch (error) {
-    console.error("Token verification failed:", error);
-    return null;
-  }
-}
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+import { hasPermission } from '@/utils/auth';
+import type { UserRole } from '@/types';
 
 /**
  * Enhanced auth middleware with authorization
@@ -42,54 +13,67 @@ function verifyToken(token: string): JWTPayload | null {
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const accessToken = request.cookies.get("accessToken")?.value;
 
+  // Define route categories for better maintainability
   const isAuthRoute =
-    pathname.startsWith("/auth/login") ||
-    pathname.startsWith("/auth/register") ||
-    pathname.startsWith("/auth/forgot-password") ||
-    pathname.startsWith("/auth/reset-password");
+    pathname.startsWith('/auth/login') ||
+    pathname.startsWith('/auth/register') ||
+    pathname.startsWith('/auth/forgot-password') ||
+    pathname.startsWith('/auth/reset-password');
 
   const isProtectedRoute =
-    pathname.startsWith("/users") ||
-    pathname.startsWith("/projects") ||
-    pathname.startsWith("/tasks") ||
-    pathname.startsWith("/comments") ||
-    pathname.startsWith("/admin");
+    pathname.startsWith('/projects') ||
+    pathname.startsWith('/tasks') ||
+    pathname.startsWith('/comments') ||
+    pathname.startsWith('/users') ||
+    pathname.startsWith('/admin');
 
-  const isAdminRoute = pathname.startsWith("/admin");
-  const isUsersRoute = pathname.startsWith("/users");
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isUsersRoute = pathname.startsWith('/users');
+
+  // Get NextAuth session token with error handling and secret validation
+  let user: { id: string; email?: string | null; name?: string | null; role?: UserRole } | null = null;
+  try {
+    const secret = process.env.NEXTAUTH_SECRET;
+    if (!secret) {
+      console.error('NEXTAUTH_SECRET is not defined');
+    } else {
+      const token = await getToken({
+        req: request,
+        secret,
+      });
+
+      if (token && token.sub) {
+        user = {
+          id: token.sub,
+          email: token.email ?? null,
+          name: token.name ?? null,
+          role: token.role as UserRole,
+        };
+      }
+    }
+  } catch (error) {
+    // Log error but continue with user = null for security
+    console.error('Middleware session check failed:', error);
+  }
 
   // If user is logged in and trying to access auth pages, redirect to projects
-  if (isAuthRoute && accessToken) {
-    return NextResponse.redirect(new URL("/projects", request.url));
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL('/projects', request.url));
   }
 
   // If user is not logged in and trying to access protected routes, redirect to login
-  if (isProtectedRoute && !accessToken) {
-    const loginUrl = new URL("/auth/login", request.url);
+  if (isProtectedRoute && !user) {
+    const loginUrl = new URL('/auth/login', request.url);
     // Store the current path to redirect back after login
-    loginUrl.searchParams.set("redirect", pathname);
+    loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // For admin routes, verify token and check permissions
-  if (isAdminRoute && accessToken) {
-    const userPayload = verifyToken(accessToken);
-
-    if (!userPayload) {
-      // Invalid token, redirect to login
-      const loginUrl = new URL("/auth/login", request.url);
-      const response = NextResponse.redirect(loginUrl);
-      response.cookies.delete("accessToken");
-      return response;
-    }
-
-    // Check if user has admin permissions
-    const hasAdminPermission = hasPermission(userPayload.role, "ADD_ADMIN");
-
+  // For admin routes, check permissions
+  if (isAdminRoute && user?.role) {
+    const hasAdminPermission = hasPermission(user.role, "ADD_ADMIN");
     if (!hasAdminPermission) {
-      // User doesn't have admin permissions, redirect to projects with error
       const projectsUrl = new URL("/projects", request.url);
       projectsUrl.searchParams.set("error", "access_denied");
       projectsUrl.searchParams.set("message", "You don't have permission to access admin features.");
@@ -97,23 +81,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // For users routes, verify token and check permissions
-  if (isUsersRoute && accessToken) {
-    const userPayload = verifyToken(accessToken);
-
-    if (!userPayload) {
-      // Invalid token, redirect to login
-      const loginUrl = new URL("/auth/login", request.url);
-      const response = NextResponse.redirect(loginUrl);
-      response.cookies.delete("accessToken");
-      return response;
-    }
-
-    // Check if user has users view permissions
-    const hasUsersPermission = hasPermission(userPayload.role, "VIEW_USERS");
-
+  // For users routes, check permissions
+  if (isUsersRoute && user?.role) {
+    const hasUsersPermission = hasPermission(user.role, "VIEW_USERS");
     if (!hasUsersPermission) {
-      // User doesn't have users permissions, redirect to projects with error
       const projectsUrl = new URL("/projects", request.url);
       projectsUrl.searchParams.set("error", "access_denied");
       projectsUrl.searchParams.set("message", "You don't have permission to access user management features.");
@@ -127,15 +98,15 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/users/:path*",
-    "/projects/:path*",
-    "/tasks/:path*",
-    "/comments/:path*",
-    "/admin/:path*",
-    "/auth/login",
-    "/auth/register",
-    "/auth/forgot-password",
-    "/auth/reset-password",
-    "/auth/refresh",
+    '/users/:path*',
+    '/projects/:path*',
+    '/tasks/:path*',
+    '/comments/:path*',
+    '/admin/:path*',
+    '/auth/login',
+    '/auth/register',
+    '/auth/forgot-password',
+    '/auth/reset-password',
+    '/auth/refresh',
   ],
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
@@ -17,9 +17,10 @@ const Login: React.FC = () => {
     email?: string;
     password?: string;
   }>({});
+  const [loginLoading, setLoginLoading] = useState(false);
   const router = useRouter();
 
-  const { login, loading, error, user } = useAuth();
+  const { login,  error } = useAuth();
 
   const validateForm = useCallback(() => {
     const errors: { email?: string; password?: string } = {};
@@ -37,26 +38,23 @@ const Login: React.FC = () => {
     return Object.keys(errors).length === 0;
   }, [email, password]);
 
-  useEffect(() => {
-    if (user && !loading) {
-      // Always redirect to projects page after login
-      router.push("/projects");
-    }
-  }, [user, loading, router]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!validateForm()) return;
 
+      setLoginLoading(true);
       try {
         await login(email, password);
-        // Redirect is handled by useEffect when user state updates
+        router.push("/projects");
       } catch {
         // Error is handled by useAuth
+      } finally {
+        setLoginLoading(false);
       }
     },
-    [validateForm, login, email, password],
+    [validateForm, login, email, password, router],
   );
 
   return (
@@ -221,10 +219,11 @@ const Login: React.FC = () => {
           </div>
           <Button
             type="submit"
-            loading={loading}
+            loading={loginLoading}
             className="w-full py-3 text-lg font-medium"
+            disabled={loginLoading}
           >
-            Sign In
+            {loginLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
         <p className="mt-6 text-center text-gray-600">
