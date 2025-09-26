@@ -6,6 +6,7 @@ import type { AuthUser } from "@/types/auth";
 import type { UserRole } from "@/types";
 import useToast from "./useToast";
 import { getErrorMessage } from "@/utils";
+import { API_BASE_URL } from "@/constants";
 
 interface UseAuthReturn {
   user: AuthUser | null;
@@ -71,7 +72,7 @@ export function useAuth(): UseAuthReturn {
   ) => {
     setError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

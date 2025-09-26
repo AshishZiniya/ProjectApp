@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { UserRole } from "@/types";
+import { API_BASE_URL } from "@/constants";
 
 // Helper type for extended user properties
 type ExtendedUser = {
@@ -21,14 +22,21 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.error('Missing credentials');
           return null;
         }
 
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+          // Use the same API base URL as the rest of the application
+          const apiUrl = `${API_BASE_URL}/auth/login`;
+
+          console.log('Attempting login to:', apiUrl);
+
+          const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
             },
             body: JSON.stringify({
               email: credentials.email,
@@ -36,11 +44,24 @@ export const authOptions: NextAuthOptions = {
             }),
           });
 
+          console.log('Response status:', response.status);
+          console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
           if (!response.ok) {
+            let errorMessage = `HTTP ${response.status}`;
+            try {
+              const errorData = await response.json();
+              errorMessage = errorData.message || errorMessage;
+              console.error('API error response:', errorData);
+            } catch (parseError) {
+              console.error('Failed to parse error response:', parseError);
+            }
+            console.error('Authentication failed:', errorMessage);
             return null;
           }
 
           const data = await response.json();
+          console.log('Login successful for user:', data.user?.email);
 
           return {
             id: data.user.id,
