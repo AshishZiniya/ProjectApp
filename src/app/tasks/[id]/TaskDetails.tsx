@@ -89,7 +89,7 @@ const TaskDetails: React.FC = (): ReactNode => {
       setEditedDueDate(dueDateString ?? "");
 
       const commentsResponse = await api.get<Comment[]>(
-        `/comments/${id}/taskId`,
+        `/comments/task/${id}`,
       );
       setComments(commentsResponse);
       setLoading(false);
