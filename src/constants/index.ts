@@ -1,20 +1,62 @@
 // constants/index.ts
 
+// API Configuration
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   "https://projectapp-api-k8mo.onrender.com";
 
+// Toast Configuration
 export const TOAST_DURATION = 2000;
+export const TOAST_COLORS = {
+  SUCCESS: "#02993c",
+  ERROR: "#990202",
+  DEFAULT: "yellow",
+} as const;
 
-export const TOAST_SUCCESS_COLOR = "#02993c";
-export const TOAST_ERROR_COLOR = "#990202";
-export const TOAST_DEFAULT_COLOR = "yellow";
-
+// Pagination Configuration
 export const DEFAULT_PAGE_LIMIT = 10;
-export const USERS_PAGE_LIMIT_OPTIONS = [5, 10, 20];
-export const PROJECTS_PAGE_LIMIT_OPTIONS = [5, 10, 20];
-export const TASKS_PAGE_LIMIT_OPTIONS = [5, 10, 20];
+export const PAGE_LIMIT_OPTIONS = {
+  USERS: [5, 10, 20] as number[],
+  PROJECTS: [5, 10, 20] as number[],
+  TASKS: [5, 10, 20] as number[],
+};
 
-export const TASK_PRIORITY_HIGH = 1;
-export const TASK_PRIORITY_MEDIUM = 2;
-export const TASK_PRIORITY_LOW = 3;
+// Task Priority (Legacy numeric values for backward compatibility)
+export const TASK_PRIORITY = {
+  HIGH: 1,
+  MEDIUM: 2,
+  LOW: 3,
+} as const;
+
+// Task Priority Mapping (New string-based priorities)
+export const TASK_PRIORITY_MAP = {
+  HIGH: "HIGH",
+  MEDIUM: "MEDIUM",
+  LOW: "LOW",
+} as const;
+
+// Task Status Options
+export const TASK_STATUS = {
+  TODO: "TODO",
+  IN_PROGRESS: "IN_PROGRESS",
+  DONE: "DONE",
+} as const;
+
+// User Roles
+export const USER_ROLES = {
+  USER: "USER",
+  ADMIN: "ADMIN",
+  SUPERADMIN: "SUPERADMIN",
+} as const;
+
+// Validation Rules
+export const VALIDATION_RULES = {
+  PASSWORD_MIN_LENGTH: 8,
+  NAME_MIN_LENGTH: 3,
+  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+} as const;
+
+// UI Constants
+export const ANIMATION_DURATION = 300;
+export const LOADING_TIMEOUT = 10000;
+export const REFRESH_TIMEOUT = 30000;

@@ -10,7 +10,7 @@ import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
-import { PROJECTS_PAGE_LIMIT_OPTIONS } from "@/constants";
+import { PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
 
@@ -276,7 +276,7 @@ const ProjectsList: React.FC = () => {
                 setLimit(newLimit);
                 setPage(1);
               }}
-              limitOptions={PROJECTS_PAGE_LIMIT_OPTIONS}
+              limitOptions={PAGE_LIMIT_OPTIONS.PROJECTS}
             />
           )}
         </>

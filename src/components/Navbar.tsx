@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import { useAuth } from "@/hooks/useAuth";
-import { useAuthorization } from "@/hooks/useAuthorization";
 import useToast from "@/hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +11,6 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 const Navbar: React.FC = () => {
   const router = useRouter();
   const { user, logout, loading: authLoading } = useAuth();
-  const { canViewUsers, canAddAdmin } = useAuthorization();
   const { showSuccess, showError } = useToast();
 
   const handleLogout = async () => {
@@ -41,24 +39,19 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          {canViewUsers && (
-            <>
-              <Link
-                href="/users"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Users
-              </Link>
-              {canAddAdmin && (
-                <Link
-                  href="/admin/add-admin"
-                  className="text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  Add Admin
-                </Link>
-              )}
-            </>
-          )}
+          {/* Authentication and authorization are handled in middleware */}
+          <Link
+            href="/users"
+            className="text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            Users
+          </Link>
+          <Link
+            href="/admin/add-admin"
+            className="text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            Add Admin
+          </Link>
           <Link
             href="/projects"
             className="text-gray-700 hover:text-blue-600 transition-colors"

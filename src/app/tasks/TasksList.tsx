@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import api from "@/lib/api";
-import { Task, PaginatedResponse } from "@/types";
+import { LegacyTask as Task, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
@@ -11,9 +11,7 @@ import Link from "next/link";
 import useToast from "@/hooks/useToast";
 import {
   DEFAULT_PAGE_LIMIT,
-  TASKS_PAGE_LIMIT_OPTIONS,
-  TASK_PRIORITY_HIGH,
-  TASK_PRIORITY_MEDIUM,
+  PAGE_LIMIT_OPTIONS,
 } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -159,9 +157,9 @@ const TasksList: React.FC = () => {
                   <div className="flex flex-wrap gap-2 mb-2">
                     <span
                       className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        task.priority === TASK_PRIORITY_HIGH
+                        task.priority === 1
                           ? "bg-red-100 text-red-800"
-                          : task.priority === TASK_PRIORITY_MEDIUM
+                          : task.priority === 2
                             ? "bg-yellow-100 text-yellow-800"
                             : "bg-green-100 text-green-800"
                       }`}
@@ -177,9 +175,9 @@ const TasksList: React.FC = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      {task.priority === TASK_PRIORITY_HIGH
+                      {task.priority === 1
                         ? "High"
-                        : task.priority === TASK_PRIORITY_MEDIUM
+                        : task.priority === 2
                           ? "Medium"
                           : "Low"}
                     </span>
@@ -292,7 +290,7 @@ const TasksList: React.FC = () => {
                 setLimit(newLimit);
                 setPage(1);
               }}
-              limitOptions={TASKS_PAGE_LIMIT_OPTIONS}
+              limitOptions={PAGE_LIMIT_OPTIONS.TASKS}
             />
           )}
         </>

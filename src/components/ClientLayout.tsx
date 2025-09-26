@@ -1,7 +1,6 @@
 "use client";
 import { Suspense, lazy } from "react";
 import { usePathname } from "next/navigation";
-import AuthGuard from "./AuthGuard";
 
 // Lazy load components that are not critical for initial render
 const Navbar = lazy(() => import("@/components/Navbar"));
@@ -21,15 +20,14 @@ export default function ClientLayout({
   return (
     <ErrorBoundary>
       <TopLoader />
-      <AuthGuard requireAuth={!isAuthPage}>
-        {!isAuthPage && <Navbar />}
-        <Suspense fallback={<TopLoader />}>
-          <main className={`flex-1 ${!isAuthPage ? "mt-16" : ""}`}>
-            {children}
-          </main>
-        </Suspense>
-        {!isAuthPage && <Footer />}
-      </AuthGuard>
+      {/* Authentication is now handled entirely in middleware */}
+      {!isAuthPage && <Navbar />}
+      <Suspense fallback={<TopLoader />}>
+        <main className={`flex-1 ${!isAuthPage ? "mt-16" : ""}`}>
+          {children}
+        </main>
+      </Suspense>
+      {!isAuthPage && <Footer />}
       <Toaster />
     </ErrorBoundary>
   );

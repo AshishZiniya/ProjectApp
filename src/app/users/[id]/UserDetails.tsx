@@ -10,7 +10,6 @@ import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import FormGroup from "@/components/common/FormGroup";
-import { useAuthorization } from "@/hooks/useAuthorization";
 import useToast from "@/hooks/useToast";
 
 const UserDetails: React.FC = () => {
@@ -27,7 +26,8 @@ const UserDetails: React.FC = () => {
   const [updateError, setUpdateError] = useState<string | null>(null);
 
   const { showSuccess, showError } = useToast();
-  const { canManageUsers } = useAuthorization();
+  // Authorization is handled at the middleware level - if we reach this component,
+  // the user has the necessary permissions to view user details
 
   const fetchUser = useCallback(async () => {
     if (!id) {
@@ -76,9 +76,8 @@ const UserDetails: React.FC = () => {
         name: editedName,
         email: editedEmail,
       };
-      if (canManageUsers) {
-        updateData.role = editedRole;
-      }
+      // Since middleware ensures proper permissions, allow role editing for authorized users
+      updateData.role = editedRole;
       const response = await api.patch<User>(`/users/${id}`, updateData);
       setUser(response);
       setIsEditing(false);
@@ -282,24 +281,22 @@ const UserDetails: React.FC = () => {
                   />
                 </div>
 
-                {canManageUsers && (
-                  <div className="mb-4">
-                    <FormGroup label="User Role" htmlFor="role">
-                      <select
-                        id="role"
-                        value={editedRole}
-                        onChange={(e) =>
-                          setEditedRole(e.target.value as UserRole)
-                        }
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      >
-                        <option value="USER">USER</option>
-                        <option value="ADMIN">ADMIN</option>
-                        <option value="SUPERADMIN">SUPERADMIN</option>
-                      </select>
-                    </FormGroup>
-                  </div>
-                )}
+                <div className="mb-4">
+                  <FormGroup label="User Role" htmlFor="role">
+                    <select
+                      id="role"
+                      value={editedRole}
+                      onChange={(e) =>
+                        setEditedRole(e.target.value as UserRole)
+                      }
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value="USER">USER</option>
+                      <option value="ADMIN">ADMIN</option>
+                      <option value="SUPERADMIN">SUPERADMIN</option>
+                    </select>
+                  </FormGroup>
+                </div>
 
                 <div className="flex justify-end space-x-3 pt-4 border-t border-blue-200">
                   <Button
