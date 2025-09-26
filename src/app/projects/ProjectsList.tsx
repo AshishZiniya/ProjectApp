@@ -79,7 +79,7 @@ const ProjectsList: React.FC = () => {
 
   // Memoized project card component for better performance
   const ProjectCard = memo(({ project }: { project: Project }) => (
-    <Card className="flex flex-col justify-between transition-all duration-200" style={{ minHeight: '280px', contain: 'layout style' }}>
+    <Card className="flex flex-col justify-between transition-all duration-200 min-h-[280px]">
       <div>
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
@@ -99,12 +99,12 @@ const ProjectsList: React.FC = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
             {project.name}
           </h3>
         </div>
         {project.description && (
-          <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
             {project.description}
           </p>
         )}
@@ -190,12 +190,11 @@ const ProjectsList: React.FC = () => {
             />
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ contain: 'layout' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="flex flex-col justify-between transition-shadow duration-200"
-                style={{ minHeight: '280px', contain: 'layout style' }}
+                className="flex flex-col justify-between transition-all duration-200 min-h-[280px]"
               >
                 <div>
                   <div className="flex items-center mb-3">
@@ -216,12 +215,12 @@ const ProjectsList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
                       {project.name}
                     </h3>
                   </div>
                   {project.description && (
-                    <p className="text-gray-600 text-sm mb-3" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {project.description}
                     </p>
                   )}

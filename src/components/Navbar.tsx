@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import { useAuth } from "@/hooks/useAuth";
@@ -26,16 +27,24 @@ const Navbar: React.FC = () => {
   const isLoggedIn = !!user;
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-sm shadow-lg py-4 px-6 z-50 border-b border-gray-100">
+    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-sm shadow-lg h-20 px-6 z-50 border-b border-gray-100 flex items-center">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"
-          className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-all duration-300 flex items-center gap-2"
+          className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-all duration-300 flex items-center gap-3"
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">P</span>
+          <div className="relative w-10 h-10 flex-shrink-0">
+            <Image
+              src="/logo.svg"
+              alt="Task Manager Logo"
+              width={40}
+              height={40}
+              className="w-full h-full object-contain"
+              priority
+              quality={85}
+            />
           </div>
-          ProjectApp
+          <span className="font-bold text-xl">Task Manager</span>
         </Link>
 
         <div className="flex items-center space-x-4">
