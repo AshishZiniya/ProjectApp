@@ -60,10 +60,7 @@ export async function middleware(request: NextRequest) {
 
   // If user is not logged in and trying to access protected routes, redirect to login
   if (isProtectedRoute && !user) {
-    const loginUrl = new URL('/auth/login', request.url);
-    // Store the current path to redirect back after login
-    loginUrl.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
   // For admin routes, check permissions
