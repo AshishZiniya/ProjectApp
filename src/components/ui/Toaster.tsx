@@ -1,9 +1,7 @@
 import { Toaster as HotToaster } from "react-hot-toast";
 import {
   TOAST_DURATION,
-  TOAST_SUCCESS_COLOR,
-  TOAST_ERROR_COLOR,
-  TOAST_DEFAULT_COLOR,
+  TOAST_COLORS,
 } from "@/constants"; // Import constants
 
 const Toaster: React.FC = () => {
@@ -21,21 +19,21 @@ const Toaster: React.FC = () => {
           duration: TOAST_DURATION,
           style: {
             background: "white",
-            color: TOAST_SUCCESS_COLOR,
+            color: TOAST_COLORS.SUCCESS,
           },
         },
         error: {
           duration: TOAST_DURATION,
           style: {
             background: "white",
-            color: TOAST_ERROR_COLOR,
+            color: TOAST_COLORS.ERROR,
           },
         },
         duration: TOAST_DURATION,
         className: "",
         style: {
           background: "white",
-          color: TOAST_DEFAULT_COLOR,
+          color: TOAST_COLORS.DEFAULT,
         },
       }}
     />

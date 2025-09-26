@@ -11,7 +11,7 @@ import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
 import { useApiQuery, useApiMutation } from "@/hooks/useApiQuery";
-import { DEFAULT_PAGE_LIMIT, USERS_PAGE_LIMIT_OPTIONS } from "@/constants";
+import { DEFAULT_PAGE_LIMIT, PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 
 interface UsersListProps {
@@ -235,7 +235,7 @@ const UsersList: React.FC<UsersListProps> = ({
                   setLimit(newLimit);
                   setPage(1);
                 }}
-                limitOptions={USERS_PAGE_LIMIT_OPTIONS}
+                limitOptions={PAGE_LIMIT_OPTIONS.USERS}
               />
             </div>
           )}
