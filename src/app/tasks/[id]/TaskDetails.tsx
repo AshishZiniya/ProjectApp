@@ -475,7 +475,7 @@ const TaskDetails: React.FC = (): ReactNode => {
             <div className="flex justify-end space-x-3 mb-8">
               <Link
                 href={`/projects/${task.project?.id}`}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200"
               >
                 Back to Project
               </Link>

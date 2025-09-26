@@ -76,7 +76,7 @@ const CreateProject: React.FC = () => {
           </Button>
           <Link
             href="/projects"
-            className="w-full mt-2 inline-block text-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
+            className="w-full mt-2 inline-block text-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200"
           >
             Cancel
           </Link>

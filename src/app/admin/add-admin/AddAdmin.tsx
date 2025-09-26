@@ -52,14 +52,8 @@ const AddAdmin: React.FC = () => {
   );
 
   return (
-    <div
-      className="flex items-center justify-center p-6"
-      style={{ contain: "layout style" }}
-    >
-      <Card
-        className="w-full max-w-md shadow-2xl"
-        style={{ contain: "layout style" }}
-      >
+    <div className="flex items-center justify-center p-6">
+      <Card className="w-full max-w-md shadow-2xl">
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <svg
@@ -87,7 +81,6 @@ const AddAdmin: React.FC = () => {
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
-          style={{ contain: "layout style" }}
         >
           <div>
             <label
@@ -103,11 +96,10 @@ const AddAdmin: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
                   validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter admin email"
-                style={{ minHeight: "48px" }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -143,11 +135,10 @@ const AddAdmin: React.FC = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
                   validationErrors.name ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter admin full name"
-                style={{ minHeight: "48px" }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -169,10 +160,7 @@ const AddAdmin: React.FC = () => {
               </p>
             )}
           </div>
-          <div
-            className="bg-yellow-50 border border-yellow-200 rounded-lg p-4"
-            style={{ minHeight: "60px" }}
-          >
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 min-h-[60px]">
             <p className="text-sm text-yellow-800">
               <strong>Note:</strong> The admin password will be set to{" "}
               <code className="bg-yellow-100 px-1 rounded">Admin@123</code>
@@ -181,8 +169,7 @@ const AddAdmin: React.FC = () => {
           <Button
             type="submit"
             loading={loading}
-            className="w-full py-3 text-lg font-medium"
-            style={{ minHeight: "48px" }}
+            className="w-full py-3 text-lg font-medium min-h-[48px]"
           >
             Create Admin
           </Button>

@@ -71,23 +71,8 @@ const TasksList: React.FC = () => {
   const TaskCardSkeleton = () => <SkeletonCard variant="task" />;
 
   return (
-    <div
-      className="container mx-auto p-6"
-      style={{
-        contain: "layout style paint",
-        containIntrinsicSize: "auto 100vh",
-        willChange: "auto",
-        minHeight: "100vh",
-      }}
-    >
-      <div
-        className="text-center mb-12"
-        style={{
-          minHeight: "120px",
-          contain: "layout style",
-          containIntrinsicSize: "auto 120px",
-        }}
-      >
+    <div className="container mx-auto p-6 min-h-screen">
+      <div className="text-center mb-12 min-h-[120px]">
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           All Tasks
         </h1>
@@ -96,28 +81,14 @@ const TasksList: React.FC = () => {
         </p>
       </div>
 
-      <div
-        className="flex justify-end items-center mb-6"
-        style={{
-          minHeight: "40px",
-          contain: "layout style",
-          containIntrinsicSize: "auto 40px",
-        }}
-      >
+      <div className="flex justify-end items-center mb-6 min-h-[40px]">
         <Link href="/tasks/create" passHref>
           <Button variant="primary">Create New Task</Button>
         </Link>
       </div>
 
       {loading ? (
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          style={{
-            contain: "layout style",
-            containIntrinsicSize: "auto 600px",
-            minHeight: "400px",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
           {[...Array(limit)].map((_, index) => (
             <TaskCardSkeleton key={index} />
           ))}
@@ -128,24 +99,11 @@ const TasksList: React.FC = () => {
             <Alert type="info" message="No tasks found." />
           )}
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            style={{
-              contain: "layout style",
-              containIntrinsicSize: "auto 600px",
-              minHeight: "400px",
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
             {tasks.map((task) => (
               <Card
                 key={task.id}
-                className="flex flex-col justify-between transition-transform"
-                style={{
-                  minHeight: "280px",
-                  contain: "layout style paint",
-                  containIntrinsicSize: "auto 280px",
-                  willChange: "auto",
-                }}
+                className="flex flex-col justify-between transition-transform min-h-[280px]"
               >
                 <div>
                   <div className="flex items-center mb-3">
@@ -164,28 +122,12 @@ const TasksList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3
-                      className="text-xl font-semibold text-gray-800"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 1,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
+                    <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
                       {task.title}
                     </h3>
                   </div>
                   {task.description && (
-                    <p
-                      className="text-gray-600 text-sm mb-3"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {task.description}
                     </p>
                   )}

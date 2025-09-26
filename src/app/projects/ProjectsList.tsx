@@ -144,7 +144,7 @@ const ProjectsList: React.FC = () => {
   ProjectCard.displayName = "ProjectCard";
 
   return (
-    <div className="container mx-auto p-6" style={{ contain: "layout" }}>
+    <div className="container mx-auto p-6">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Project Dashboard
@@ -173,10 +173,7 @@ const ProjectsList: React.FC = () => {
       {error && <Alert type="error" message={error.message} className="mb-4" />}
 
       {loading ? (
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          style={{ contain: "layout" }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(limit)].map((_, index) => (
             <ProjectCardSkeleton key={index} />
           ))}

@@ -114,14 +114,7 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
   return (
     <Card
       className={`flex flex-col justify-between animate-pulse min-h-[${getCardHeight()}] min-w-[280px] max-w-[400px] w-full ${className}`}
-      style={{
-        contain: "layout style paint",
-        containIntrinsicSize: `auto ${getCardHeight()}`,
-        willChange: "auto",
-        transform: "translateZ(0)",
-        backfaceVisibility: "hidden",
-        ...style,
-      }}
+      style={style}
     >
       {getSkeletonContent()}
     </Card>

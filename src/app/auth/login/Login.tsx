@@ -57,14 +57,8 @@ const Login: React.FC = () => {
   );
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-6"
-      style={{ contain: "layout style" }}
-    >
-      <Card
-        className="w-full max-w-md shadow-2xl"
-        style={{ contain: "layout style" }}
-      >
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <Card className="w-full max-w-md shadow-2xl">
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <svg
@@ -90,7 +84,6 @@ const Login: React.FC = () => {
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
-          style={{ contain: "layout style" }}
         >
           <div>
             <label
@@ -106,11 +99,10 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
                   validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your email"
-                style={{ minHeight: "48px" }}
               />
               <svg
                 className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
@@ -146,13 +138,12 @@ const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 pr-12 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`block w-full px-4 py-3 pr-12 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
                   validationErrors.password
                     ? "border-red-500"
                     : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
-                style={{ minHeight: "48px" }}
               />
               <button
                 type="button"
@@ -202,10 +193,7 @@ const Login: React.FC = () => {
               </p>
             )}
           </div>
-          <div
-            className="flex items-center justify-between"
-            style={{ minHeight: "40px" }}
-          >
+          <div className="flex items-center justify-between min-h-[40px]">
             <div className="flex items-center">
               <input
                 id="remember-me"
@@ -234,17 +222,13 @@ const Login: React.FC = () => {
           <Button
             type="submit"
             loading={loginLoading}
-            className="w-full py-3 text-lg font-medium"
+            className="w-full py-3 text-lg font-medium min-h-[48px]"
             disabled={loginLoading}
-            style={{ minHeight: "48px" }}
           >
             {loginLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
-        <p
-          className="mt-6 text-center text-gray-600"
-          style={{ minHeight: "20px" }}
-        >
+        <p className="mt-6 text-center text-gray-600 min-h-[20px]">
           Don&#39;t have an account?{" "}
           <Link href="/auth/register" className="text-blue-600 hover:underline">
             Register here
