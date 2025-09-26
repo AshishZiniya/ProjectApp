@@ -12,9 +12,7 @@ import api from "@/lib/api";
 import { User } from "@/types";
 import useToast from "@/hooks/useToast";
 import {
-  TASK_PRIORITY_HIGH,
-  TASK_PRIORITY_LOW,
-  TASK_PRIORITY_MEDIUM,
+  TASK_PRIORITY,
 } from "@/constants";
 import FormGroup from "@/components/common/FormGroup";
 
@@ -127,9 +125,9 @@ const CreateTask: React.FC = () => {
               onChange={(e) => setPriority(Number(e.target.value))}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
-              <option value={TASK_PRIORITY_HIGH}>High</option>
-              <option value={TASK_PRIORITY_MEDIUM}>Medium</option>
-              <option value={TASK_PRIORITY_LOW}>Low</option>
+              <option value={TASK_PRIORITY.HIGH}>High</option>
+              <option value={TASK_PRIORITY.MEDIUM}>Medium</option>
+              <option value={TASK_PRIORITY.LOW}>Low</option>
             </select>
           </FormGroup>
           <FormGroup label="Status" htmlFor="status">

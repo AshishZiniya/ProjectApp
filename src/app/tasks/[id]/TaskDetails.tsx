@@ -19,19 +19,17 @@ import CommentItem from "@/app/comments/CommentItem";
 import useToast from "@/hooks/useToast";
 import { io } from "socket.io-client";
 import {
-  TASK_PRIORITY_HIGH,
-  TASK_PRIORITY_LOW,
-  TASK_PRIORITY_MEDIUM,
+  TASK_PRIORITY,
 } from "@/constants";
 import FormGroup from "@/components/common/FormGroup";
 
 const getPriorityLabel = (priority: number) => {
   switch (priority) {
-    case TASK_PRIORITY_HIGH:
+    case TASK_PRIORITY.HIGH:
       return "High";
-    case TASK_PRIORITY_MEDIUM:
+    case TASK_PRIORITY.MEDIUM:
       return "Medium";
-    case TASK_PRIORITY_LOW:
+    case TASK_PRIORITY.LOW:
       return "Low";
     default:
       return "Unknown";
@@ -83,7 +81,7 @@ const TaskDetails: React.FC = (): ReactNode => {
       setTask(taskResponse);
       setEditedTitle(taskResponse.title);
       setEditedDescription(taskResponse.description || "");
-      setEditedPriority(taskResponse.priority);
+      setEditedPriority(Number(taskResponse.priority));
       setEditedStatus(taskResponse.status);
       const dueDateString = taskResponse.dueDate
         ? new Date(taskResponse.dueDate).toISOString().split("T")[0]
@@ -378,14 +376,14 @@ const TaskDetails: React.FC = (): ReactNode => {
                 </div>
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    task.priority === TASK_PRIORITY_HIGH
+                    Number(task.priority) === TASK_PRIORITY.HIGH
                       ? "bg-red-100 text-red-800"
-                      : task.priority === TASK_PRIORITY_MEDIUM
+                      : Number(task.priority) === TASK_PRIORITY.MEDIUM
                         ? "bg-yellow-100 text-yellow-800"
                         : "bg-green-100 text-green-800"
                   }`}
                 >
-                  {getPriorityLabel(task.priority)}
+                  {getPriorityLabel(Number(task.priority))}
                 </span>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -513,9 +511,9 @@ const TaskDetails: React.FC = (): ReactNode => {
                 onChange={(e) => setEditedPriority(Number(e.target.value))}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
-                <option value={TASK_PRIORITY_HIGH}>High</option>
-                <option value={TASK_PRIORITY_MEDIUM}>Medium</option>
-                <option value={TASK_PRIORITY_LOW}>Low</option>
+                <option value={TASK_PRIORITY.HIGH}>High</option>
+                <option value={TASK_PRIORITY.MEDIUM}>Medium</option>
+                <option value={TASK_PRIORITY.LOW}>Low</option>
               </select>
             </FormGroup>
             <FormGroup label="Status" htmlFor="status">

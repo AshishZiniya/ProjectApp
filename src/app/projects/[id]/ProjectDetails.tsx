@@ -1,22 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/projects/[id]/ProjectDetails.tsx
-"use client";
+'use client';
 
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import api from "@/lib/api";
-import { Project, Task } from "@/types";
-import Card from "@/components/ui/Card";
-import Alert from "@/components/ui/Alert";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import Link from "next/link";
-import useToast from "@/hooks/useToast";
-import {
-  TASK_PRIORITY_HIGH,
-  TASK_PRIORITY_MEDIUM,
-  TASK_PRIORITY_LOW,
-} from "@/constants";
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import api from '@/lib/api';
+import { Project, Task } from '@/types';
+import Card from '@/components/ui/Card';
+import Alert from '@/components/ui/Alert';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Link from 'next/link';
+import useToast from '@/hooks/useToast';
+import { TASK_PRIORITY_MAP } from '@/constants';
 
 const ProjectDetails: React.FC = () => {
   const { id } = useParams();
@@ -24,8 +20,8 @@ const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState("");
-  const [editedDescription, setEditedDescription] = useState("");
+  const [editedName, setEditedName] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
@@ -42,10 +38,10 @@ const ProjectDetails: React.FC = () => {
       const response = await api.get<Project>(`/projects/${id}`);
       setProject(response);
       setEditedName(response.name);
-      setEditedDescription(response.description || "");
+      setEditedDescription(response.description || '');
       setLoading(false);
     } catch {
-      showError("Failed to Fetch Project Data...!");
+      showError('Failed to Fetch Project Data...!');
     }
   }, [id]);
 
@@ -58,7 +54,7 @@ const ProjectDetails: React.FC = () => {
       });
       setTasks(response.data || []);
     } catch {
-      setTasksError("Failed to fetch tasks for this project.");
+      setTasksError('Failed to fetch tasks for this project.');
       setTasks([]);
     } finally {
       setTasksLoading(false);
@@ -74,7 +70,7 @@ const ProjectDetails: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("refresh")) {
+    if (urlParams.get('refresh')) {
       fetchTasksForProject();
     }
   }, [fetchTasksForProject, id, router]);
@@ -89,10 +85,10 @@ const ProjectDetails: React.FC = () => {
       });
       setProject(response);
       setIsEditing(false);
-      showSuccess("Project updated successfully!");
+      showSuccess('Project updated successfully!');
     } catch {
-      showError("Failed to Update Project...!");
-      setUpdateError("Failed to update project.");
+      showError('Failed to Update Project...!');
+      setUpdateError('Failed to update project.');
     } finally {
       setUpdateLoading(false);
     }
@@ -103,32 +99,32 @@ const ProjectDetails: React.FC = () => {
       <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-1/2"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-3/4"></div> {/* Value */}
         </div>
         <div className="col-span-full">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
         </div>
@@ -138,10 +134,10 @@ const ProjectDetails: React.FC = () => {
         <div className="h-10 w-28 bg-gray-200 rounded"></div> {/* Button */}
       </div>
       <hr className="my-8" />
-      <div className="h-7 bg-gray-200 rounded w-1/3 mb-4"></div>{" "}
+      <div className="h-7 bg-gray-200 rounded w-1/3 mb-4"></div>{' '}
       {/* Tasks for this Project title */}
       <div className="flex justify-end mb-4">
-        <div className="h-10 w-32 bg-gray-200 rounded"></div>{" "}
+        <div className="h-10 w-32 bg-gray-200 rounded"></div>{' '}
         {/* Add New Task Button */}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -224,7 +220,7 @@ const ProjectDetails: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-gray-600">
-                  {project.description || "No description provided"}
+                  {project.description || 'No description provided'}
                 </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -247,12 +243,12 @@ const ProjectDetails: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  {new Date(project.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
+                  {new Date(project.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })}
                 </p>
               </div>
@@ -266,18 +262,18 @@ const ProjectDetails: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  {new Date(project.updatedAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
+                  {new Date(project.updatedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })}
                 </p>
               </div>
             </div>
             <div className="flex justify-end space-x-3 mb-8">
-              <Link href={"/projects"} className="mr-auto">
+              <Link href={'/projects'} className="mr-auto">
                 Back to Projects
               </Link>
               <Button onClick={() => setIsEditing(true)}>Edit Project</Button>
@@ -386,18 +382,18 @@ const ProjectDetails: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                  {task.description || "No description"}
+                  {task.description || 'No description'}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-2">
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      task.priority === TASK_PRIORITY_HIGH
-                        ? "bg-red-100 text-red-800"
-                        : task.priority === TASK_PRIORITY_MEDIUM
-                          ? "bg-yellow-100 text-yellow-800"
-                          : task.priority === TASK_PRIORITY_LOW
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
+                      task.priority === TASK_PRIORITY_MAP.HIGH
+                        ? 'bg-red-100 text-red-800'
+                        : task.priority === TASK_PRIORITY_MAP.MEDIUM
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : task.priority === TASK_PRIORITY_MAP.LOW
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-gray-100 text-gray-800'
                     }`}
                   >
                     <svg
@@ -411,19 +407,19 @@ const ProjectDetails: React.FC = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    {task.priority === TASK_PRIORITY_HIGH
-                      ? "High"
-                      : task.priority === TASK_PRIORITY_MEDIUM
-                        ? "Medium"
-                        : task.priority === TASK_PRIORITY_LOW
-                          ? "Low"
-                          : "Unknown"}
+                    {task.priority === TASK_PRIORITY_MAP.HIGH
+                       ? 'High'
+                       : task.priority === TASK_PRIORITY_MAP.MEDIUM
+                         ? 'Medium'
+                         : task.priority === TASK_PRIORITY_MAP.LOW
+                           ? 'Low'
+                           : 'Unknown'}
                   </span>
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      task.status === "DONE"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                      task.status === 'DONE'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
                     }`}
                   >
                     <svg
@@ -437,7 +433,7 @@ const ProjectDetails: React.FC = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    {task.status === "DONE" ? "Completed" : "Pending"}
+                    {task.status === 'DONE' ? 'Completed' : 'Pending'}
                   </span>
                 </div>
                 {task.assignedTo && (
