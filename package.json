@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "yarn next dev",
-    "build": "yarn next build",
-    "start": "yarn next start",
-    "lint": "yarn eslint"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
