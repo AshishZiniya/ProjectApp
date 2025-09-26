@@ -21,14 +21,16 @@ type TextareaProps = BaseProps &
 
 type Props = InputProps | TextareaProps;
 
-const baseInputClasses = "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm";
+const baseInputClasses =
+  "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm";
 const errorInputClasses = "border-red-500";
 
 const InputComponent: React.FC<Props> = (props) => {
   const { label, error, className = "", id } = props;
 
   // Create FormGroup props object with only defined values
-  const formGroupProps: { label?: string; htmlFor?: string; error?: string } = {};
+  const formGroupProps: { label?: string; htmlFor?: string; error?: string } =
+    {};
   if (label !== undefined) formGroupProps.label = label;
   if (id !== undefined) formGroupProps.htmlFor = id;
   if (error !== undefined) formGroupProps.error = error;
@@ -36,27 +38,33 @@ const InputComponent: React.FC<Props> = (props) => {
   const inputClasses = cn(
     baseInputClasses,
     className,
-    error && errorInputClasses
+    error && errorInputClasses,
   );
 
   if (props.type === "textarea") {
-    const { label: _label, error: _error, className: _className, ...textareaProps } = props as TextareaProps;
+    const {
+      label: _label,
+      error: _error,
+      className: _className,
+      ...textareaProps
+    } = props as TextareaProps;
     void _label;
     void _error;
     void _className;
 
     return (
       <FormGroup {...formGroupProps}>
-        <textarea
-          id={id}
-          className={inputClasses}
-          {...textareaProps}
-        />
+        <textarea id={id} className={inputClasses} {...textareaProps} />
       </FormGroup>
     );
   }
 
-  const { label: _label, error: _error, className: _className, ...inputProps } = props as InputProps;
+  const {
+    label: _label,
+    error: _error,
+    className: _className,
+    ...inputProps
+  } = props as InputProps;
   void _label;
   void _error;
   void _className;

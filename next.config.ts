@@ -3,7 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Enable experimental features for better performance
   experimental: {
-    optimizePackageImports: ["@fortawesome/react-fontawesome", "@fortawesome/free-solid-svg-icons"]
+    optimizePackageImports: [
+      "@fortawesome/react-fontawesome",
+      "@fortawesome/free-solid-svg-icons",
+    ],
   },
 
   // Image optimization
@@ -69,8 +72,8 @@ const nextConfig: NextConfig = {
         loaders: ["@svgr/webpack"],
         as: "*.js",
       },
-    }
-  }
+    },
+  },
 };
 
 export default nextConfig;

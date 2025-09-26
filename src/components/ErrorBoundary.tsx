@@ -2,7 +2,10 @@
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExclamationTriangle,
+  faRefresh,
+} from "@fortawesome/free-solid-svg-icons";
 import Button from "./ui/Button";
 
 interface ErrorBoundaryState {
@@ -12,7 +15,10 @@ interface ErrorBoundaryState {
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback?: React.ComponentType<{ error?: Error | undefined; resetError: () => void }>;
+  fallback?: React.ComponentType<{
+    error?: Error | undefined;
+    resetError: () => void;
+  }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
@@ -90,11 +96,7 @@ const DefaultErrorFallback: React.FC<{
         >
           Try Again
         </Button>
-        <Button
-          onClick={() => window.location.reload()}
-        >
-          Refresh Page
-        </Button>
+        <Button onClick={() => window.location.reload()}>Refresh Page</Button>
       </div>
 
       <div className="mt-6 pt-6 border-t border-gray-200 text-center">

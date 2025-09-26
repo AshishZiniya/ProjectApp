@@ -30,7 +30,10 @@ export type Permission = keyof typeof PERMISSIONS;
 /**
  * Check if a user role has a specific permission
  */
-export function hasPermission(userRole: UserRole, permission: Permission): boolean {
+export function hasPermission(
+  userRole: UserRole,
+  permission: Permission,
+): boolean {
   const allowedRoles = PERMISSIONS[permission];
   return allowedRoles.includes(userRole);
 }
@@ -38,15 +41,21 @@ export function hasPermission(userRole: UserRole, permission: Permission): boole
 /**
  * Check if a user role has any of the specified permissions
  */
-export function hasAnyPermission(userRole: UserRole, permissions: Permission[]): boolean {
-  return permissions.some(permission => hasPermission(userRole, permission));
+export function hasAnyPermission(
+  userRole: UserRole,
+  permissions: Permission[],
+): boolean {
+  return permissions.some((permission) => hasPermission(userRole, permission));
 }
 
 /**
  * Check if a user role has all of the specified permissions
  */
-export function hasAllPermissions(userRole: UserRole, permissions: Permission[]): boolean {
-  return permissions.every(permission => hasPermission(userRole, permission));
+export function hasAllPermissions(
+  userRole: UserRole,
+  permissions: Permission[],
+): boolean {
+  return permissions.every((permission) => hasPermission(userRole, permission));
 }
 
 /**
@@ -61,11 +70,13 @@ export function hasRoleLevel(userRole: UserRole, minRole: UserRole): boolean {
 /**
  * Get all permissions for a user role
  */
-export function getUserPermissions(userRole: UserRole | undefined): Permission[] {
+export function getUserPermissions(
+  userRole: UserRole | undefined,
+): Permission[] {
   if (!userRole) return [];
 
-  return Object.keys(PERMISSIONS).filter(permission =>
-    hasPermission(userRole, permission as Permission)
+  return Object.keys(PERMISSIONS).filter((permission) =>
+    hasPermission(userRole, permission as Permission),
   ) as Permission[];
 }
 
@@ -76,7 +87,7 @@ export function canAccessResource(
   userRole: UserRole,
   userId: string,
   resourceUserId: string | undefined,
-  requiredPermission?: Permission
+  requiredPermission?: Permission,
 ): boolean {
   // Users can always access their own resources
   if (resourceUserId && userId === resourceUserId) {

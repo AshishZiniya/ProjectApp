@@ -34,25 +34,34 @@ const UsersList: React.FC<UsersListProps> = ({
   const { showSuccess, showError } = useToast();
 
   // Fetch users data
-  const { data: response, loading, error, refetch } = useApiQuery<PaginatedResponse<User>>(
-    "/users",
-    {
-      params: { q, page, limit },
-      onError: (err) => {
-        console.error("Error fetching users:", err);
-        showError("Failed to fetch users.");
-      },
-      onSuccess: (data) => {
-        console.log("✅ Users fetched successfully:", data.data?.length || 0, "users");
-      },
-    }
-  );
+  const {
+    data: response,
+    loading,
+    error,
+    refetch,
+  } = useApiQuery<PaginatedResponse<User>>("/users", {
+    params: { q, page, limit },
+    onError: (err) => {
+      console.error("Error fetching users:", err);
+      showError("Failed to fetch users.");
+    },
+    onSuccess: (data) => {
+      console.log(
+        "✅ Users fetched successfully:",
+        data.data?.length || 0,
+        "users",
+      );
+    },
+  });
 
   const users = response?.data || [];
   const totalPages = response?.pages || 1;
 
   // Delete user mutation
-  const { mutate: deleteUser, loading: deleting } = useApiMutation<void, string>();
+  const { mutate: deleteUser, loading: deleting } = useApiMutation<
+    void,
+    string
+  >();
 
   const handleDeleteClick = useCallback((user: User) => {
     setUserToDelete(user);
@@ -106,8 +115,8 @@ const UsersList: React.FC<UsersListProps> = ({
         role === "ADMIN"
           ? "bg-purple-100 text-purple-800"
           : role === "SUPERADMIN"
-          ? "bg-red-100 text-red-800"
-          : "bg-blue-100 text-blue-800"
+            ? "bg-red-100 text-red-800"
+            : "bg-blue-100 text-blue-800"
       }`}
     >
       {role}

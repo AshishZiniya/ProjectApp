@@ -32,12 +32,14 @@ A modern, full-stack project management application built with Next.js 15, TypeS
 ## 🚀 Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd project-management-app
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -46,11 +48,13 @@ A modern, full-stack project management application built with Next.js 15, TypeS
 
 3. **Environment Setup**
    Create a `.env.local` file in the root directory:
+
    ```env
    NEXT_PUBLIC_API_BASE_URL=http://localhost:10000
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    # or
@@ -92,20 +96,25 @@ src/
 ## 🎨 Customization
 
 ### Styling
+
 The project uses Tailwind CSS for styling. You can customize the design by:
+
 - Modifying `tailwind.config.js`
 - Updating CSS classes in components
 - Adding new design tokens in `src/styles/globals.css`
 
 ### Components
+
 UI components are located in `src/components/ui/`. The Button component uses Class Variance Authority for flexible styling variants.
 
 ### API Configuration
+
 Update the API base URL in `src/constants/index.ts` or via environment variables.
 
 ## 🔒 Authentication
 
 The app supports JWT-based authentication with:
+
 - Login/Register functionality
 - Token refresh mechanism
 - Protected routes
@@ -114,6 +123,7 @@ The app supports JWT-based authentication with:
 ## 📱 Responsive Design
 
 The application is fully responsive and optimized for:
+
 - Mobile devices (320px+)
 - Tablets (768px+)
 - Desktop (1024px+)
@@ -158,6 +168,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 If you encounter any issues or have questions:
+
 1. Check the [Issues](https://github.com/your-repo/issues) page
 2. Create a new issue with detailed information
 3. Contact the development team

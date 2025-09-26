@@ -36,7 +36,7 @@ export class ApiError extends Error {
     status: number,
     code?: string | undefined,
     endpoint?: string,
-    method?: string
+    method?: string,
   ) {
     super(message);
     this.name = "ApiError";
@@ -114,7 +114,7 @@ async function fetchApi<TResponse, TBody = unknown>(
     method: options.method || "GET",
     url,
     hasBody: body !== undefined,
-    hasToken: !!localStorage.getItem("accessToken")
+    hasToken: !!localStorage.getItem("accessToken"),
   });
 
   const hasBody = body !== undefined;
@@ -184,7 +184,9 @@ async function processResponse<TResponse, TBody>(
           const refreshData = await refreshRes.json();
           localStorage.setItem("accessToken", refreshData.accessToken);
           localStorage.setItem("refreshToken", refreshData.refreshToken);
-          console.log("✅ Token refreshed successfully, retrying original request");
+          console.log(
+            "✅ Token refreshed successfully, retrying original request",
+          );
           return fetchApi<TResponse, TBody>(endpoint, options, true);
         } else {
           console.log("❌ Token refresh failed:", refreshRes.status);
@@ -209,7 +211,7 @@ async function processResponse<TResponse, TBody>(
       message,
       code,
       endpoint,
-      method: options.method || "GET"
+      method: options.method || "GET",
     });
 
     throw new ApiError(
@@ -217,7 +219,7 @@ async function processResponse<TResponse, TBody>(
       response.status,
       code,
       endpoint,
-      options.method || "GET"
+      options.method || "GET",
     );
   }
 
@@ -251,7 +253,9 @@ const extractErrorMessage = async (response: Response): Promise<string> => {
 /**
  * Extract error code from response
  */
-const extractErrorCode = async (response: Response): Promise<string | undefined> => {
+const extractErrorCode = async (
+  response: Response,
+): Promise<string | undefined> => {
   try {
     const json = await parseJsonMaybe(response);
     if (json && typeof json === "object") {

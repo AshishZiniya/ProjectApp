@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   useCallback,
@@ -6,35 +6,35 @@ import React, {
   useState,
   ReactNode,
   ChangeEvent,
-} from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import api from '@/lib/api';
-import { Task, Comment } from '@/types';
-import Card from '@/components/ui/Card';
-import Alert from '@/components/ui/Alert';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-import CommentItem from '@/app/comments/CommentItem';
-import useToast from '@/hooks/useToast';
-import { io } from 'socket.io-client';
+} from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import api from "@/lib/api";
+import { Task, Comment } from "@/types";
+import Card from "@/components/ui/Card";
+import Alert from "@/components/ui/Alert";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import CommentItem from "@/app/comments/CommentItem";
+import useToast from "@/hooks/useToast";
+import { io } from "socket.io-client";
 import {
   TASK_PRIORITY_HIGH,
   TASK_PRIORITY_LOW,
   TASK_PRIORITY_MEDIUM,
-} from '@/constants';
-import FormGroup from '@/components/common/FormGroup';
+} from "@/constants";
+import FormGroup from "@/components/common/FormGroup";
 
 const getPriorityLabel = (priority: number) => {
   switch (priority) {
     case TASK_PRIORITY_HIGH:
-      return 'High';
+      return "High";
     case TASK_PRIORITY_MEDIUM:
-      return 'Medium';
+      return "Medium";
     case TASK_PRIORITY_LOW:
-      return 'Low';
+      return "Low";
     default:
-      return 'Unknown';
+      return "Unknown";
   }
 };
 
@@ -44,13 +44,13 @@ const TaskDetails: React.FC = (): ReactNode => {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedDescription, setEditedDescription] = useState('');
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
   const [editedPriority, setEditedPriority] = useState(2);
   const [editedStatus, setEditedStatus] = useState<
-    'TODO' | 'IN_PROGRESS' | 'DONE'
-  >('TODO');
-  const [editedDueDate, setEditedDueDate] = useState('');
+    "TODO" | "IN_PROGRESS" | "DONE"
+  >("TODO");
+  const [editedDueDate, setEditedDueDate] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
@@ -58,7 +58,7 @@ const TaskDetails: React.FC = (): ReactNode => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(true);
   const [commentsError, setCommentsError] = useState<string | null>(null);
-  const [newCommentBody, setNewCommentBody] = useState('');
+  const [newCommentBody, setNewCommentBody] = useState("");
   const [postCommentLoading, setPostCommentLoading] = useState(false);
   const [postCommentError, setPostCommentError] = useState<string | null>(null);
 
@@ -66,7 +66,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   const fetchTaskAndComments = useCallback(async () => {
     if (!id) {
-      showError('No task ID provided');
+      showError("No task ID provided");
       setLoading(false);
       setCommentsLoading(false);
       return;
@@ -78,29 +78,29 @@ const TaskDetails: React.FC = (): ReactNode => {
     try {
       const taskResponse = await api.get<Task>(`/tasks/${id}`);
       if (!taskResponse.project || !taskResponse) {
-        showError('Task or project data is missing');
+        showError("Task or project data is missing");
       }
       setTask(taskResponse);
       setEditedTitle(taskResponse.title);
-      setEditedDescription(taskResponse.description || '');
+      setEditedDescription(taskResponse.description || "");
       setEditedPriority(taskResponse.priority);
       setEditedStatus(taskResponse.status);
       const dueDateString = taskResponse.dueDate
-        ? new Date(taskResponse.dueDate).toISOString().split('T')[0]
-        : '';
-      setEditedDueDate(dueDateString ?? '');
+        ? new Date(taskResponse.dueDate).toISOString().split("T")[0]
+        : "";
+      setEditedDueDate(dueDateString ?? "");
 
       const commentsResponse = await api.get<Comment[]>(
-        `/comments/${id}/taskId`
+        `/comments/${id}/taskId`,
       );
       setComments(commentsResponse);
       setLoading(false);
       setCommentsLoading(false);
     } catch (error) {
-      console.error('Error fetching task and comments:', error);
-      showError('Failed to fetch task or comments. Please try again.');
+      console.error("Error fetching task and comments:", error);
+      showError("Failed to fetch task or comments. Please try again.");
       setTask(null);
-      setCommentsError('Failed to load comments.');
+      setCommentsError("Failed to load comments.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -110,38 +110,38 @@ const TaskDetails: React.FC = (): ReactNode => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     if (!apiBaseUrl) {
-      showError('API base URL not configured');
+      showError("API base URL not configured");
       return;
     }
 
     const socket = io(apiBaseUrl, {
-      transports: ['websocket'], // force websocket (optional but recommended)
+      transports: ["websocket"], // force websocket (optional but recommended)
       withCredentials: true,
     });
-    socket.on('connect', () => {
-      console.log('Connected to Socket.io server');
-      socket.emit('joinTaskComments', id);
+    socket.on("connect", () => {
+      console.log("Connected to Socket.io server");
+      socket.emit("joinTaskComments", id);
     });
 
-    socket.on('connect_error', (error) => {
-      console.error('Socket.io connection error:', error);
+    socket.on("connect_error", (error) => {
+      console.error("Socket.io connection error:", error);
     });
-    socket.on('newComment', (newComment: Comment & { taskId?: string }) => {
+    socket.on("newComment", (newComment: Comment & { taskId?: string }) => {
       if (newComment.task?.id === id || newComment.taskId === id) {
         setComments((prev) => [newComment, ...prev]);
       }
     });
 
-    socket.on('deletedComment', (deletedCommentId: string) => {
+    socket.on("deletedComment", (deletedCommentId: string) => {
       setComments((prev) =>
-        prev.filter((comment) => comment.id !== deletedCommentId)
+        prev.filter((comment) => comment.id !== deletedCommentId),
       );
     });
-    socket.on('disconnect', () => {
-      console.log('Disconnected from Socket.io server');
+    socket.on("disconnect", () => {
+      console.log("Disconnected from Socket.io server");
     });
     return () => {
-      socket.emit('leaveTaskComments', id);
+      socket.emit("leaveTaskComments", id);
       socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,12 +160,12 @@ const TaskDetails: React.FC = (): ReactNode => {
       });
       setTask(response);
       setIsEditing(false);
-      showSuccess('Task updated successfully!');
+      showSuccess("Task updated successfully!");
       setUpdateLoading(false);
     } catch (error) {
-      console.error('Error updating task:', error);
-      showError('Failed to Update Task...!');
-      setUpdateError('Failed to update task.');
+      console.error("Error updating task:", error);
+      showError("Failed to Update Task...!");
+      setUpdateError("Failed to update task.");
     }
   };
 
@@ -179,25 +179,25 @@ const TaskDetails: React.FC = (): ReactNode => {
       await api.post<Comment>(`/comments/${id}`, {
         body: newCommentBody,
       });
-      setNewCommentBody('');
-      showSuccess('Comment added successfully!');
+      setNewCommentBody("");
+      showSuccess("Comment added successfully!");
       // Socket.io will handle updating the comments list
     } catch (error) {
-      console.error('Error posting comment:', error);
-      showError('Failed to Add Comment...!');
-      setPostCommentError('Failed to post comment.');
+      console.error("Error posting comment:", error);
+      showError("Failed to Add Comment...!");
+      setPostCommentError("Failed to post comment.");
     }
   };
 
   const handleDeleteComment = async (comment: Comment) => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
+    if (window.confirm("Are you sure you want to delete this comment?")) {
       try {
         await api.delete(`/comments/${comment.id}`);
-        showSuccess('Comment deleted successfully!');
+        showSuccess("Comment deleted successfully!");
         // Socket.io will handle updating the comments list
       } catch (error) {
-        console.error('Error deleting comment:', error);
-        showError('Failed to delete Comment...!');
+        console.error("Error deleting comment:", error);
+        showError("Failed to delete Comment...!");
       }
     }
   };
@@ -207,42 +207,42 @@ const TaskDetails: React.FC = (): ReactNode => {
       <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-1/2"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-3/4"></div> {/* Value */}
         </div>
         <div className="col-span-full">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
         </div>
         <div className="col-span-full">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-full"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-1/3"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-1/3"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
         </div>
         <div>
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{' '}
+          <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>{" "}
           {/* Label */}
           <div className="h-6 bg-gray-200 rounded w-2/3"></div> {/* Value */}
         </div>
@@ -252,15 +252,15 @@ const TaskDetails: React.FC = (): ReactNode => {
         <div className="h-10 w-28 bg-gray-200 rounded"></div> {/* Button */}
       </div>
       <hr className="my-8" />
-      <div className="h-7 bg-gray-200 rounded w-1/3 mb-4"></div>{' '}
+      <div className="h-7 bg-gray-200 rounded w-1/3 mb-4"></div>{" "}
       {/* Comments title */}
       <div className="flex justify-end mb-4">
-        <div className="h-10 w-40 bg-gray-200 rounded"></div>{' '}
+        <div className="h-10 w-40 bg-gray-200 rounded"></div>{" "}
         {/* View All Comments Button */}
       </div>
-      <div className="h-20 bg-gray-200 rounded mb-2"></div>{' '}
+      <div className="h-20 bg-gray-200 rounded mb-2"></div>{" "}
       {/* New comment input */}
-      <div className="h-10 bg-gray-200 rounded w-full"></div>{' '}
+      <div className="h-10 bg-gray-200 rounded w-full"></div>{" "}
       {/* Post Comment Button */}
       <div className="space-y-4 mt-6">
         {[...Array(2)].map((_, index) => (
@@ -270,17 +270,17 @@ const TaskDetails: React.FC = (): ReactNode => {
           >
             <div className="flex justify-between items-start mb-2">
               <div>
-                <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>{' '}
+                <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>{" "}
                 {/* Author Name */}
-                <div className="h-3 bg-gray-200 rounded w-40"></div>{' '}
+                <div className="h-3 bg-gray-200 rounded w-40"></div>{" "}
                 {/* Date */}
               </div>
-              <div className="h-8 w-16 bg-gray-200 rounded"></div>{' '}
+              <div className="h-8 w-16 bg-gray-200 rounded"></div>{" "}
               {/* Delete Button */}
             </div>
-            <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>{' '}
+            <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>{" "}
             {/* Body line 1 */}
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>{' '}
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>{" "}
             {/* Body line 2 */}
           </Card>
         ))}
@@ -364,7 +364,7 @@ const TaskDetails: React.FC = (): ReactNode => {
                   </h3>
                 </div>
                 <p className="text-gray-600">
-                  {task.description || 'No description provided'}
+                  {task.description || "No description provided"}
                 </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -379,10 +379,10 @@ const TaskDetails: React.FC = (): ReactNode => {
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     task.priority === TASK_PRIORITY_HIGH
-                      ? 'bg-red-100 text-red-800'
+                      ? "bg-red-100 text-red-800"
                       : task.priority === TASK_PRIORITY_MEDIUM
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-green-100 text-green-800'
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-green-100 text-green-800"
                   }`}
                 >
                   {getPriorityLabel(task.priority)}
@@ -399,12 +399,12 @@ const TaskDetails: React.FC = (): ReactNode => {
                 </div>
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    task.status === 'DONE'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                    task.status === "DONE"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {task.status === 'DONE' ? 'Completed' : 'In Progress'}
+                  {task.status === "DONE" ? "Completed" : "In Progress"}
                 </span>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -418,12 +418,12 @@ const TaskDetails: React.FC = (): ReactNode => {
                 </div>
                 <p className="text-gray-600">
                   {task.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
+                    ? new Date(task.dueDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       })
-                    : 'No due date'}
+                    : "No due date"}
                 </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -436,7 +436,7 @@ const TaskDetails: React.FC = (): ReactNode => {
                   </h3>
                 </div>
                 <p className="text-gray-600">
-                  {task.assignedTo?.name || 'Unassigned'}
+                  {task.assignedTo?.name || "Unassigned"}
                 </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -449,12 +449,12 @@ const TaskDetails: React.FC = (): ReactNode => {
                   </h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  {new Date(task.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
+                  {new Date(task.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })}
                 </p>
               </div>
@@ -468,12 +468,12 @@ const TaskDetails: React.FC = (): ReactNode => {
                   </h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  {new Date(task.updatedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
+                  {new Date(task.updatedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })}
                 </p>
               </div>
@@ -524,7 +524,7 @@ const TaskDetails: React.FC = (): ReactNode => {
                 value={editedStatus}
                 onChange={(e) =>
                   setEditedStatus(
-                    e.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE'
+                    e.target.value as "TODO" | "IN_PROGRESS" | "DONE",
                   )
                 }
                 className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"

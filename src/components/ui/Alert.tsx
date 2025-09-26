@@ -22,11 +22,7 @@ const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
-      className={cn(
-        "border-l-4 p-4 rounded-r-lg",
-        typeStyles[type],
-        className
-      )}
+      className={cn("border-l-4 p-4 rounded-r-lg", typeStyles[type], className)}
       role="alert"
     >
       <p className="font-medium">{message}</p>

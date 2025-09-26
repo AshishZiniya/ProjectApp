@@ -1,7 +1,7 @@
 // app/admin/add-admin/AddAdmin.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
@@ -18,7 +18,7 @@ const AddAdmin: React.FC = () => {
   const { register, loading, error } = useAuth();
   const { showSuccess } = useToast();
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const errors: { email?: string; name?: string } = {};
     if (!email) {
       errors.email = "Email is required";
@@ -32,21 +32,24 @@ const AddAdmin: React.FC = () => {
     }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
-  };
+  }, [email, name]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-    try {
-      await register(email, name, "Admin@123", "ADMIN");
-      showSuccess("Admin created successfully");
-      setEmail("");
-      setName("");
-    } catch {
-      // Error is handled by useAuth hook
-    }
-  };
+      try {
+        await register(email, name, "Admin@123", "ADMIN");
+        showSuccess("Admin created successfully");
+        setEmail("");
+        setName("");
+      } catch {
+        // Error is handled by useAuth hook
+      }
+    },
+    [validateForm, register, email, name, showSuccess],
+  );
 
   return (
     <div className="flex items-center justify-center p-6">

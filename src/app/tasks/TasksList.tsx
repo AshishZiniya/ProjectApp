@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// app/tasks/TasksList.tsx
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import api from "@/lib/api";
 import { Task, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
@@ -18,36 +16,32 @@ import {
   TASK_PRIORITY_MEDIUM,
 } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
+import { useApiQuery } from "@/hooks/useApiQuery";
 
 const TasksList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(DEFAULT_PAGE_LIMIT);
-  const [totalPages, setTotalPages] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
 
-  const fetchTasks = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await api.get<PaginatedResponse<Task>>("/tasks/all", {
-        params: { page, limit },
-      });
-      setTasks(response.data);
-      setTotalPages(response.pages);
-      setLoading(false);
-    } catch {
+  // Use optimized API query with caching
+  const {
+    data: response,
+    loading,
+    refetch,
+  } = useApiQuery<PaginatedResponse<Task>>("/tasks/all", {
+    params: { page, limit },
+    onError: (err) => {
+      console.error("Error fetching tasks:", err);
       showError("Failed to fetch tasks.");
-    }
-  }, [limit, page]);
+    },
+  });
 
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+  const tasks = response?.data || [];
+  const totalPages = response?.pages || 1;
 
   const handleDeleteClick = (task: Task) => {
     setTaskToDelete(task);
@@ -60,13 +54,16 @@ const TasksList: React.FC = () => {
     setDeleting(true);
     try {
       await api.delete(`/tasks/${taskToDelete.id}`);
-      setTasks(tasks.filter((task) => task.id !== taskToDelete.id));
+      // Force a re-fetch to ensure data consistency
+      refetch();
       showSuccess("Task deleted successfully!");
       setShowDeleteModal(false);
       setTaskToDelete(null);
+    } catch (err) {
+      console.error("Error deleting task:", err);
+      showError("Failed to delete task.");
+    } finally {
       setDeleting(false);
-    } catch {
-      showError("Failed to delete Task...!");
     }
   };
 

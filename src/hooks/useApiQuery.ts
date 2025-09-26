@@ -10,7 +10,12 @@ const CACHE_DURATION = 30000; // 30 seconds
 /**
  * Supported parameter value types for API requests
  */
-type ParamValue = string | number | boolean | undefined | Array<string | number | boolean>;
+type ParamValue =
+  | string
+  | number
+  | boolean
+  | undefined
+  | Array<string | number | boolean>;
 
 interface UseApiQueryOptions<T> {
   enabled?: boolean;
@@ -32,7 +37,7 @@ interface UseApiQueryReturn<T> {
  */
 export function useApiQuery<T>(
   endpoint: string,
-  options?: UseApiQueryOptions<T>
+  options?: UseApiQueryOptions<T>,
 ): UseApiQueryReturn<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,7 +49,7 @@ export function useApiQuery<T>(
     if (isFetching) return; // Prevent concurrent requests
 
     // Generate cache key
-    const paramsString = options?.params ? JSON.stringify(options.params) : '';
+    const paramsString = options?.params ? JSON.stringify(options.params) : "";
     const cacheKey = `${endpoint}:${paramsString}`;
 
     // Check cache first
@@ -59,7 +64,9 @@ export function useApiQuery<T>(
     setError(null);
 
     try {
-      const apiOptions = options?.params ? { params: options.params } : undefined;
+      const apiOptions = options?.params
+        ? { params: options.params }
+        : undefined;
       const result = await api.get<T>(endpoint, apiOptions);
 
       // Cache the result
@@ -89,7 +96,7 @@ export function useApiQuery<T>(
 
   useEffect(() => {
     // Only fetch if we don't have cached data
-    const paramsString = options?.params ? JSON.stringify(options.params) : '';
+    const paramsString = options?.params ? JSON.stringify(options.params) : "";
     const cacheKey = `${endpoint}:${paramsString}`;
     const cached = queryCache.get(cacheKey);
 
@@ -107,7 +114,7 @@ export function useApiQuery<T>(
 
   // Refetch function that bypasses cache
   const refetch = useCallback(async () => {
-    const paramsString = options?.params ? JSON.stringify(options.params) : '';
+    const paramsString = options?.params ? JSON.stringify(options.params) : "";
     const cacheKey = `${endpoint}:${paramsString}`;
     queryCache.delete(cacheKey); // Remove from cache
     await fetchData();
@@ -129,45 +136,49 @@ export function useApiMutation<TData, TVariables = unknown>() {
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<TData | null>(null);
 
-  const mutate = useCallback(async (
-    endpoint: string,
-    variables: TVariables,
-    method: "POST" | "PUT" | "PATCH" | "DELETE" = "POST"
-  ) => {
-    setLoading(true);
-    setError(null);
-    setData(null);
+  const mutate = useCallback(
+    async (
+      endpoint: string,
+      variables: TVariables,
+      method: "POST" | "PUT" | "PATCH" | "DELETE" = "POST",
+    ) => {
+      setLoading(true);
+      setError(null);
+      setData(null);
 
-    try {
-      let result: TData;
+      try {
+        let result: TData;
 
-      switch (method) {
-        case "POST":
-          result = await api.post<TData, TVariables>(endpoint, variables);
-          break;
-        case "PUT":
-          result = await api.put<TData, TVariables>(endpoint, variables);
-          break;
-        case "PATCH":
-          result = await api.patch<TData, TVariables>(endpoint, variables);
-          break;
-        case "DELETE":
-          result = await api.delete<TData>(endpoint);
-          break;
-        default:
-          throw new Error(`Unsupported method: ${method}`);
+        switch (method) {
+          case "POST":
+            result = await api.post<TData, TVariables>(endpoint, variables);
+            break;
+          case "PUT":
+            result = await api.put<TData, TVariables>(endpoint, variables);
+            break;
+          case "PATCH":
+            result = await api.patch<TData, TVariables>(endpoint, variables);
+            break;
+          case "DELETE":
+            result = await api.delete<TData>(endpoint);
+            break;
+          default:
+            throw new Error(`Unsupported method: ${method}`);
+        }
+
+        setData(result);
+        return result;
+      } catch (err) {
+        const error =
+          err instanceof Error ? err : new Error("An error occurred");
+        setError(error);
+        throw error;
+      } finally {
+        setLoading(false);
       }
-
-      setData(result);
-      return result;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error("An error occurred");
-      setError(error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   return {
     mutate,

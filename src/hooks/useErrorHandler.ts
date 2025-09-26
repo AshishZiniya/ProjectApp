@@ -47,16 +47,12 @@ export function useErrorHandler(): UseErrorHandlerReturn {
         showError(errorMessage);
       }
     },
-    [showError]
+    [showError],
   );
 
   const handleApiError = useCallback(
     (error: ApiError, options: ErrorHandlerOptions = {}) => {
-      const {
-        showToast = true,
-        logError = true,
-        fallbackMessage,
-      } = options;
+      const { showToast = true, logError = true, fallbackMessage } = options;
 
       let errorMessage = fallbackMessage || `API Error: ${error.message}`;
 
@@ -84,7 +80,8 @@ export function useErrorHandler(): UseErrorHandlerReturn {
           errorMessage = "A server error occurred. Please try again later.";
           break;
         default:
-          errorMessage = error.message || fallbackMessage || "An API error occurred";
+          errorMessage =
+            error.message || fallbackMessage || "An API error occurred";
       }
 
       if (logError) {
@@ -100,7 +97,7 @@ export function useErrorHandler(): UseErrorHandlerReturn {
         showError(errorMessage);
       }
     },
-    [showError]
+    [showError],
   );
 
   const clearError = useCallback(() => {

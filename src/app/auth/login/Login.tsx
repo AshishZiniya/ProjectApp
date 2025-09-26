@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
-import Alert from '@/components/ui/Alert';
-import { useAuth } from '@/hooks/useAuth';
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Alert from "@/components/ui/Alert";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
@@ -19,46 +19,45 @@ const Login: React.FC = () => {
   }>({});
   const router = useRouter();
 
-  const { login, loading, error, user, setLoading, setError } = useAuth();
+  const { login, loading, error, user } = useAuth();
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const errors: { email?: string; password?: string } = {};
     if (!email) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = 'Please enter a valid email';
+      errors.email = "Please enter a valid email";
     }
     if (!password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
+      errors.password = "Password must be at least 8 characters";
     }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
-  };
+  }, [email, password]);
 
   useEffect(() => {
     if (user && !loading) {
       // Redirect to projects after successful login
-      router.push('/projects');
+      router.push("/projects");
     }
   }, [user, loading, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      await login(email, password);
-      setLoading(false);
-      // Redirect is handled by useEffect when user state updates
-    } catch {
-      // Error is handled by useAuth
-    }
-  };
+      try {
+        await login(email, password);
+        // Redirect is handled by useEffect when user state updates
+      } catch {
+        // Error is handled by useAuth
+      }
+    },
+    [validateForm, login, email, password],
+  );
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
@@ -101,7 +100,7 @@ const Login: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                  validationErrors.email ? 'border-red-500' : 'border-gray-300'
+                  validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your email"
               />
@@ -134,15 +133,15 @@ const Login: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className={`block w-full px-4 py-3 pr-12 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   validationErrors.password
-                    ? 'border-red-500'
-                    : 'border-gray-300'
+                    ? "border-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
               />
@@ -229,7 +228,7 @@ const Login: React.FC = () => {
           </Button>
         </form>
         <p className="mt-6 text-center text-gray-600">
-          Don&#39;t have an account?{' '}
+          Don&#39;t have an account?{" "}
           <Link href="/auth/register" className="text-blue-600 hover:underline">
             Register here
           </Link>
