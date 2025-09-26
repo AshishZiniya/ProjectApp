@@ -1,6 +1,5 @@
 import { API_BASE_URL } from "@/constants";
 import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
 
 // Debug: Log the API base URL being used
 console.log("🔗 API Base URL:", API_BASE_URL);
@@ -112,7 +111,14 @@ async function fetchApi<TResponse, TBody = unknown>(
   const queryString = buildQueryString(params);
   const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
-  const session = await getSession();
+  // Get session with better error handling
+  let session = null;
+  try {
+    session = await getSession();
+  } catch (error) {
+    console.warn("Failed to get session:", error);
+  }
+
   const accessToken = session?.accessToken as string | undefined;
 
   console.log("🌐 API Request:", {
@@ -120,7 +126,13 @@ async function fetchApi<TResponse, TBody = unknown>(
     url,
     hasBody: body !== undefined,
     hasToken: !!accessToken,
+    hasSession: !!session,
   });
+
+  // If no session and trying to access protected endpoint, throw error early
+  if (!session && endpoint !== "/auth/login" && endpoint !== "/auth/register" && endpoint !== "/auth/refresh") {
+    console.warn("No active session found for protected endpoint:", endpoint);
+  }
 
   const hasBody = body !== undefined;
 
@@ -139,7 +151,7 @@ async function fetchApi<TResponse, TBody = unknown>(
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    return await processResponse(response, endpoint, options, internalRetry, session);
+    return await processResponse(response, endpoint, options, internalRetry);
   } catch (error) {
     clearTimeout(timeoutId);
     if (error instanceof Error && error.name === "AbortError") {
@@ -156,7 +168,6 @@ async function processResponse<TResponse, TBody>(
   endpoint: string,
   options: FetchOptions<TBody>,
   internalRetry: boolean,
-  session?: Session | null,
 ): Promise<TResponse> {
   // Handle authentication errors with token refresh
   if (
@@ -165,7 +176,9 @@ async function processResponse<TResponse, TBody>(
     !internalRetry
   ) {
     try {
-      const refreshToken = session?.refreshToken as string | undefined;
+      // Get fresh session for token refresh
+      const currentSession = await getSession();
+      const refreshToken = currentSession?.refreshToken as string | undefined;
       if (refreshToken) {
         console.log("🔄 Attempting token refresh for:", endpoint);
         const refreshController = new AbortController();
