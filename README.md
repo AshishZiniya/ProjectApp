@@ -26,7 +26,7 @@ A modern, full-stack project management application built with Next.js 15, TypeS
 
 ## 📋 Prerequisites
 
-- Node.js 18+ and npm/yarn
+- Node.js 18+ and Yarn
 - Backend API server (NestJS) running on the configured API base URL
 
 ## 🚀 Getting Started
@@ -41,8 +41,6 @@ A modern, full-stack project management application built with Next.js 15, TypeS
 2. **Install dependencies**
 
    ```bash
-   npm install
-   # or
    yarn install
    ```
 
@@ -56,8 +54,6 @@ A modern, full-stack project management application built with Next.js 15, TypeS
 4. **Run the development server**
 
    ```bash
-   npm run dev
-   # or
    yarn dev
    ```
 
@@ -88,10 +84,10 @@ src/
 
 ## 🔧 Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn start` - Start production server
+- `yarn lint` - Run ESLint
 
 ## 🎨 Customization
 

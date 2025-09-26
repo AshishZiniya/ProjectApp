@@ -7,8 +7,6 @@ This document explains how to set up and use NextAuth for JWT authentication and
 First, install the required dependencies:
 
 ```bash
-npm install next-auth @auth/prisma-adapter
-# or
 yarn add next-auth @auth/prisma-adapter
 ```
 
