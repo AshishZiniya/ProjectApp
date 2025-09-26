@@ -21,12 +21,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/auth/forgot-password') ||
     pathname.startsWith('/auth/reset-password');
 
-  const isProtectedRoute =
-    pathname.startsWith('/projects') ||
-    pathname.startsWith('/tasks') ||
-    pathname.startsWith('/comments') ||
-    pathname.startsWith('/users') ||
-    pathname.startsWith('/admin');
+  // All routes except auth routes are protected
+  const isProtectedRoute = !isAuthRoute;
 
   const isAdminRoute = pathname.startsWith('/admin');
   const isUsersRoute = pathname.startsWith('/users');
@@ -98,15 +94,14 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/users/:path*',
-    '/projects/:path*',
-    '/tasks/:path*',
-    '/comments/:path*',
-    '/admin/:path*',
-    '/auth/login',
-    '/auth/register',
-    '/auth/forgot-password',
-    '/auth/reset-password',
-    '/auth/refresh',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public files with extensions
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
   ],
 };
