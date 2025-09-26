@@ -102,7 +102,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
-      <body className="flex flex-col min-h-screen antialiased pt-20">
+      <body className="flex flex-col min-h-screen antialiased">
         <div style={{ contain: "layout style paint" }}>
           <SpeedInsights />
           <Analytics />

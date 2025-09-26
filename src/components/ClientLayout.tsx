@@ -25,7 +25,7 @@ export default function ClientLayout({
         {/* Authentication is now handled entirely in middleware */}
         {!isAuthPage && <Navbar />}
         <Suspense fallback={<TopLoader />}>
-          <main className={`flex-1 ${!isAuthPage ? "mt-16" : ""}`}>
+          <main className={`flex-1 ${!isAuthPage ? "mt-20" : ""}`}>
             {children}
           </main>
         </Suspense>

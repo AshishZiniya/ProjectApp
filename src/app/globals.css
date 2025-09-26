@@ -53,6 +53,11 @@ img[loading="lazy"] {
   contain-intrinsic-size: 1px 150px;
 }
 
+/* Ensure proper spacing for fixed navbar */
+body {
+  padding-top: 5rem; /* 80px for h-20 navbar */
+}
+
 /* Logo and icon stability */
 .logo,
 .icon,

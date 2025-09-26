@@ -7,10 +7,7 @@ const Toaster: React.FC = () => {
       position="top-right"
       reverseOrder={false}
       gutter={10}
-      containerClassName=""
-      containerStyle={{
-        marginTop: "50px",
-      }}
+      containerClassName="mt-[50px]"
       toastOptions={{
         success: {
           duration: TOAST_DURATION,
