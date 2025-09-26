@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, memo } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, memo } from "react";
 import api from "@/lib/api";
 import { Project, PaginatedResponse } from "@/types";
 import Card from "@/components/ui/Card";
@@ -11,7 +10,6 @@ import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
-import { useAuth } from "@/hooks/useAuth";
 import { PROJECTS_PAGE_LIMIT_OPTIONS } from "@/constants";
 import PaginationControls from "@/components/common/PaginationControls";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -25,8 +23,6 @@ const ProjectsList: React.FC = () => {
   const [deleting, setDeleting] = useState(false);
 
   const { showSuccess, showError } = useToast();
-  const { user } = useAuth();
-  const router = useRouter();
 
   // Use optimized API query with caching
   const {
@@ -45,12 +41,6 @@ const ProjectsList: React.FC = () => {
   const projects = response?.data || [];
   const totalPages = response?.pages || 1;
 
-  useEffect(() => {
-    // Only redirect if we're not loading and user is definitely null (not just undefined)
-    if (!loading && user === null) {
-      router.push("/auth/login");
-    }
-  }, [user, loading, router]);
 
   const handleDeleteClick = (project: Project) => {
     setProjectToDelete(project);
