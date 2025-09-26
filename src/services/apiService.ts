@@ -54,11 +54,25 @@ class ApiService {
   }
 
   static async createTask(data: TaskFormData): Promise<Task> {
-    return api.post<Task>("/tasks", data);
+    // Transform assignedToId to assigneeId for backend compatibility
+    const { assignedToId, priority, ...taskData } = data;
+    // Transform string priority to numeric priority for backend
+    const numericPriority = priority === 'HIGH' ? 1 : priority === 'MEDIUM' ? 2 : 3;
+    return api.post<Task>("/tasks", {
+      ...taskData,
+      assigneeId: assignedToId,
+      priority: numericPriority,
+    });
   }
 
   static async updateTask(id: string, data: Partial<TaskFormData>): Promise<Task> {
-    return api.put<Task>(`/tasks/${id}`, data);
+    // Transform priority if present
+    const { priority, ...taskData } = data;
+    const updateData = priority ? {
+      ...taskData,
+      priority: priority === 'HIGH' ? 1 : priority === 'MEDIUM' ? 2 : 3,
+    } : taskData;
+    return api.put<Task>(`/tasks/${id}`, updateData);
   }
 
   static async deleteTask(id: string): Promise<void> {
@@ -87,8 +101,8 @@ class ApiService {
   }
 
   static async deleteUser(id: string): Promise<void> {
-    return api.delete<void>(`/users/${id}`);
-  }
+   return api.delete<void>(`/users/${id}`);
+ }
 
   // Comment operations
   static async getComments(taskId: string): Promise<Comment[]> {
@@ -96,11 +110,36 @@ class ApiService {
   }
 
   static async createComment(taskId: string, body: string): Promise<Comment> {
-    return api.post<Comment>("/comments", { taskId, body });
+    return api.post<Comment>(`/comments/${taskId}`, { body });
   }
 
   static async deleteComment(id: string): Promise<void> {
     return api.delete<void>(`/comments/${id}`);
+  }
+
+  // Authentication operations
+  static async getCurrentUser(): Promise<{ user: User }> {
+    return api.get<{ user: User }>("/auth/me");
+  }
+
+  static async refreshToken(refreshToken: string): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: User;
+  }> {
+    return api.post("/auth/refresh", { refreshToken });
+  }
+
+  static async forgotPassword(email: string): Promise<{ message: string }> {
+    return api.post("/auth/forgot-password", { email });
+  }
+
+  static async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+    return api.post("/auth/reset-password", { token, newPassword });
+  }
+
+  static async logout(): Promise<{ message: string }> {
+    return api.post("/auth/logout");
   }
 }
 
@@ -190,6 +229,11 @@ export const useUsers = () => {
     errorMessage: "Failed to create user",
   });
 
+  const updateUser = useAsyncOperation<User>({
+    successMessage: "User updated successfully",
+    errorMessage: "Failed to update user",
+  });
+
   const deleteUser = useAsyncOperation<void>({
     successMessage: "User deleted successfully",
     errorMessage: "Failed to delete user",
@@ -200,10 +244,13 @@ export const useUsers = () => {
       getUsers.execute(() => ApiService.getUsers(params)),
     createUser: (data: UserFormData) =>
       createUser.execute(() => ApiService.createUser(data)),
+    updateUser: (id: string, data: Partial<UserFormData>) =>
+      updateUser.execute(() => ApiService.updateUser(id, data)),
     deleteUser: (id: string) =>
       deleteUser.execute(() => ApiService.deleteUser(id)),
     ...getUsers,
     ...createUser,
+    ...updateUser,
     ...deleteUser,
   };
 };
