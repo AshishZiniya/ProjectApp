@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
       "@fortawesome/react-fontawesome",
       "@fortawesome/free-solid-svg-icons",
     ],
-    // Enable CSS optimization for better CLS
-    optimizeCss: true,
+    // Temporarily disable CSS optimization to avoid critters dependency issues
+    // optimizeCss: true,
   },
 
   // Image optimization with better CLS prevention
