@@ -116,7 +116,16 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
       className={`flex flex-col justify-between animate-pulse ${className}`}
       style={{
         minHeight: getCardHeight(),
-        contain: 'layout style',
+        contain: 'layout style paint',
+        containIntrinsicSize: `auto ${getCardHeight()}`,
+        willChange: 'auto',
+        // Additional stability measures
+        minWidth: '280px',
+        maxWidth: '400px',
+        width: '100%',
+        // Prevent any layout shifts during animation
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
         ...style
       }}
     >

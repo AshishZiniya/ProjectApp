@@ -111,7 +111,15 @@ const UsersList: React.FC<UsersListProps> = ({
 
   // User card component
   const UserCard = ({ user }: { user: User }) => (
-    <Card className="flex flex-col justify-between transition-transform" style={{ minHeight: '200px', contain: 'layout style' }}>
+    <Card
+      className="flex flex-col justify-between transition-transform"
+      style={{
+        minHeight: '200px',
+        contain: 'layout style paint',
+        containIntrinsicSize: 'auto 200px',
+        willChange: 'auto'
+      }}
+    >
       <div>
         <div className="flex items-center mb-3">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-lg">
@@ -158,9 +166,24 @@ const UsersList: React.FC<UsersListProps> = ({
   );
 
   return (
-    <div className="container mx-auto p-6" style={{ contain: 'layout style' }}>
+    <div
+      className="container mx-auto p-6"
+      style={{
+        contain: 'layout style paint',
+        containIntrinsicSize: 'auto 100vh',
+        willChange: 'auto',
+        minHeight: '100vh'
+      }}
+    >
       {/* Header Section */}
-      <div className="text-center mb-12">
+      <div
+        className="text-center mb-12"
+        style={{
+          minHeight: '120px',
+          contain: 'layout style',
+          containIntrinsicSize: 'auto 120px'
+        }}
+      >
         <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           User Management
         </h1>
@@ -170,7 +193,14 @@ const UsersList: React.FC<UsersListProps> = ({
       </div>
 
       {/* Search and Filters */}
-      <div className="flex justify-between items-center mb-6">
+      <div
+        className="flex justify-between items-center mb-6"
+        style={{
+          minHeight: '40px',
+          contain: 'layout style',
+          containIntrinsicSize: 'auto 40px'
+        }}
+      >
         <Input
           type="text"
           placeholder="Search users by name..."
@@ -190,7 +220,14 @@ const UsersList: React.FC<UsersListProps> = ({
 
       {/* Loading State */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          style={{
+            contain: 'layout style',
+            containIntrinsicSize: 'auto 600px',
+            minHeight: '400px'
+          }}
+        >
           {[...Array(limit)].map((_, index) => (
             <UserCardSkeleton key={index} />
           ))}
@@ -203,7 +240,14 @@ const UsersList: React.FC<UsersListProps> = ({
           )}
 
           {/* Users Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            style={{
+              contain: 'layout style',
+              containIntrinsicSize: 'auto 600px',
+              minHeight: '400px'
+            }}
+          >
             {users.map((user) => (
               <UserCard key={user.id} user={user} />
             ))}

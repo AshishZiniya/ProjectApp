@@ -85,6 +85,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <head>
+        {/* Preconnect to external domains for faster resource loading */}
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"
@@ -94,6 +95,10 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+
+        {/* DNS prefetch for any external APIs */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
       <body className="flex flex-col min-h-screen antialiased">
         <div style={{ contain: 'layout style paint' }}>
