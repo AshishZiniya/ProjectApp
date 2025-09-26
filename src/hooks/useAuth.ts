@@ -6,7 +6,6 @@ import type { AuthUser } from "@/types/auth";
 import type { UserRole } from "@/types";
 import useToast from "./useToast";
 import { getErrorMessage } from "@/utils";
-import { API_BASE_URL } from "@/constants";
 
 interface UseAuthReturn {
   user: AuthUser | null;
@@ -72,21 +71,19 @@ export function useAuth(): UseAuthReturn {
   ) => {
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, name, password, role }),
+      // Use NextAuth signIn with custom register endpoint
+      const result = await signIn("credentials", {
+        email,
+        password,
+        name,
+        role,
+        isRegister: true,
+        redirect: false,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Registration failed');
+      if (result?.error) {
+        throw new Error(result.error);
       }
-
-      // After successful registration, log the user in
-      await login(email, password);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);

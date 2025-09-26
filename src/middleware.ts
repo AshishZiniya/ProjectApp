@@ -2,26 +2,13 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import type { UserRole } from "@/types";
+import { hasPermission } from "@/utils/auth";
 
-// JWT secret - in production, this should come from environment variables
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
-// Permission definitions (moved from utils/auth.ts)
-const PERMISSIONS = {
-  VIEW_USERS: ["ADMIN", "SUPERADMIN"] as UserRole[],
-  MANAGE_USERS: ["ADMIN", "SUPERADMIN"] as UserRole[],
-  ADD_ADMIN: ["ADMIN", "SUPERADMIN"] as UserRole[],
-  VIEW_PROJECTS: ["USER", "ADMIN", "SUPERADMIN"] as UserRole[],
-  MANAGE_PROJECTS: ["USER", "ADMIN", "SUPERADMIN"] as UserRole[],
-  VIEW_TASKS: ["USER", "ADMIN", "SUPERADMIN"] as UserRole[],
-  MANAGE_TASKS: ["USER", "ADMIN", "SUPERADMIN"] as UserRole[],
-  SYSTEM_ADMIN: ["SUPERADMIN"] as UserRole[],
-} as const;
-
-type Permission = keyof typeof PERMISSIONS;
+// JWT secret - should match backend JWT_ACCESS_SECRET
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET || "your-secret-key";
 
 interface JWTPayload {
-  userId: string;
+  sub: string; // User ID (matches backend)
   email: string;
   role: UserRole;
   iat: number;
@@ -30,11 +17,8 @@ interface JWTPayload {
 
 /**
  * Check if a user role has a specific permission
+ * (imported from @/utils/auth)
  */
-function hasPermission(userRole: UserRole, permission: Permission): boolean {
-  const allowedRoles = PERMISSIONS[permission];
-  return allowedRoles.includes(userRole);
-}
 
 /**
  * Verify JWT token and return user payload

@@ -31,7 +31,7 @@ class ApiService {
   }
 
   static async updateProject(id: string, data: Partial<ProjectFormData>): Promise<Project> {
-    return api.put<Project>(`/projects/${id}`, data);
+    return api.patch<Project>(`/projects/${id}`, data);
   }
 
   static async deleteProject(id: string): Promise<void> {
@@ -72,7 +72,7 @@ class ApiService {
       ...taskData,
       priority: priority === 'HIGH' ? 1 : priority === 'MEDIUM' ? 2 : 3,
     } : taskData;
-    return api.put<Task>(`/tasks/${id}`, updateData);
+    return api.patch<Task>(`/tasks/${id}`, updateData);
   }
 
   static async deleteTask(id: string): Promise<void> {
@@ -93,11 +93,11 @@ class ApiService {
   }
 
   static async createUser(data: UserFormData): Promise<User> {
-    return api.post<User>("/users", data);
+    return api.post<User>("/auth/register", data);
   }
 
   static async updateUser(id: string, data: Partial<UserFormData>): Promise<User> {
-    return api.put<User>(`/users/${id}`, data);
+    return api.patch<User>(`/users/${id}`, data);
   }
 
   static async deleteUser(id: string): Promise<void> {

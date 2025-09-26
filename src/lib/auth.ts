@@ -18,7 +18,10 @@ export const authOptions: NextAuthOptions = {
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
+        name: { label: "Name", type: "text" },
+        role: { label: "Role", type: "text" },
+        isRegister: { label: "Is Register", type: "text" }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -27,10 +30,13 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          // Use the same API base URL as the rest of the application
-          const apiUrl = `${API_BASE_URL}/auth/login`;
+          // Check if this is a registration request
+          const isRegister = credentials.isRegister === 'true';
+          const apiUrl = isRegister
+            ? `${API_BASE_URL}/auth/register`
+            : `${API_BASE_URL}/auth/login`;
 
-          console.log('Attempting login to:', apiUrl);
+          console.log(`Attempting ${isRegister ? 'registration' : 'login'} to:`, apiUrl);
 
           const response = await fetch(apiUrl, {
             method: 'POST',
@@ -41,6 +47,10 @@ export const authOptions: NextAuthOptions = {
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
+              ...(credentials.isRegister === 'true' && {
+                name: credentials.name,
+                role: credentials.role || 'USER',
+              }),
             }),
           });
 
