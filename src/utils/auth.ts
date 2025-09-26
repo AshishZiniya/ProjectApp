@@ -28,35 +28,34 @@ export const PERMISSIONS = {
 export type Permission = keyof typeof PERMISSIONS;
 
 /**
- * Check if a user has a specific permission
+ * Check if a user role has a specific permission
  */
-export function hasPermission(userRole: UserRole | undefined, permission: Permission): boolean {
-  if (!userRole) return false;
-  return PERMISSIONS[permission].includes(userRole);
+export function hasPermission(userRole: UserRole, permission: Permission): boolean {
+  const allowedRoles = PERMISSIONS[permission];
+  return allowedRoles.includes(userRole);
 }
 
 /**
- * Check if a user has any of the specified permissions
+ * Check if a user role has any of the specified permissions
  */
-export function hasAnyPermission(userRole: UserRole | undefined, permissions: Permission[]): boolean {
-  if (!userRole) return false;
+export function hasAnyPermission(userRole: UserRole, permissions: Permission[]): boolean {
   return permissions.some(permission => hasPermission(userRole, permission));
 }
 
 /**
- * Check if a user has all of the specified permissions
+ * Check if a user role has all of the specified permissions
  */
-export function hasAllPermissions(userRole: UserRole | undefined, permissions: Permission[]): boolean {
-  if (!userRole) return false;
+export function hasAllPermissions(userRole: UserRole, permissions: Permission[]): boolean {
   return permissions.every(permission => hasPermission(userRole, permission));
 }
 
 /**
- * Check if a user role is at least the specified level
+ * Check if a user role has at least the specified role level
  */
-export function hasRoleLevel(userRole: UserRole | undefined, minRole: UserRole): boolean {
-  if (!userRole) return false;
-  return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[minRole];
+export function hasRoleLevel(userRole: UserRole, minRole: UserRole): boolean {
+  const userRoleLevel = ROLE_HIERARCHY[userRole];
+  const minRoleLevel = ROLE_HIERARCHY[minRole];
+  return userRoleLevel >= minRoleLevel;
 }
 
 /**
@@ -66,29 +65,29 @@ export function getUserPermissions(userRole: UserRole | undefined): Permission[]
   if (!userRole) return [];
 
   return Object.keys(PERMISSIONS).filter(permission =>
-    PERMISSIONS[permission as Permission].includes(userRole)
+    hasPermission(userRole, permission as Permission)
   ) as Permission[];
 }
 
 /**
- * Check if user can access a resource (either owns it or has admin permissions)
+ * Check if a user can access a resource based on ownership and permissions
  */
 export function canAccessResource(
-  userRole: UserRole | undefined,
-  userId: string | undefined,
+  userRole: UserRole,
+  userId: string,
   resourceUserId: string | undefined,
   requiredPermission?: Permission
 ): boolean {
-  if (!userRole) return false;
+  // Users can always access their own resources
+  if (resourceUserId && userId === resourceUserId) {
+    return true;
+  }
 
-  // User can always access their own resources
-  if (userId === resourceUserId) return true;
-
-  // Check role-based permission
+  // Check if user has the required permission
   if (requiredPermission) {
     return hasPermission(userRole, requiredPermission);
   }
 
-  // Default to admin-level access for resource management
-  return hasRoleLevel(userRole, "ADMIN");
+  // Default to false if no specific permission is required
+  return false;
 }

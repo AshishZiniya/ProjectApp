@@ -1,11 +1,13 @@
 "use client";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Toaster from "@/components/ui/Toaster";
-import TopLoader from "@/components/ui/TopLoader";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { usePathname } from "next/navigation";
+
+// Lazy load components that are not critical for initial render
+const Navbar = lazy(() => import("@/components/Navbar"));
+const Footer = lazy(() => import("@/components/Footer"));
+const Toaster = lazy(() => import("@/components/ui/Toaster"));
+const TopLoader = lazy(() => import("@/components/ui/TopLoader"));
+const ErrorBoundary = lazy(() => import("@/components/ErrorBoundary"));
 
 export default function ClientLayout({
   children,

@@ -1,4 +1,3 @@
-import React from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
 import {
   TOAST_DURATION,

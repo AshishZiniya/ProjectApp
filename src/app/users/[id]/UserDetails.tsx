@@ -1,27 +1,28 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import api from "@/lib/api";
-import { User, UserRole } from "@/types";
-import Card from "@/components/ui/Card";
-import Alert from "@/components/ui/Alert";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import FormGroup from "@/components/common/FormGroup";
-import { useAuthorization } from "@/hooks/useAuthorization";
-import useToast from "@/hooks/useToast";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import api from '@/lib/api';
+import { User, UserRole } from '@/types';
+import Card from '@/components/ui/Card';
+import Alert from '@/components/ui/Alert';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import FormGroup from '@/components/common/FormGroup';
+import { useAuthorization } from '@/hooks/useAuthorization';
+import useToast from '@/hooks/useToast';
 
 const UserDetails: React.FC = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string;
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState("");
-  const [editedEmail, setEditedEmail] = useState("");
-  const [editedRole, setEditedRole] = useState<UserRole>("USER");
+  const [editedName, setEditedName] = useState('');
+  const [editedEmail, setEditedEmail] = useState('');
+  const [editedRole, setEditedRole] = useState<UserRole>('USER');
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
@@ -29,6 +30,12 @@ const UserDetails: React.FC = () => {
   const { canManageUsers } = useAuthorization();
 
   const fetchUser = useCallback(async () => {
+    if (!id) {
+      setError('User ID is required.');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -38,9 +45,13 @@ const UserDetails: React.FC = () => {
       setEditedEmail(response.email);
       setEditedRole(response.role);
       setLoading(false);
-    } catch {
-      showError("Failed to fetch user details.");
-      setError("Failed to load user details.");
+    } catch (err) {
+      console.error('Error fetching user:', err);
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to load user details.';
+      showError('Failed to fetch user details.');
+      setError(errorMessage);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -53,6 +64,11 @@ const UserDetails: React.FC = () => {
   }, [fetchUser]);
 
   const handleUpdate = async () => {
+    if (!id) {
+      showError('User ID is required.');
+      return;
+    }
+
     setUpdateLoading(true);
     setUpdateError(null);
     try {
@@ -66,11 +82,15 @@ const UserDetails: React.FC = () => {
       const response = await api.patch<User>(`/users/${id}`, updateData);
       setUser(response);
       setIsEditing(false);
-      showSuccess("User updated successfully!");
+      showSuccess('User updated successfully!');
+    } catch (err) {
+      console.error('Error updating user:', err);
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to update user.';
+      showError('Failed to update user.');
+      setUpdateError(errorMessage);
+    } finally {
       setUpdateLoading(false);
-    } catch {
-      showError("Failed to update user.");
-      setUpdateError("Failed to update user.");
     }
   };
 
@@ -132,11 +152,11 @@ const UserDetails: React.FC = () => {
             <div className="mt-2">
               <span
                 className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  user.role === "SUPERADMIN"
-                    ? "bg-red-100 text-red-800"
-                    : user.role === "ADMIN"
-                      ? "bg-purple-100 text-purple-800"
-                      : "bg-blue-100 text-blue-800"
+                  user.role === 'SUPERADMIN'
+                    ? 'bg-red-100 text-red-800'
+                    : user.role === 'ADMIN'
+                    ? 'bg-purple-100 text-purple-800'
+                    : 'bg-blue-100 text-blue-800'
                 }`}
               >
                 {user.role}
@@ -186,11 +206,11 @@ const UserDetails: React.FC = () => {
                   </div>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      user.role === "SUPERADMIN"
-                        ? "bg-red-100 text-red-800"
-                        : user.role === "ADMIN"
-                          ? "bg-purple-100 text-purple-800"
-                          : "bg-blue-100 text-blue-800"
+                      user.role === 'SUPERADMIN'
+                        ? 'bg-red-100 text-red-800'
+                        : user.role === 'ADMIN'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-blue-100 text-blue-800'
                     }`}
                   >
                     {user.role}
@@ -207,10 +227,10 @@ const UserDetails: React.FC = () => {
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm">
-                    {new Date(user.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                    {new Date(user.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </p>
                 </div>

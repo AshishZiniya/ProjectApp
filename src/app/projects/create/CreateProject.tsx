@@ -30,7 +30,6 @@ const CreateProject: React.FC = () => {
         name,
         description,
       });
-      console.log(response);
       router.push(`/projects/${response.id}`);
       showSuccess("Project created successfully!");
       setLoading(false);

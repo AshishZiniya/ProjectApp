@@ -1,5 +1,4 @@
 import NextTopLoader from "nextjs-toploader";
-import React from "react";
 
 const TopLoader: React.FC = () => {
   return (

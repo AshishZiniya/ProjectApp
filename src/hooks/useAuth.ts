@@ -26,9 +26,10 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const refreshPromiseRef = useRef<Promise<void> | null>(null);
+  const initializationAttemptedRef = useRef(false);
 
   const { showError } = useToast();
 
@@ -83,12 +84,27 @@ export function useAuth(): UseAuthReturn {
   }, []);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      refreshUser();
-    } else {
-      setLoading(false);
-    }
+    const initializeAuth = async () => {
+      if (initializationAttemptedRef.current) return;
+      initializationAttemptedRef.current = true;
+
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        try {
+          await refreshUser();
+        } catch {
+          // If refresh fails, clear tokens and set loading to false
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          setUser(null);
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, [refreshUser]);
 
   const login = async (email: string, password: string) => {
@@ -103,12 +119,13 @@ export function useAuth(): UseAuthReturn {
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("refreshToken", response.refreshToken);
       setUser(response.user);
-      setLoading(false);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
       showError(msg);
-      throw err; // Re-throw to allow calling component to handle
+      throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,12 +146,13 @@ export function useAuth(): UseAuthReturn {
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("refreshToken", response.refreshToken);
       setUser(response.user);
-      setLoading(false);
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
       setError(msg);
       showError(msg);
       throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,15 +161,14 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       await api.post("/auth/logout");
+    } catch (err: unknown) {
+      // Don't show error for logout failures
+      console.warn("Logout API call failed:", err);
+    } finally {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       setUser(null);
       setLoading(false);
-    } catch (err: unknown) {
-      const msg = getErrorMessage(err);
-      setError(msg);
-      showError(msg);
-      throw err;
     }
   };
 

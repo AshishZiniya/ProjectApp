@@ -1,5 +1,6 @@
-import React, { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { InputHTMLAttributes, TextareaHTMLAttributes, memo } from "react";
 import FormGroup from "@/components/common/FormGroup";
+import { cn } from "@/utils";
 
 interface BaseProps {
   label?: string;
@@ -20,22 +21,10 @@ type TextareaProps = BaseProps &
 
 type Props = InputProps | TextareaProps;
 
-function isTextareaProps(props: Props): props is TextareaProps {
-  return props.type === "textarea";
-}
+const baseInputClasses = "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm";
+const errorInputClasses = "border-red-500";
 
-function omit<T extends object, K extends keyof T>(
-  obj: T,
-  keys: K[],
-): Omit<T, K> {
-  const result = { ...obj };
-  keys.forEach((key) => {
-    delete result[key];
-  });
-  return result;
-}
-
-const Input: React.FC<Props> = (props) => {
+const InputComponent: React.FC<Props> = (props) => {
   const { label, error, className = "", id } = props;
 
   // Create FormGroup props object with only defined values
@@ -44,42 +33,46 @@ const Input: React.FC<Props> = (props) => {
   if (id !== undefined) formGroupProps.htmlFor = id;
   if (error !== undefined) formGroupProps.error = error;
 
-  if (isTextareaProps(props)) {
-    const textareaProps = omit(props, [
-      "label",
-      "error",
-      "className",
-      "id",
-      "type",
-    ]);
+  const inputClasses = cn(
+    baseInputClasses,
+    className,
+    error && errorInputClasses
+  );
+
+  if (props.type === "textarea") {
+    const { label: _label, error: _error, className: _className, ...textareaProps } = props as TextareaProps;
+    void _label;
+    void _error;
+    void _className;
 
     return (
       <FormGroup {...formGroupProps}>
         <textarea
           id={id}
-          className={`block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${className} ${
-            error ? "border-red-500" : ""
-          }`}
+          className={inputClasses}
           {...textareaProps}
         />
       </FormGroup>
     );
   }
 
-  const inputProps = omit(props, ["label", "error", "className", "id"]);
+  const { label: _label, error: _error, className: _className, ...inputProps } = props as InputProps;
+  void _label;
+  void _error;
+  void _className;
 
   return (
     <FormGroup {...formGroupProps}>
       <input
         id={id}
         type={props.type ?? "text"}
-        className={`block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${className} ${
-          error ? "border-red-500" : ""
-        }`}
+        className={inputClasses}
         {...inputProps}
       />
     </FormGroup>
   );
 };
+
+const Input = memo(InputComponent);
 
 export default Input;

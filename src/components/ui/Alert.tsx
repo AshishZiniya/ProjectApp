@@ -1,9 +1,10 @@
 // components/ui/Alert.tsx
-import React from "react";
+
+import { cn } from "@/utils";
 
 interface AlertProps {
   message: string;
-  type?: "success" | "error" | "info";
+  type?: "success" | "error" | "warning" | "info";
   className?: string;
 }
 
@@ -13,17 +14,22 @@ const Alert: React.FC<AlertProps> = ({
   className = "",
 }) => {
   const typeStyles = {
-    success: "bg-green-100 border-green-400 text-green-700",
-    error: "bg-red-100 border-red-400 text-red-700",
-    info: "bg-blue-100 border-blue-400 text-blue-700",
+    success: "bg-green-50 border-green-200 text-green-800",
+    error: "bg-red-50 border-red-200 text-red-800",
+    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    info: "bg-blue-50 border-blue-200 text-blue-800",
   };
 
   return (
     <div
-      className={`border px-4 py-3 rounded relative ${typeStyles[type]} ${className}`}
+      className={cn(
+        "border-l-4 p-4 rounded-r-lg",
+        typeStyles[type],
+        className
+      )}
       role="alert"
     >
-      <span className="block sm:inline">{message}</span>
+      <p className="font-medium">{message}</p>
     </div>
   );
 };

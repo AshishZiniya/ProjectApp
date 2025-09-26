@@ -9,20 +9,22 @@ export interface User {
   role: UserRole;
   createdAt: string;
   updatedAt: string;
+  resetToken?: string;
+  resetTokenExpiry?: string;
 }
 
 export interface Project {
   id: string;
   name: string;
   description?: string;
-  owner: User; // Assuming owner is eagerly loaded
+  owner: User;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Task {
   id: string;
-  project?: Project;
+  project: Project;
   title: string;
   description?: string;
   priority: number;

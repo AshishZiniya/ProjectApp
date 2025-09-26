@@ -15,16 +15,29 @@ export default function UserDetailsPage({
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    params.then((resolvedParams) => {
-      setUserId(resolvedParams.id);
-    });
-  }, [params]);
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setUserId(resolvedParams.id);
+      } catch (error) {
+        console.error("Error resolving params:", error);
+        router.replace("/users");
+      }
+    };
+
+    resolveParams();
+  }, [params, router]);
 
   useEffect(() => {
     if (!loading && userId && user) {
-      const canAccess = canAccessResource(userId, "MANAGE_USERS");
-      if (!canAccess) {
-        router.replace("/projects");
+      try {
+        const canAccess = canAccessResource(userId, "MANAGE_USERS");
+        if (!canAccess) {
+          router.replace("/projects");
+        }
+      } catch (error) {
+        console.error("Error checking user permissions:", error);
+        router.replace("/users");
       }
     }
   }, [user, loading, router, userId, canAccessResource]);

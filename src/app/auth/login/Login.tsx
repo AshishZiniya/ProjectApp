@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -38,10 +38,11 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && !loading) {
+      // Redirect to projects after successful login
       router.push('/projects');
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -39,25 +39,48 @@ interface UseAuthorizationReturn {
   canManageUsers: boolean;
   canAddAdmin: boolean;
   canViewUsers: boolean;
+  canViewProjects: boolean;
+  canManageProjects: boolean;
+  canViewTasks: boolean;
+  canManageTasks: boolean;
 }
 
 /**
  * Hook for role-based authorization and permissions
+ * Provides centralized access control for the application
  */
 export function useAuthorization(): UseAuthorizationReturn {
   const { user, loading } = useAuth();
 
   const userPermissions = useMemo(() => getUserPermissions(user?.role), [user?.role]);
 
-  const hasPermissionCheck = useCallback((permission: Permission) => hasPermission(user?.role, permission), [user?.role]);
-  const hasAnyPermissionCheck = useCallback((permissions: Permission[]) => hasAnyPermission(user?.role, permissions), [user?.role]);
-  const hasAllPermissionsCheck = useCallback((permissions: Permission[]) => hasAllPermissions(user?.role, permissions), [user?.role]);
-  const hasRoleLevelCheck = useCallback((minRole: import("@/types").UserRole) => hasRoleLevel(user?.role, minRole), [user?.role]);
+  const hasPermissionCheck = useCallback((permission: Permission) => {
+    if (!user?.role) return false;
+    return hasPermission(user.role, permission);
+  }, [user?.role]);
+
+  const hasAnyPermissionCheck = useCallback((permissions: Permission[]) => {
+    if (!user?.role) return false;
+    return hasAnyPermission(user.role, permissions);
+  }, [user?.role]);
+
+  const hasAllPermissionsCheck = useCallback((permissions: Permission[]) => {
+    if (!user?.role) return false;
+    return hasAllPermissions(user.role, permissions);
+  }, [user?.role]);
+
+  const hasRoleLevelCheck = useCallback((minRole: import("@/types").UserRole) => {
+    if (!user?.role) return false;
+    return hasRoleLevel(user.role, minRole);
+  }, [user?.role]);
 
   const canAccessResourceCheck = useCallback((
     resourceUserId: string | undefined,
     requiredPermission?: Permission
-  ) => canAccessResource(user?.role, user?.id, resourceUserId, requiredPermission), [user?.role, user?.id]);
+  ) => {
+    if (!user?.role || !user?.id) return false;
+    return canAccessResource(user.role, user.id, resourceUserId, requiredPermission);
+  }, [user?.role, user?.id]);
 
   const convenienceChecks = useMemo(() => ({
     isAdmin: user?.role === "ADMIN",
@@ -66,6 +89,10 @@ export function useAuthorization(): UseAuthorizationReturn {
     canManageUsers: hasPermissionCheck("MANAGE_USERS"),
     canAddAdmin: hasPermissionCheck("ADD_ADMIN"),
     canViewUsers: hasPermissionCheck("VIEW_USERS"),
+    canViewProjects: hasPermissionCheck("VIEW_PROJECTS"),
+    canManageProjects: hasPermissionCheck("MANAGE_PROJECTS"),
+    canViewTasks: hasPermissionCheck("VIEW_TASKS"),
+    canManageTasks: hasPermissionCheck("MANAGE_TASKS"),
   }), [user?.role, hasPermissionCheck]);
 
   return {

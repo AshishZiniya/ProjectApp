@@ -1,5 +1,4 @@
 // components/common/FormGroup.tsx
-import React from "react";
 
 interface FormGroupProps {
   label?: string;

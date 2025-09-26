@@ -1,5 +1,4 @@
 // components/common/PaginationControls.tsx
-import React from "react";
 import Button from "@/components/ui/Button";
 
 interface PaginationControlsProps {
