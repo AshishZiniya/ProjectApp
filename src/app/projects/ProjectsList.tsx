@@ -72,18 +72,23 @@ const ProjectsList: React.FC = () => {
   };
 
   const ProjectCardSkeleton = memo(() => (
-    <Card className="flex flex-col justify-between animate-pulse">
+    <Card className="flex flex-col justify-between animate-pulse min-h-[280px]">
       <div>
         <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
+          <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex-shrink-0"></div>
           <div className="h-6 bg-gray-200 rounded w-3/4"></div>
         </div>
         <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+        <div className="flex items-center text-gray-700 text-sm mb-3">
+          <div className="w-4 h-4 bg-gray-200 rounded mr-1 flex-shrink-0"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+        </div>
       </div>
-      <div className="flex space-x-2 mt-4">
-        <div className="h-8 w-24 bg-gray-200 rounded flex-1"></div>
-        <div className="h-8 w-20 bg-gray-200 rounded flex-1"></div>
+      <div className="flex space-x-2 mt-auto">
+        <div className="h-8 bg-gray-200 rounded flex-1"></div>
+        <div className="h-8 bg-gray-200 rounded flex-1"></div>
       </div>
     </Card>
   ));
@@ -91,15 +96,17 @@ const ProjectsList: React.FC = () => {
 
   // Memoized project card component for better performance
   const ProjectCard = memo(({ project }: { project: Project }) => (
-    <Card className="flex flex-col justify-between hover:scale-105 transition-transform">
+    <Card className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg min-h-[280px]">
       <div>
         <div className="flex items-center mb-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
             <svg
               className="w-6 h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              width="24"
+              height="24"
             >
               <path
                 strokeLinecap="round"
@@ -109,7 +116,7 @@ const ProjectsList: React.FC = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 truncate">
+          <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
             {project.name}
           </h3>
         </div>
@@ -118,12 +125,14 @@ const ProjectsList: React.FC = () => {
             {project.description}
           </p>
         )}
-        <div className="flex items-center text-gray-700 text-sm">
+        <div className="flex items-center text-gray-700 text-sm mb-4">
           <svg
-            className="w-4 h-4 mr-1 text-gray-500"
+            className="w-4 h-4 mr-1 text-gray-500 flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            width="16"
+            height="16"
           >
             <path
               strokeLinecap="round"
@@ -132,10 +141,10 @@ const ProjectsList: React.FC = () => {
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             />
           </svg>
-          <span className="font-medium">{project.owner.name}</span>
+          <span className="font-medium truncate">{project.owner.name}</span>
         </div>
       </div>
-      <div className="flex space-x-2 mt-4">
+      <div className="flex space-x-2 mt-auto">
         <Link href={`/projects/${project.id}`} passHref>
           <Button variant="secondary" size="sm" className="flex-1">
             View Details
@@ -202,16 +211,18 @@ const ProjectsList: React.FC = () => {
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="flex flex-col justify-between hover:scale-105 transition-transform"
+                className="flex flex-col justify-between transition-all duration-200 hover:shadow-lg min-h-[280px]"
               >
                 <div>
                   <div className="flex items-center mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                       <svg
                         className="w-6 h-6 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
                       >
                         <path
                           strokeLinecap="round"
@@ -221,7 +232,7 @@ const ProjectsList: React.FC = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800 truncate">
+                    <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
                       {project.name}
                     </h3>
                   </div>
@@ -230,12 +241,14 @@ const ProjectsList: React.FC = () => {
                       {project.description}
                     </p>
                   )}
-                  <div className="flex items-center text-gray-700 text-sm">
+                  <div className="flex items-center text-gray-700 text-sm mb-4">
                     <svg
-                      className="w-4 h-4 mr-1 text-gray-500"
+                      className="w-4 h-4 mr-1 text-gray-500 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
                     >
                       <path
                         strokeLinecap="round"
@@ -244,10 +257,10 @@ const ProjectsList: React.FC = () => {
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                       />
                     </svg>
-                    <span className="font-medium">{project.owner.name}</span>
+                    <span className="font-medium truncate">{project.owner.name}</span>
                   </div>
                 </div>
-                <div className="flex space-x-2 mt-4">
+                <div className="flex space-x-2 mt-auto">
                   <Link href={`/projects/${project.id}`} passHref>
                     <Button variant="secondary" size="sm" className="flex-1">
                       View Details
