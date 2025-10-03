@@ -1,9 +1,7 @@
 import { API_BASE_URL } from "@/constants";
 import { getSession } from "next-auth/react";
 
-// Debug: Log the API base URL being used
-console.log("🔗 API Base URL:", API_BASE_URL);
-console.log("🔗 Environment variable:", process.env.NEXT_PUBLIC_API_BASE_URL);
+// API Base URL configuration
 
 /**
  * Supported parameter value types for API requests
@@ -121,13 +119,6 @@ async function fetchApi<TResponse, TBody = unknown>(
 
   const accessToken = session?.accessToken as string | undefined;
 
-  console.log("🌐 API Request:", {
-    method: options.method || "GET",
-    url,
-    hasBody: body !== undefined,
-    hasToken: !!accessToken,
-    hasSession: !!session,
-  });
 
   // If no session and trying to access protected endpoint, throw error early
   if (
@@ -160,10 +151,10 @@ async function fetchApi<TResponse, TBody = unknown>(
   } catch (error) {
     clearTimeout(timeoutId);
     if (error instanceof Error && error.name === "AbortError") {
-      console.error("⏰ API Request timed out:", url);
+      // Request timed out
       throw new Error("Request timed out");
     }
-    console.error("❌ API Request failed:", url, error);
+    // API request failed
     throw error;
   }
 }
@@ -185,7 +176,7 @@ async function processResponse<TResponse, TBody>(
       const currentSession = await getSession();
       const refreshToken = currentSession?.refreshToken as string | undefined;
       if (refreshToken) {
-        console.log("🔄 Attempting token refresh for:", endpoint);
+        // Attempting token refresh
         const refreshController = new AbortController();
         const refreshTimeoutId = setTimeout(
           () => refreshController.abort(),
@@ -206,14 +197,14 @@ async function processResponse<TResponse, TBody>(
         if (refreshRes.ok) {
           // Note: Since we can't update session here, the refresh might not persist
           // NextAuth handles session updates, but for now, we'll retry the request
-          console.log("✅ Token refresh successful, retrying original request");
+          // Token refresh successful, retrying original request
           return fetchApi<TResponse, TBody>(endpoint, options, true);
         } else {
-          console.log("❌ Token refresh failed:", refreshRes.status);
+          // Token refresh failed
         }
       }
     } catch (err) {
-      console.log("❌ Token refresh error:", err);
+      // Token refresh error
       // Can't clear session here
       throw err;
     }
@@ -224,14 +215,7 @@ async function processResponse<TResponse, TBody>(
     const message = await extractErrorMessage(response);
     const code = await extractErrorCode(response);
 
-    console.error("❌ API Error Response:", {
-      status: response.status,
-      statusText: response.statusText,
-      message,
-      code,
-      endpoint,
-      method: options.method || "GET",
-    });
+    // API error response handled
 
     throw new ApiError(
       message,

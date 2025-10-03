@@ -10,7 +10,7 @@ import React, {
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/api";
-import { Task, Comment } from "@/types";
+import { LegacyTask as Task, Comment } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
@@ -84,7 +84,7 @@ const TaskDetails: React.FC = (): ReactNode => {
       const dueDateString = taskResponse.dueDate
         ? new Date(taskResponse.dueDate).toISOString().split("T")[0]
         : "";
-      setEditedDueDate(dueDateString ?? "");
+      setEditedDueDate(dueDateString || "");
 
       const commentsResponse = await api.get<Comment[]>(`/comments/task/${id}`);
       setComments(commentsResponse);
@@ -292,13 +292,13 @@ const TaskDetails: React.FC = (): ReactNode => {
     return <Alert type="info" message="Task not found." className="m-6" />;
 
   return (
-    <div className="container mx-auto p-6">
-      <Card className="max-w-8xl mx-auto shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+    <div className="container mx-auto px-6 py-8">
+      <Card className="max-w-6xl mx-auto">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold mb-2 text-gray-900">
             Task Details
           </h1>
-          <p className="text-2xl text-gray-600 font-medium">{task.title}</p>
+          <p className="text-lg text-gray-600 font-medium">{task.title}</p>
         </div>
 
         {updateError && (
@@ -307,7 +307,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
         {!isEditing ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">

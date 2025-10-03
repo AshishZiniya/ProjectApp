@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
   const isLoggedIn = !!user;
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-sm shadow-lg h-20 px-6 z-50 border-b border-gray-100 flex items-center">
+    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-xl h-20 px-4 sm:px-6 lg:px-8 z-50 border-b border-gray-200/50 flex items-center">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"
@@ -44,32 +44,32 @@ const Navbar: React.FC = () => {
               quality={85}
             />
           </div>
-          <span className="font-bold text-xl">Task Manager</span>
+          <span className="font-bold text-xl hidden sm:block">Task Manager</span>
         </Link>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-1 sm:space-x-4">
           {/* Authentication and authorization are handled in middleware */}
           <Link
             href="/users"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
+            className="hidden lg:block text-gray-700 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
           >
             Users
           </Link>
           <Link
             href="/admin/add-admin"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
+            className="hidden lg:block text-gray-700 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
           >
             Add Admin
           </Link>
           <Link
             href="/projects"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
           >
             Projects
           </Link>
           <Link
             href="/tasks"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
           >
             Tasks
           </Link>

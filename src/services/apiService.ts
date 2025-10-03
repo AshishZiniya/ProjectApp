@@ -9,6 +9,7 @@ import type {
   ProjectFormData,
   UserFormData,
 } from "@/types";
+import { TASK_PRIORITY_MAP } from "@/types";
 import { useAsyncOperation } from "@/hooks/useAsyncOperation";
 
 // Generic API service class
@@ -65,13 +66,10 @@ class ApiService {
   static async createTask(data: TaskFormData): Promise<Task> {
     // Transform assignedToId to assigneeId for backend compatibility
     const { assignedToId, priority, ...taskData } = data;
-    // Transform string priority to numeric priority for backend
-    const numericPriority =
-      priority === "HIGH" ? 1 : priority === "MEDIUM" ? 2 : 3;
     return api.post<Task>("/tasks", {
       ...taskData,
       assigneeId: assignedToId,
-      priority: numericPriority,
+      priority: TASK_PRIORITY_MAP[priority],
     });
   }
 
@@ -84,7 +82,7 @@ class ApiService {
     const updateData = priority
       ? {
           ...taskData,
-          priority: priority === "HIGH" ? 1 : priority === "MEDIUM" ? 2 : 3,
+          priority: TASK_PRIORITY_MAP[priority],
         }
       : taskData;
     return api.patch<Task>(`/tasks/${id}`, updateData);

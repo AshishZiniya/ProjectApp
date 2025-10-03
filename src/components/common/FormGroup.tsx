@@ -4,6 +4,7 @@ interface FormGroupProps {
   label?: string;
   htmlFor?: string;
   error?: string;
+  errorId?: string;
   children: React.ReactNode;
   className?: string;
 }
@@ -12,6 +13,7 @@ const FormGroup: React.FC<FormGroupProps> = ({
   label,
   htmlFor,
   error,
+  errorId,
   children,
   className = "",
 }) => {
@@ -26,7 +28,16 @@ const FormGroup: React.FC<FormGroupProps> = ({
         </label>
       )}
       {children}
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p
+          id={errorId}
+          className="mt-1 text-sm text-red-600"
+          role="alert"
+          aria-live="polite"
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 };

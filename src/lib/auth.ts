@@ -25,7 +25,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.error("Missing credentials");
           return null;
         }
 
@@ -36,10 +35,6 @@ export const authOptions: NextAuthOptions = {
             ? `${API_BASE_URL}/auth/register`
             : `${API_BASE_URL}/auth/login`;
 
-          console.log(
-            `Attempting ${isRegister ? "registration" : "login"} to:`,
-            apiUrl,
-          );
 
           const response = await fetch(apiUrl, {
             method: "POST",
@@ -57,27 +52,19 @@ export const authOptions: NextAuthOptions = {
             }),
           });
 
-          console.log("Response status:", response.status);
-          console.log(
-            "Response headers:",
-            Object.fromEntries(response.headers.entries()),
-          );
 
           if (!response.ok) {
             let errorMessage = `HTTP ${response.status}`;
             try {
               const errorData = await response.json();
               errorMessage = errorData.message || errorMessage;
-              console.error("API error response:", errorData);
-            } catch (parseError) {
-              console.error("Failed to parse error response:", parseError);
+            } catch {
+              // Failed to parse error response
             }
-            console.error("Authentication failed:", errorMessage);
-            return null;
+            throw new Error(errorMessage);
           }
 
           const data = await response.json();
-          console.log("Login successful for user:", data.user?.email);
 
           return {
             id: data.user.id,
@@ -89,8 +76,7 @@ export const authOptions: NextAuthOptions = {
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
           } as const;
-        } catch (error) {
-          console.error("Auth error:", error);
+        } catch {
           return null;
         }
       },

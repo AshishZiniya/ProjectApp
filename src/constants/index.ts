@@ -21,18 +21,14 @@ export const PAGE_LIMIT_OPTIONS = {
   TASKS: [5, 10, 20] as number[],
 };
 
-// Task Priority (Legacy numeric values for backward compatibility)
+// Task Priority Mapping (imported from types for consistency)
+export { TASK_PRIORITY_MAP } from "@/types";
+
+// Task Priority Constants (reverse mapping for easier usage)
 export const TASK_PRIORITY = {
   HIGH: 1,
   MEDIUM: 2,
   LOW: 3,
-} as const;
-
-// Task Priority Mapping (New string-based priorities)
-export const TASK_PRIORITY_MAP = {
-  HIGH: "HIGH",
-  MEDIUM: "MEDIUM",
-  LOW: "LOW",
 } as const;
 
 // Task Status Options

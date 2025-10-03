@@ -12,7 +12,6 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
 import useToast from "@/hooks/useToast";
-import { TASK_PRIORITY_MAP } from "@/constants";
 
 const ProjectDetails: React.FC = () => {
   const { id } = useParams();
@@ -387,11 +386,11 @@ const ProjectDetails: React.FC = () => {
                 <div className="flex flex-wrap gap-2 mb-2">
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      task.priority === TASK_PRIORITY_MAP.HIGH
+                      task.priority === "HIGH"
                         ? "bg-red-100 text-red-800"
-                        : task.priority === TASK_PRIORITY_MAP.MEDIUM
+                        : task.priority === "MEDIUM"
                           ? "bg-yellow-100 text-yellow-800"
-                          : task.priority === TASK_PRIORITY_MAP.LOW
+                          : task.priority === "LOW"
                             ? "bg-green-100 text-green-800"
                             : "bg-gray-100 text-gray-800"
                     }`}
@@ -407,11 +406,11 @@ const ProjectDetails: React.FC = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    {task.priority === TASK_PRIORITY_MAP.HIGH
+                    {task.priority === "HIGH"
                       ? "High"
-                      : task.priority === TASK_PRIORITY_MAP.MEDIUM
+                      : task.priority === "MEDIUM"
                         ? "Medium"
-                        : task.priority === TASK_PRIORITY_MAP.LOW
+                        : task.priority === "LOW"
                           ? "Low"
                           : "Unknown"}
                   </span>
