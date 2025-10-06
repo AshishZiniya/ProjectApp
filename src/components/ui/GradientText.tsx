@@ -13,7 +13,7 @@ const gradientTextVariants = cva(
         warning: "bg-gradient-to-r from-yellow-600 via-orange-600 to-yellow-800",
         danger: "bg-gradient-to-r from-red-600 via-pink-600 to-red-800",
         cosmic: "bg-gradient-to-r from-indigo-600 via-purple-600 via-pink-600 to-orange-500",
-        ocean: "bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600",
+        ocean: "bg-gradient-to-r from-blue-500 via-blue-500 to-purple-600",
         sunset: "bg-gradient-to-r from-orange-500 via-red-500 to-pink-600",
       },
       size: {

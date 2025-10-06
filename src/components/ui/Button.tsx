@@ -1,42 +1,41 @@
-import { memo } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils";
+import { memo } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/utils';
 
 const buttonVariants = cva(
-  "font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2",
+  'font-medium rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 relative overflow-hidden',
   {
     variants: {
       variant: {
         primary:
-          "bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-sm hover:shadow-md",
+          'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white shadow-lg hover:shadow-xl border border-blue-400/50',
         secondary:
-          "bg-gray-100 hover:bg-gray-200 text-gray-900 focus:ring-gray-400 shadow-sm hover:shadow-md",
+          'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300 shadow-md hover:shadow-lg dark:glass dark:text-gray-200 dark:hover:bg-white/10 dark:border-white/20',
         success:
-          "bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 shadow-sm hover:shadow-md",
+          'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg hover:shadow-xl border border-green-400/50',
         warning:
-          "bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-500 shadow-sm hover:shadow-md",
+          'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white shadow-lg hover:shadow-xl border border-yellow-400/50',
         danger:
-          "bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-sm hover:shadow-md",
+          'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-400 hover:to-pink-500 text-white shadow-lg hover:shadow-xl border border-red-400/50',
         outline:
-          "border border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 focus:ring-blue-500 bg-transparent shadow-sm",
+          'border-2 border-blue-400 text-blue-600 hover:bg-blue-400/10 hover:border-blue-300 focus:ring-blue-400 bg-transparent shadow-lg dark:text-blue-400 dark:hover:bg-blue-400/10',
         ghost:
-          "text-blue-600 hover:bg-blue-50 focus:ring-blue-500 bg-transparent shadow-sm",
-        link:
-          "text-blue-600 hover:text-blue-700 focus:ring-blue-500 bg-transparent shadow-none hover:underline p-0",
+          'text-blue-600 hover:bg-blue-400/10 hover:text-blue-700 focus:ring-blue-400 bg-transparent dark:text-blue-400 dark:hover:bg-blue-400/10 dark:hover:text-blue-300',
+        link: 'text-blue-600 hover:text-blue-700 focus:ring-blue-400 bg-transparent shadow-none hover:underline p-0 dark:text-blue-400 dark:hover:text-blue-300',
       },
       size: {
-        xs: "px-2.5 py-1.5 text-xs",
-        sm: "px-3 py-2 text-sm",
-        md: "px-4 py-2.5 text-sm",
-        lg: "px-6 py-3 text-base",
-        xl: "px-8 py-4 text-lg",
+        xs: 'px-3 py-1.5 text-xs',
+        sm: 'px-4 py-2 text-sm',
+        md: 'px-6 py-3 text-sm',
+        lg: 'px-8 py-4 text-base',
+        xl: 'px-10 py-5 text-lg',
       },
     },
     defaultVariants: {
-      variant: "primary",
-      size: "md",
+      variant: 'primary',
+      size: 'md',
     },
-  },
+  }
 );
 
 interface ButtonProps
@@ -71,7 +70,7 @@ const LoadingSpinner = memo(() => (
   </svg>
 ));
 
-LoadingSpinner.displayName = "LoadingSpinner";
+LoadingSpinner.displayName = 'LoadingSpinner';
 
 const ButtonComponent: React.FC<ButtonProps> = ({
   children,
@@ -99,6 +98,6 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 };
 
 const Button = memo(ButtonComponent);
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 export default Button;

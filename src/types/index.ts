@@ -20,15 +20,15 @@ export const TASK_PRIORITY_MAP = {
 export const TASK_PRIORITY_CONFIG = {
   LOW: {
     label: "Low",
-    color: "bg-green-100 text-green-800",
+    color: "bg-green-900 text-green-100",
   },
   MEDIUM: {
     label: "Medium",
-    color: "bg-yellow-100 text-yellow-800",
+    color: "bg-yellow-900 text-yellow-100",
   },
   HIGH: {
     label: "High",
-    color: "bg-red-100 text-red-800",
+    color: "bg-red-900 text-red-100",
   },
 } as const;
 
@@ -36,15 +36,15 @@ export const TASK_PRIORITY_CONFIG = {
 export const TASK_STATUS_CONFIG = {
   TODO: {
     label: "To Do",
-    color: "bg-gray-100 text-gray-800",
+    color: "bg-gray-800 text-gray-100",
   },
   IN_PROGRESS: {
     label: "In Progress",
-    color: "bg-blue-100 text-blue-800",
+    color: "bg-blue-900 text-blue-100",
   },
   DONE: {
     label: "Completed",
-    color: "bg-green-100 text-green-800",
+    color: "bg-green-900 text-green-100",
   },
 } as const;
 

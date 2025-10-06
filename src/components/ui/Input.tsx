@@ -1,6 +1,6 @@
-import { InputHTMLAttributes, TextareaHTMLAttributes, memo } from "react";
-import FormGroup from "@/components/common/FormGroup";
-import { cn } from "@/utils";
+import { InputHTMLAttributes, TextareaHTMLAttributes, memo } from 'react';
+import FormGroup from '@/components/common/FormGroup';
+import { cn } from '@/utils';
 
 interface BaseProps {
   label?: string;
@@ -11,26 +11,31 @@ interface BaseProps {
 
 type InputProps = BaseProps &
   InputHTMLAttributes<HTMLInputElement> & {
-    type?: Exclude<string, "textarea">;
+    type?: Exclude<string, 'textarea'>;
   };
 
 type TextareaProps = BaseProps &
   TextareaHTMLAttributes<HTMLTextAreaElement> & {
-    type: "textarea";
+    type: 'textarea';
   };
 
 type Props = InputProps | TextareaProps;
 
 const baseInputClasses =
-  "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm";
-const errorInputClasses = "border-red-400 focus:ring-red-500 focus:border-red-500";
+  'block w-full px-4 py-3 border border-border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-all duration-300 bg-background text-foreground placeholder-gray-500 dark:placeholder-gray-400 text-sm';
+const errorInputClasses =
+  'border-error-400 focus:ring-error-400 focus:border-error-400 bg-error-50 dark:bg-error-500/10';
 
 const InputComponent: React.FC<Props> = (props) => {
-  const { label, error, className = "", id } = props;
+  const { label, error, className = '', id } = props;
 
   // Create FormGroup props object with only defined values
-  const formGroupProps: { label?: string; htmlFor?: string; error?: string; errorId?: string } =
-    {};
+  const formGroupProps: {
+    label?: string;
+    htmlFor?: string;
+    error?: string;
+    errorId?: string;
+  } = {};
   if (label !== undefined) formGroupProps.label = label;
   if (id !== undefined) formGroupProps.htmlFor = id;
   if (error !== undefined) {
@@ -41,10 +46,10 @@ const InputComponent: React.FC<Props> = (props) => {
   const inputClasses = cn(
     baseInputClasses,
     className,
-    error && errorInputClasses,
+    error && errorInputClasses
   );
 
-  if (props.type === "textarea") {
+  if (props.type === 'textarea') {
     const {
       label: _label,
       error: _error,
@@ -60,7 +65,7 @@ const InputComponent: React.FC<Props> = (props) => {
         <textarea
           id={id}
           className={inputClasses}
-          aria-invalid={error ? "true" : undefined}
+          aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? `${id || 'textarea'}-error` : undefined}
           {...textareaProps}
         />
@@ -82,9 +87,9 @@ const InputComponent: React.FC<Props> = (props) => {
     <FormGroup {...formGroupProps}>
       <input
         id={id}
-        type={props.type ?? "text"}
+        type={props.type ?? 'text'}
         className={inputClasses}
-        aria-invalid={error ? "true" : undefined}
+        aria-invalid={error ? 'true' : undefined}
         aria-describedby={error ? `${id || 'input'}-error` : undefined}
         {...inputProps}
       />

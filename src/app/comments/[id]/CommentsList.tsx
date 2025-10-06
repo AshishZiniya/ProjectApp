@@ -120,7 +120,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ id }) => {
   if (error) return <Alert type="error" message={error} />;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="p-6 w-full">
       <div className="text-center mb-12">
         <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Comments

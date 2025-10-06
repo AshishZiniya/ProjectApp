@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import Button from "./Button";
+import React, { useEffect, useRef } from 'react';
+import Button from './Button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,8 +9,9 @@ interface ModalProps {
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
-  confirmVariant?: "primary" | "secondary" | "danger";
+  confirmVariant?: 'primary' | 'secondary' | 'danger';
   loading?: boolean;
+  className?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -18,11 +19,12 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   message,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   onConfirm,
-  confirmVariant = "danger",
+  confirmVariant = 'danger',
   loading = false,
+  className,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -37,20 +39,20 @@ const Modal: React.FC<ModalProps> = ({
       modalRef.current?.focus();
 
       // Prevent body scroll
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
 
       // Handle escape key
       const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
+        if (e.key === 'Escape') {
           onClose();
         }
       };
 
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
 
       return () => {
-        document.removeEventListener("keydown", handleEscape);
-        document.body.style.overflow = "";
+        document.removeEventListener('keydown', handleEscape);
+        document.body.style.overflow = '';
         // Restore focus
         if (previousFocusRef.current) {
           previousFocusRef.current.focus();
@@ -70,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -79,27 +81,28 @@ const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 focus:outline-none"
+        className={`glass-card rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 focus:outline-none border border-white/20 animate-scale-in ${className}`}
         tabIndex={-1}
         role="document"
       >
-        <div className="mb-4">
-          <h3
-            id="modal-title"
-            className="text-lg font-semibold text-gray-900 mb-2"
-          >
+        <div className="mb-6">
+          <h3 id="modal-title" className="text-2xl font-bold text-white mb-4">
             {title}
           </h3>
-          <p id="modal-description" className="text-gray-600">
+          <p
+            id="modal-description"
+            className="text-gray-500 text-lg leading-relaxed"
+          >
             {message}
           </p>
         </div>
-        <div className="flex justify-end space-x-3">
+        <div className="flex justify-end space-x-4">
           <Button
             variant="secondary"
             onClick={onClose}
             disabled={loading}
             aria-label={cancelText}
+            className="px-6 py-3"
           >
             {cancelText}
           </Button>
@@ -107,9 +110,10 @@ const Modal: React.FC<ModalProps> = ({
             variant={confirmVariant}
             onClick={onConfirm}
             disabled={loading}
-            aria-label={loading ? "Processing..." : confirmText}
+            aria-label={loading ? 'Processing...' : confirmText}
+            className="px-6 py-3"
           >
-            {loading ? "Processing..." : confirmText}
+            {loading ? 'Processing...' : confirmText}
           </Button>
         </div>
       </div>

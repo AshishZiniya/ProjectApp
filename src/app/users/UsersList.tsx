@@ -1,34 +1,19 @@
 // app/users/UsersList.tsx
-"use client";
+'use client';
 
-import React, { useState, useCallback } from "react";
-import { User, PaginatedResponse } from "@/types";
-import Card from "@/components/ui/Card";
-import Alert from "@/components/ui/Alert";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import Modal from "@/components/ui/Modal";
-import Link from "next/link";
-import useToast from "@/hooks/useToast";
-import { useApiQuery, useApiMutation } from "@/hooks/useApiQuery";
-import { DEFAULT_PAGE_LIMIT, PAGE_LIMIT_OPTIONS } from "@/constants";
-import PaginationControls from "@/components/common/PaginationControls";
-import SkeletonCard from "@/components/ui/SkeletonCard";
+import React, { useState, useCallback } from 'react';
+import { User, PaginatedResponse } from '@/types';
+import Modal from '@/components/ui/Modal';
+import useToast from '@/hooks/useToast';
+import { useApiQuery, useApiMutation } from '@/hooks/useApiQuery';
+import { PAGE_LIMIT_OPTIONS } from '@/constants';
+import DataList from '@/components/common/DataList';
+import UserCard from '@/components/common/UserCard';
 
-interface UsersListProps {
-  searchQuery?: string;
-  currentPage?: number;
-  pageSize?: number;
-}
-
-const UsersList: React.FC<UsersListProps> = ({
-  searchQuery = "",
-  currentPage = 1,
-  pageSize = DEFAULT_PAGE_LIMIT,
-}) => {
-  const [q, setQ] = useState(searchQuery);
-  const [page, setPage] = useState(currentPage);
-  const [limit, setLimit] = useState(pageSize);
+const UsersList: React.FC = () => {
+  const [q, setQ] = useState('');
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
@@ -40,18 +25,10 @@ const UsersList: React.FC<UsersListProps> = ({
     loading,
     error,
     refetch,
-  } = useApiQuery<PaginatedResponse<User>>("/users", {
+  } = useApiQuery<PaginatedResponse<User>>('/users', {
     params: { q, page, limit },
-    onError: (err) => {
-      console.error("Error fetching users:", err);
-      showError("Failed to fetch users.");
-    },
-    onSuccess: (data) => {
-      console.log(
-        "✅ Users fetched successfully:",
-        data.data?.length || 0,
-        "users",
-      );
+    onError: () => {
+      showError('Failed to fetch users.');
     },
   });
 
@@ -73,14 +50,14 @@ const UsersList: React.FC<UsersListProps> = ({
     if (!userToDelete) return;
 
     try {
-      await deleteUser(`/users/${userToDelete.id}`, userToDelete.id, "DELETE");
-      showSuccess("User deleted successfully!");
+      await deleteUser(`/users/${userToDelete.id}`, userToDelete.id, 'DELETE');
+      showSuccess('User deleted successfully!');
       setShowDeleteModal(false);
       setUserToDelete(null);
       refetch(); // Refresh the list
     } catch (err) {
-      console.error("Error deleting user:", err);
-      showError("Failed to delete user.");
+      console.error('Error deleting user:', err);
+      showError('Failed to delete user.');
     }
   }, [userToDelete, deleteUser, showSuccess, showError, refetch]);
 
@@ -89,146 +66,28 @@ const UsersList: React.FC<UsersListProps> = ({
     setUserToDelete(null);
   }, []);
 
-  // Loading skeleton component
-  const UserCardSkeleton = () => <SkeletonCard variant="user" />;
-
-  // User role badge component
-  const UserRoleBadge = ({ role }: { role: string }) => (
-    <span
-      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-        role === "ADMIN"
-          ? "bg-purple-100 text-purple-800"
-          : role === "SUPERADMIN"
-            ? "bg-red-100 text-red-800"
-            : "bg-blue-100 text-blue-800"
-      }`}
-    >
-      {role}
-    </span>
-  );
-
-  // User card component
-  const UserCard = ({ user }: { user: User }) => (
-    <Card
-      className="flex flex-col justify-between transition-transform min-h-[200px]"
-    >
-      <div>
-        <div className="flex items-center mb-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-lg">
-            {user.name.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800">{user.name}</h3>
-            <UserRoleBadge role={user.role} />
-          </div>
-        </div>
-        <div className="flex items-center text-gray-600 text-sm">
-          <svg
-            className="w-4 h-4 mr-2 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
-          {user.email}
-        </div>
-      </div>
-      <div className="flex space-x-2 mt-4">
-        <Link href={`/users/${user.id}`} passHref>
-          <Button variant="secondary" size="sm" className="flex-1">
-            View Details
-          </Button>
-        </Link>
-        <Button
-          variant="danger"
-          size="sm"
-          onClick={() => handleDeleteClick(user)}
-          className="flex-1"
-        >
-          Delete
-        </Button>
-      </div>
-    </Card>
-  );
-
   return (
-    <div className="container mx-auto p-6 min-h-screen">
-      {/* Header Section */}
-      <div className="text-center mb-12 min-h-[120px]">
-        <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          User Management
-        </h1>
-        <p className="text-xl text-gray-600">
-          Manage user accounts and permissions
-        </p>
-      </div>
+    <>
+      <DataList
+        title="User Management"
+        subtitle="Manage user accounts and permissions across your organization"
+        data={users}
+        loading={loading}
+        error={error}
+        totalPages={totalPages}
+        currentPage={page}
+        limit={limit}
+        searchQuery={q}
+        onPageChange={setPage}
+        onLimitChange={setLimit}
+        onSearchChange={setQ}
+        renderItem={(user) => (
+          <UserCard key={user.id} user={user} onDelete={handleDeleteClick} />
+        )}
+        emptyMessage="No users found. Start by inviting team members!"
+        limitOptions={PAGE_LIMIT_OPTIONS.USERS}
+      />
 
-      {/* Search and Filters */}
-      <div className="flex justify-between items-center mb-6 min-h-[40px]">
-        <Input
-          type="text"
-          placeholder="Search users by name..."
-          value={q}
-          onChange={(e) => {
-            setQ(e.target.value);
-            setPage(1); // Reset page on search
-          }}
-          className="w-1/3"
-        />
-      </div>
-
-      {/* Error State */}
-      {error && (
-        <Alert type="error" message="Failed to load users. Please try again." />
-      )}
-
-      {/* Loading State */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
-          {[...Array(limit)].map((_, index) => (
-            <UserCardSkeleton key={index} />
-          ))}
-        </div>
-      ) : (
-        <>
-          {/* Empty State */}
-          {users.length === 0 && !error && (
-            <Alert type="info" message="No users found." />
-          )}
-
-          {/* Users Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
-            {users.map((user) => (
-              <UserCard key={user.id} user={user} />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-8">
-              <PaginationControls
-                currentPage={page}
-                totalPages={totalPages}
-                limit={limit}
-                onPageChange={setPage}
-                onLimitChange={(newLimit) => {
-                  setLimit(newLimit);
-                  setPage(1);
-                }}
-                limitOptions={PAGE_LIMIT_OPTIONS.USERS}
-              />
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Delete Confirmation Modal */}
       <Modal
         isOpen={showDeleteModal}
         onClose={handleDeleteCancel}
@@ -238,7 +97,7 @@ const UsersList: React.FC<UsersListProps> = ({
         onConfirm={handleDeleteConfirm}
         loading={deleting}
       />
-    </div>
+    </>
   );
 };
 

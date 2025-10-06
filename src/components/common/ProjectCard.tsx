@@ -1,85 +1,127 @@
-"use client";
+'use client';
 
-import React, { memo } from "react";
-import Link from "next/link";
-import { Project } from "@/types";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import React, { memo } from 'react';
+import Link from 'next/link';
+import { Project } from '@/types';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 
 interface ProjectCardProps {
   project: Project;
   onDelete?: (project: Project) => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = memo(({ project, onDelete }) => (
-  <Card className="flex flex-col justify-between transition-all duration-200 min-h-[280px]">
-    <div>
-      <div className="flex items-center mb-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-            />
-          </svg>
+const ProjectCard: React.FC<ProjectCardProps> = memo(
+  ({ project, onDelete }) => (
+    <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up">
+      <div className="flex-1">
+        <div className="flex items-center mb-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <svg
+              className="w-7 h-7 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              width="28"
+              height="28"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+          <h3 className="text-xl font-bold text-white line-clamp-1 group-hover:text-blue-300 transition-colors">
+            {project.name}
+          </h3>
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 line-clamp-1">
-          {project.name}
-        </h3>
+        {project.description && (
+          <p className="text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">
+            {project.description}
+          </p>
+        )}
+        <div className="flex items-center text-gray-400 text-sm mb-6">
+          <div className="w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg flex items-center justify-center mr-2">
+            <svg
+              className="w-3 h-3 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              width="12"
+              height="12"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <span className="font-medium truncate text-gray-200">
+            {project.owner.name}
+          </span>
+        </div>
       </div>
-      {project.description && (
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-          {project.description}
-        </p>
-      )}
-      <div className="flex items-center text-gray-700 text-sm mb-4">
-        <svg
-          className="w-4 h-4 mr-1 text-gray-500 flex-shrink-0"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-          />
-        </svg>
-        <span className="font-medium truncate">{project.owner.name}</span>
+      <div className="flex space-x-3 mt-auto">
+        <Link href={`/projects/${project.id}`} passHref className="flex-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full hover:bg-blue-400/10 hover:border-blue-400 group-hover:shadow-blue-500/20"
+          >
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            View Details
+          </Button>
+        </Link>
+        {onDelete && (
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => onDelete(project)}
+            className="flex-1 hover:bg-red-500/20 hover:border-red-400/50 group-hover:shadow-red-500/20"
+          >
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+            Delete
+          </Button>
+        )}
       </div>
-    </div>
-    <div className="flex space-x-2 mt-auto">
-      <Link href={`/projects/${project.id}`} passHref>
-        <Button variant="secondary" size="sm" className="flex-1">
-          View Details
-        </Button>
-      </Link>
-      {onDelete && (
-        <Button
-          variant="danger"
-          size="sm"
-          onClick={() => onDelete(project)}
-          className="flex-1"
-        >
-          Delete
-        </Button>
-      )}
-    </div>
-  </Card>
-));
+    </Card>
+  )
+);
 
-ProjectCard.displayName = "ProjectCard";
+ProjectCard.displayName = 'ProjectCard';
 
 export default ProjectCard;

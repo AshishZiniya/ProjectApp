@@ -163,7 +163,7 @@ const ProjectDetails: React.FC = () => {
 
   if (loading)
     return (
-      <div className="container mx-auto p-6">
+      <div className="p-6 w-full">
         <ProjectDetailsSkeleton />
       </div>
     );
@@ -171,7 +171,7 @@ const ProjectDetails: React.FC = () => {
     return <Alert type="info" message="Project not found." className="m-6" />;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="p-6 w-full">
       <Card className="max-w-8xl mx-auto shadow-2xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

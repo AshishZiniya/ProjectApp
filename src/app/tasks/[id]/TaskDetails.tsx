@@ -284,7 +284,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   if (loading)
     return (
-      <div className="container mx-auto p-6">
+      <div className="p-6 w-full">
         <TaskDetailsSkeleton />
       </div>
     );
@@ -292,7 +292,7 @@ const TaskDetails: React.FC = (): ReactNode => {
     return <Alert type="info" message="Task not found." className="m-6" />;
 
   return (
-    <div className="container mx-auto px-6 py-8">
+    <div className="px-6 py-8 w-full">
       <Card className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold mb-2 text-gray-900">
@@ -435,8 +435,8 @@ const TaskDetails: React.FC = (): ReactNode => {
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-cyan-600 font-bold">🕒</span>
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-blue-600 font-bold">🕒</span>
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800">
                     Created At

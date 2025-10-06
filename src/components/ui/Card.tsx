@@ -1,28 +1,31 @@
-import React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils";
+import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/utils';
 
 const cardVariants = cva(
-  "bg-white rounded-lg transition-all duration-200 border min-h-[100px]",
+  'rounded-2xl transition-all duration-300 border min-h-[100px] hover-lift',
   {
     variants: {
       variant: {
-        default: "shadow-sm border-gray-200 hover:shadow-md hover:border-gray-300",
-        elevated: "shadow-md border-gray-200 hover:shadow-lg hover:border-gray-300",
-        outlined: "shadow-sm border-2 border-gray-300 hover:border-gray-400 bg-gray-50/50",
-        ghost: "shadow-none border-transparent hover:bg-gray-50/50",
+        default:
+          'bg-card border-border shadow-md hover:shadow-lg',
+        elevated:
+          'bg-card border-border/80 shadow-lg hover:shadow-xl',
+        outlined:
+          'bg-transparent border-2 border-border/50 hover:border-border',
+        ghost: 'shadow-none border-transparent hover:bg-card/50',
       },
       padding: {
-        none: "p-0",
-        sm: "p-3",
-        md: "p-4",
-        lg: "p-6",
-        xl: "p-8",
+        none: 'p-0',
+        sm: 'p-4',
+        md: 'p-6',
+        lg: 'p-8',
+        xl: 'p-10',
       },
     },
     defaultVariants: {
-      variant: "default",
-      padding: "md",
+      variant: 'default',
+      padding: 'md',
     },
   }
 );

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
-import Alert from "@/components/ui/Alert";
-import { useAuth } from "@/hooks/useAuth";
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
+import Alert from '@/components/ui/Alert';
+import { useAuth } from '@/hooks/useAuth';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
@@ -25,14 +25,14 @@ const Login: React.FC = () => {
   const validateForm = useCallback(() => {
     const errors: { email?: string; password?: string } = {};
     if (!email) {
-      errors.email = "Email is required";
+      errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Please enter a valid email";
+      errors.email = 'Please enter a valid email';
     }
     if (!password) {
-      errors.password = "Password is required";
+      errors.password = 'Password is required';
     } else if (password.length < 8) {
-      errors.password = "Password must be at least 8 characters";
+      errors.password = 'Password must be at least 8 characters';
     }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -46,21 +46,21 @@ const Login: React.FC = () => {
       setLoginLoading(true);
       try {
         await login(email, password);
-        router.push("/projects");
+        router.push('/projects');
       } catch {
         // Error is handled by useAuth
       } finally {
         setLoginLoading(false);
       }
     },
-    [validateForm, login, email, password, router],
+    [validateForm, login, email, password, router]
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="min-h-screen animated-bg flex items-center justify-center p-6">
+      <Card className="w-full max-w-md glass-card shadow-2xl animate-scale-in">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-neon rounded-2xl flex items-center justify-center mx-auto mb-6 pulse-glow">
             <svg
               className="w-10 h-10 text-white"
               fill="none"
@@ -75,20 +75,25 @@ const Login: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold mb-2 text-gradient">
             Welcome Back
           </h2>
-          <p className="text-gray-600 text-lg">Sign in to your account</p>
+          <p className="text-gray-500 text-lg">Sign in to your account</p>
         </div>
-        {error && <Alert type="error" message={error} className="mb-4" />}
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
+
+        {error && (
+          <Alert
+            type="error"
+            message={error}
+            className="mb-6 glass-card border-red-400/20"
+          />
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-gray-200 mb-2"
             >
               Email Address
             </label>
@@ -99,8 +104,10 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
-                  validationErrors.email ? "border-red-500" : "border-gray-300"
+                className={`block w-full px-4 py-3 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white placeholder-gray-400 backdrop-blur-md min-h-[48px] ${
+                  validationErrors.email
+                    ? 'border-red-400/50'
+                    : 'border-white/20'
                 }`}
                 placeholder="Enter your email"
               />
@@ -119,36 +126,37 @@ const Login: React.FC = () => {
               </svg>
             </div>
             {validationErrors.email && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-red-400">
                 {validationErrors.email}
               </p>
             )}
           </div>
+
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-gray-200 mb-2"
             >
               Password
             </label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 pr-12 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors min-h-[48px] ${
+                className={`block w-full px-4 py-3 pr-12 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white placeholder-gray-400 backdrop-blur-md min-h-[48px] ${
                   validationErrors.password
-                    ? "border-red-500"
-                    : "border-gray-300"
+                    ? 'border-red-400/50'
+                    : 'border-white/20'
                 }`}
                 placeholder="Enter your password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 focus:outline-none"
+                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-200 focus:outline-none transition-colors"
               >
                 {showPassword ? (
                   <svg
@@ -188,11 +196,12 @@ const Login: React.FC = () => {
               </button>
             </div>
             {validationErrors.password && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-red-400">
                 {validationErrors.password}
               </p>
             )}
           </div>
+
           <div className="flex items-center justify-between min-h-[40px]">
             <div className="flex items-center">
               <input
@@ -201,11 +210,11 @@ const Login: React.FC = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-400 focus:ring-blue-400 border-white/20 rounded glass"
               />
               <label
                 htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-700"
+                className="ml-2 block text-sm text-gray-200"
               >
                 Remember me
               </label>
@@ -213,24 +222,29 @@ const Login: React.FC = () => {
             <div className="text-sm">
               <Link
                 href="/auth/forgot-password"
-                className="text-blue-600 hover:text-blue-500 font-medium"
+                className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
               >
                 Forgot your password?
               </Link>
             </div>
           </div>
+
           <Button
             type="submit"
             loading={loginLoading}
-            className="w-full py-3 text-lg font-medium min-h-[48px]"
+            className="w-full py-3 text-lg font-medium min-h-[48px] shadow-2xl hover:shadow-blue-500/30"
             disabled={loginLoading}
           >
-            {loginLoading ? "Signing In..." : "Sign In"}
+            {loginLoading ? 'Signing In...' : 'Sign In'}
           </Button>
         </form>
-        <p className="mt-6 text-center text-gray-600 min-h-[20px]">
-          Don&#39;t have an account?{" "}
-          <Link href="/auth/register" className="text-blue-600 hover:underline">
+
+        <p className="mt-6 text-center text-gray-500 min-h-[20px]">
+          Don&#39;t have an account?{' '}
+          <Link
+            href="/auth/register"
+            className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+          >
             Register here
           </Link>
         </p>
