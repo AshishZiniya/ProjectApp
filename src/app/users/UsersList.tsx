@@ -9,6 +9,7 @@ import { useApiQuery, useApiMutation } from '@/hooks/useApiQuery';
 import { PAGE_LIMIT_OPTIONS } from '@/constants';
 import DataList from '@/components/common/DataList';
 import UserCard from '@/components/common/UserCard';
+import { useSession } from 'next-auth/react';
 
 const UsersList: React.FC = () => {
   const [q, setQ] = useState('');
@@ -18,6 +19,10 @@ const UsersList: React.FC = () => {
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const { showSuccess, showError } = useToast();
+
+    const { data: session } = useSession();
+    const currentUser = session?.user;
+    const isSuperAdmin = currentUser?.role === 'SUPERADMIN';
 
   // Fetch users data
   const {
@@ -82,7 +87,7 @@ const UsersList: React.FC = () => {
         onLimitChange={setLimit}
         onSearchChange={setQ}
         renderItem={(user) => (
-          <UserCard key={user.id} user={user} onDelete={handleDeleteClick} />
+          <UserCard key={user.id} user={user} {...(isSuperAdmin ? { onDelete: handleDeleteClick } : {})} />
         )}
         emptyMessage="No users found. Start by inviting team members!"
         limitOptions={PAGE_LIMIT_OPTIONS.USERS}
