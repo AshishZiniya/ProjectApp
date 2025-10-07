@@ -2,8 +2,8 @@
 
 // API Configuration
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "projectapp-api-production.up.railway.app";
+  process.env.API_BASE_URL ||
+  "https://projectapp-api-production.up.railway.app";
 
 // Toast Configuration
 export const TOAST_DURATION = 2000;
