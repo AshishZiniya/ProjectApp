@@ -146,7 +146,7 @@ const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className={`block w-full px-4 py-3 pr-12 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white placeholder-gray-400 backdrop-blur-md min-h-[48px] ${
+                className={`block w-full px-4 py-3 pr-12 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-gray-700 placeholder-gray-400 backdrop-blur-md min-h-[48px] ${
                   validationErrors.password
                     ? 'border-red-400/50'
                     : 'border-white/20'
