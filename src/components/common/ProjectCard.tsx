@@ -2,6 +2,7 @@
 
 import React, { memo } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { Project } from '@/types';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -12,7 +13,12 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = memo(
-  ({ project, onDelete }) => (
+  ({ project, onDelete }) => {
+    const { data: session } = useSession();
+    const currentUser = session?.user;
+    const isSuperAdmin = currentUser?.role === 'SUPERADMIN';
+
+    return (
     <Card className="p-6 hover:shadow-md transition-all duration-200 group w-fit">
       <div className="flex flex-col items-start justify-between gap-5">
         <div className="flex items-center space-x-4 flex-1 min-w-0">
@@ -79,7 +85,7 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
             </Button>
           </Link>
 
-          {onDelete && (
+          {onDelete && isSuperAdmin && (
             <Button
               variant="outline"
               size="sm"
@@ -92,7 +98,8 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
         </div>
       </div>
     </Card>
-  )
+    );
+  }
 );
 
 ProjectCard.displayName = 'ProjectCard';
