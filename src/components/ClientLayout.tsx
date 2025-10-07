@@ -35,7 +35,7 @@ export default function ClientLayout({
             </main>
           }
         >
-          <main className={`flex-1 w-full ${!isAuthPage ? 'mt-20' : ''} animated-bg`}>
+          <main className={`flex-1 w-full ${!isAuthPage ? 'mt-28' : ''} animated-bg`}>
             {children}
           </main>
         </Suspense>
