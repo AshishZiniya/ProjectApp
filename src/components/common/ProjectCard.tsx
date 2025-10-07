@@ -78,6 +78,17 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
               View Project
             </Button>
           </Link>
+
+          {onDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDelete(project)}
+              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </div>
     </Card>

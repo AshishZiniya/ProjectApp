@@ -8,10 +8,9 @@ import Button from '@/components/ui/Button';
 
 interface UserCardProps {
   user: User;
-  onDelete?: (user: User) => void;
 }
 
-const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
+const UserCard: React.FC<UserCardProps> = memo(({ user }) => (
   <Card className="p-6 hover:shadow-md transition-all duration-200 group w-fit">
     <div className="flex flex-col items-start justify-between gap-5">
       <div className="flex items-center space-x-4 flex-1 min-w-0">
