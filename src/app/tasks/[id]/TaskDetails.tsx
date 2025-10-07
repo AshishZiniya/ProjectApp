@@ -101,7 +101,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   useEffect(() => {
     fetchTaskAndComments();
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const apiBaseUrl = process.env.API_BASE_URL;
 
     if (!apiBaseUrl) {
       showError("API base URL not configured");
