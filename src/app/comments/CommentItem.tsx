@@ -14,12 +14,12 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
     <Card className="group p-4 bg-gray-50 border border-gray-200 transition-shadow">
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-white font-bold text-sm">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3 text-gray-900 dark:text-white font-bold text-sm">
             {comment.author.name.charAt(0).toUpperCase()}
           </div>
           <div>
             <p className="font-semibold text-gray-800">{comment.author.name}</p>
-            <div className="flex items-center text-xs text-gray-500">
+            <div className="flex items-center text-xs text-gray-700 dark:text-gray-500">
               <svg
                 className="w-3 h-3 mr-1"
                 fill="none"
@@ -41,7 +41,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
           variant="danger"
           size="sm"
           onClick={() => onDelete(comment)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
+          className="opacity-0 transition-opacity"
         >
           <svg
             className="w-4 h-4"

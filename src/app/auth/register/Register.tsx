@@ -122,7 +122,7 @@ const Register: React.FC = () => {
                 placeholder="Enter your email"
               />
               <svg
-                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
+                className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -161,7 +161,7 @@ const Register: React.FC = () => {
                 placeholder="Enter your full name"
               />
               <svg
-                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
+                className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -204,7 +204,7 @@ const Register: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 focus:outline-none"
+                className="absolute right-3 top-3.5 text-gray-600 dark:text-gray-400 focus:outline-none"
               >
                 {showPassword ? (
                   <svg
@@ -261,7 +261,7 @@ const Register: React.FC = () => {
                     />
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-700 dark:text-gray-500 mt-1">
                   {passwordStrength <= 2
                     ? "Weak"
                     : passwordStrength === 3
@@ -290,7 +290,7 @@ const Register: React.FC = () => {
             Already have an account?{" "}
             <Link
               href="/auth/login"
-              className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
+              className="text-blue-600 font-medium transition-colors"
             >
               Sign in here
             </Link>

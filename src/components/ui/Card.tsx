@@ -3,17 +3,17 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils';
 
 const cardVariants = cva(
-  'rounded-2xl transition-all duration-300 border min-h-[100px] hover-lift',
+  'rounded-2xl border min-h-[100px]',
   {
     variants: {
       variant: {
         default:
-          'bg-card border-border shadow-md hover:shadow-lg',
+          'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700',
         elevated:
-          'bg-card border-border/80 shadow-lg hover:shadow-xl',
+          'bg-white dark:bg-gray-800 border-gray-200/80 dark:border-gray-700/80',
         outlined:
-          'bg-transparent border-2 border-border/50 hover:border-border',
-        ghost: 'shadow-none border-transparent hover:bg-card/50',
+          'bg-transparent border-2 border-gray-200/50 dark:border-gray-700/50',
+        ghost: 'shadow-none border-transparent',
       },
       padding: {
         none: 'p-0',

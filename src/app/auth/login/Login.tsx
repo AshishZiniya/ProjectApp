@@ -57,8 +57,8 @@ const Login: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen animated-bg flex items-center justify-center p-6">
-      <Card className="w-full max-w-md glass-card shadow-2xl animate-scale-in">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 flex items-center justify-center p-6">
+      <Card className="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg animate-scale-in">
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-neon rounded-2xl flex items-center justify-center mx-auto mb-6 pulse-glow">
             <svg
@@ -75,17 +75,17 @@ const Login: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className="text-4xl font-bold mb-2 text-gradient">
+          <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             Welcome Back
           </h2>
-          <p className="text-gray-500 text-lg">Sign in to your account</p>
+          <p className="text-gray-700 dark:text-gray-500 text-lg">Sign in to your account</p>
         </div>
 
         {error && (
           <Alert
             type="error"
             message={error}
-            className="mb-6 glass-card border-red-400/20"
+            className="mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
           />
         )}
 
@@ -93,7 +93,7 @@ const Login: React.FC = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-200 mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
             >
               Email Address
             </label>
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
                 placeholder="Enter your email"
               />
               <svg
-                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
+                className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -135,7 +135,7 @@ const Login: React.FC = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-200 mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
             >
               Password
             </label>
@@ -156,7 +156,7 @@ const Login: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-200 focus:outline-none transition-colors"
+                className="absolute right-3 top-3.5 text-gray-600 dark:text-gray-400 focus:outline-none transition-colors"
               >
                 {showPassword ? (
                   <svg
@@ -214,7 +214,7 @@ const Login: React.FC = () => {
               />
               <label
                 htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-200"
+                className="ml-2 block text-sm text-gray-700 dark:text-gray-200"
               >
                 Remember me
               </label>
@@ -222,7 +222,7 @@ const Login: React.FC = () => {
             <div className="text-sm">
               <Link
                 href="/auth/forgot-password"
-                className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                className="text-blue-400 font-medium transition-colors"
               >
                 Forgot your password?
               </Link>
@@ -232,18 +232,18 @@ const Login: React.FC = () => {
           <Button
             type="submit"
             loading={loginLoading}
-            className="w-full py-3 text-lg font-medium min-h-[48px] shadow-2xl hover:shadow-blue-500/30"
+            className="w-full py-3 text-lg font-medium min-h-[48px] shadow-2xl"
             disabled={loginLoading}
           >
             {loginLoading ? 'Signing In...' : 'Sign In'}
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-gray-500 min-h-[20px]">
+        <p className="mt-6 text-center text-gray-700 dark:text-gray-500 min-h-[20px]">
           Don&#39;t have an account?{' '}
           <Link
             href="/auth/register"
-            className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+            className="text-blue-400 transition-colors"
           >
             Register here
           </Link>

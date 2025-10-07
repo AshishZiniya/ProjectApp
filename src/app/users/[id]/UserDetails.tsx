@@ -140,7 +140,7 @@ const UserDetails: React.FC = () => {
         <Card className="shadow-2xl">
           <div className="text-center mb-8">
             <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <span className="text-white font-bold text-4xl">
+              <span className="text-gray-900 dark:text-white font-bold text-4xl">
                 {user.name.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -237,13 +237,13 @@ const UserDetails: React.FC = () => {
 
               <div className="border-t border-gray-200 pt-6">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-700 dark:text-gray-500">
                     Last updated: {new Date(user.updatedAt).toLocaleString()}
                   </div>
                   <div className="flex space-x-3">
                     <Link
                       href="/users"
-                      className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
+                      className="px-4 py-2 bg-gray-500 text-gray-900 dark:text-white rounded-md hover:bg-gray-600 transition-colors duration-200"
                     >
                       Back to List
                     </Link>

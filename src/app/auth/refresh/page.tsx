@@ -36,7 +36,7 @@ export default function RefreshPage() {
       <Card className="w-full max-w-md text-center shadow-2xl">
         <div className="mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">P</span>
+            <span className="text-gray-900 dark:text-white font-bold text-2xl">P</span>
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Token Refresh Status

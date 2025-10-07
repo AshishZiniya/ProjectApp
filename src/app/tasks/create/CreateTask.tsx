@@ -75,16 +75,16 @@ const CreateTask: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center animated-bg p-6">
-      <Card className="w-full max-w-2xl glass-card shadow-2xl animate-scale-in">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 p-6">
+      <Card className="w-full max-w-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg animate-scale-in">
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-neon rounded-2xl flex items-center justify-center mx-auto mb-6 pulse-glow">
-            <span className="text-white font-bold text-3xl">✅</span>
+            <span className="text-gray-900 dark:text-white font-bold text-3xl">✅</span>
           </div>
-          <h2 className="text-4xl font-bold text-gradient mb-4">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent mb-4">
             Create New Task
           </h2>
-          <p className="text-gray-500 text-lg">
+          <p className="text-gray-700 dark:text-gray-500 text-lg">
             Add a new task to your project and assign it to team members
           </p>
         </div>
@@ -93,7 +93,7 @@ const CreateTask: React.FC = () => {
           <Alert
             type="error"
             message={error}
-            className="mb-6 glass-card border-red-400/20"
+            className="mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
           />
         )}
 
@@ -107,7 +107,7 @@ const CreateTask: React.FC = () => {
               onChange={(e) => setProjectId(e.target.value)}
               required
               disabled={!!initialProjectId}
-              className="text-white"
+              className="text-gray-900 dark:text-white"
             />
 
             <Input
@@ -117,7 +117,7 @@ const CreateTask: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="text-white"
+              className="text-gray-900 dark:text-white"
             />
           </div>
 
@@ -129,7 +129,7 @@ const CreateTask: React.FC = () => {
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               setDescription(e.target.value)
             }
-            className="text-white"
+            className="text-gray-900 dark:text-white"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -138,7 +138,7 @@ const CreateTask: React.FC = () => {
                 id="priority"
                 value={priority}
                 onChange={(e) => setPriority(Number(e.target.value))}
-                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white backdrop-blur-md"
+                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-gray-900 dark:text-white backdrop-blur-md"
               >
                 <option value={TASK_PRIORITY.HIGH}>High</option>
                 <option value={TASK_PRIORITY.MEDIUM}>Medium</option>
@@ -153,7 +153,7 @@ const CreateTask: React.FC = () => {
                 onChange={(e) =>
                   setStatus(e.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE')
                 }
-                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white backdrop-blur-md"
+                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-gray-900 dark:text-white backdrop-blur-md"
               >
                 <option value="TODO">To Do</option>
                 <option value="IN_PROGRESS">In Progress</option>
@@ -167,25 +167,25 @@ const CreateTask: React.FC = () => {
               id="dueDate"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="text-white"
+              className="text-gray-900 dark:text-white"
             />
           </div>
 
           <FormGroup label="Assignee (Optional)" htmlFor="assignee">
             {usersLoading ? (
-              <div className="h-12 glass-card rounded-xl animate-pulse"></div>
+              <div className="h-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-xl animate-pulse"></div>
             ) : usersError ? (
               <Alert
                 type="error"
                 message={usersError}
-                className="glass-card border-red-400/20"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
               />
             ) : (
               <select
                 id="assignee"
                 value={assigneeId}
                 onChange={(e) => setAssigneeId(e.target.value)}
-                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white backdrop-blur-md"
+                className="block w-full px-4 py-3 border border-white/20 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-gray-900 dark:text-white backdrop-blur-md"
               >
                 <option value="">Select Assignee</option>
                 {users.map((user) => (
@@ -211,7 +211,7 @@ const CreateTask: React.FC = () => {
             <Button
               type="submit"
               variant="primary"
-              className="flex-1 shadow-2xl hover:shadow-blue-500/30"
+              className="flex-1 shadow-2xl"
               loading={loading}
             >
               Create Task

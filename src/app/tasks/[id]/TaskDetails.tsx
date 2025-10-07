@@ -331,7 +331,7 @@ const TaskDetails: React.FC = (): ReactNode => {
                 {task.project ? (
                   <Link
                     href={`/projects/${task.project.id}`}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600"
                   >
                     <p className="text-gray-600">{task.project.name}</p>
                   </Link>
@@ -475,7 +475,7 @@ const TaskDetails: React.FC = (): ReactNode => {
             <div className="flex justify-end space-x-3 mb-8">
               <Link
                 href={`/projects/${task.project?.id}`}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200"
+                className="px-4 py-2 bg-gray-500 text-gray-900 dark:text-white rounded-md transition-all duration-200"
               >
                 Back to Project
               </Link>
@@ -589,13 +589,18 @@ const TaskDetails: React.FC = (): ReactNode => {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>
-                    <div className="h-3 bg-gray-200 rounded w-40"></div>
+                    <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>{" "}
+                    {/* Author Name */}
+                    <div className="h-3 bg-gray-200 rounded w-40"></div>{" "}
+                    {/* Date */}
                   </div>
-                  <div className="h-8 w-16 bg-gray-200 rounded"></div>
+                  <div className="h-8 w-16 bg-gray-200 rounded"></div>{" "}
+                  {/* Delete Button */}
                 </div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>{" "}
+                {/* Body line 1 */}
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>{" "}
+                {/* Body line 2 */}
               </Card>
             ))}
           </div>

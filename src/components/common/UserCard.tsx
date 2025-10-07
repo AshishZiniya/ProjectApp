@@ -12,16 +12,16 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
-  <Card className="flex flex-col justify-between transition-all duration-300 min-h-[280px] group animate-fade-in-up hover-lift">
+  <Card className="flex flex-col justify-between transition-all duration-300 min-h-[280px] group animate-fade-in-up">
     <div className="flex-1">
       <div className="flex items-center mb-6">
-        <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-          <span className="text-2xl font-bold text-white">
+        <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 shadow-lg">
+          <span className="text-2xl font-bold text-gray-900 dark:text-white">
             {user.name.charAt(0).toUpperCase()}
           </span>
         </div>
         <div>
-          <h3 className="text-xl font-bold text-white line-clamp-1 group-hover:text-blue-300 transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-1 transition-colors">
             {user.name}
           </h3>
           <div
@@ -37,7 +37,7 @@ const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
           </div>
         </div>
       </div>
-      <div className="flex items-center text-gray-500 text-sm">
+      <div className="flex items-center text-gray-700 dark:text-gray-500 text-sm">
         <div className="w-5 h-5 bg-white/10 rounded-lg flex items-center justify-center mr-3">
           <svg
             className="w-3 h-3 text-blue-400"
@@ -53,7 +53,7 @@ const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
             />
           </svg>
         </div>
-        <span className="font-medium text-gray-200">{user.email}</span>
+        <span className="font-medium text-gray-600 dark:text-gray-200">{user.email}</span>
       </div>
     </div>
     <div className="flex space-x-3 mt-auto">
@@ -61,7 +61,7 @@ const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
         <Button
           variant="outline"
           size="sm"
-          className="w-full hover:bg-blue-400/10 hover:border-blue-400 group-hover:shadow-blue-500/20"
+          className="w-full"
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -90,7 +90,7 @@ const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
           variant="danger"
           size="sm"
           onClick={() => onDelete(user)}
-          className="flex-1 hover:bg-red-500/20 hover:border-red-400/50 group-hover:shadow-red-500/20"
+          className="flex-1"
         >
           <svg
             className="w-4 h-4 mr-2"

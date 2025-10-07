@@ -53,7 +53,6 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
         'theme-toggle',
         'group',
         'transition-all duration-300',
-        'hover:scale-110',
         className
       )}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
@@ -63,8 +62,8 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
         className={cn(
           'w-5 h-5 transition-all duration-300',
           theme === 'light' 
-            ? 'text-gray-700 group-hover:text-gray-900' 
-            : 'text-blue-300 group-hover:text-blue-100'
+            ? 'text-gray-700' 
+            : 'text-blue-300'
         )}
       />
     </button>

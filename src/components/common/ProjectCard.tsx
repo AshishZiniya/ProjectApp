@@ -16,9 +16,9 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
     <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up">
       <div className="flex-1">
         <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mr-4 transition-transform duration-300 shadow-lg">
             <svg
-              className="w-7 h-7 text-white"
+              className="w-7 h-7 text-gray-900 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -33,19 +33,19 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
               />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-white line-clamp-1 group-hover:text-blue-300 transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-1 transition-colors">
             {project.name}
           </h3>
         </div>
         {project.description && (
-          <p className="text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">
             {project.description}
           </p>
         )}
         <div className="flex items-center text-gray-400 text-sm mb-6">
           <div className="w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg flex items-center justify-center mr-2">
             <svg
-              className="w-3 h-3 text-white"
+              className="w-3 h-3 text-gray-900 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
               />
             </svg>
           </div>
-          <span className="font-medium truncate text-gray-200">
+          <span className="font-medium truncate text-gray-600 dark:text-gray-200">
             {project.owner.name}
           </span>
         </div>
@@ -70,7 +70,7 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
           <Button
             variant="outline"
             size="sm"
-            className="w-full hover:bg-blue-400/10 hover:border-blue-400 group-hover:shadow-blue-500/20"
+            className="w-full"
           >
             <svg
               className="w-4 h-4 mr-2"
@@ -99,7 +99,7 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
             variant="danger"
             size="sm"
             onClick={() => onDelete(project)}
-            className="flex-1 hover:bg-red-500/20 hover:border-red-400/50 group-hover:shadow-red-500/20"
+            className="flex-1"
           >
             <svg
               className="w-4 h-4 mr-2"

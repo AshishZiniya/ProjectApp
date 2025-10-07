@@ -8,20 +8,20 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white shadow-lg hover:shadow-xl border border-blue-400/50',
+          'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 dark:text-white shadow-lg border border-blue-400/50',
         secondary:
-          'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300 shadow-md hover:shadow-lg dark:glass dark:text-gray-200 dark:hover:bg-white/10 dark:border-white/20',
+          'bg-gray-100 text-gray-800 border border-gray-300 shadow-md dark:glass dark:text-gray-200 dark:border-white/20',
         success:
-          'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg hover:shadow-xl border border-green-400/50',
+          'bg-gradient-to-r from-green-500 to-emerald-600 text-gray-900 dark:text-white shadow-lg border border-green-400/50',
         warning:
-          'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white shadow-lg hover:shadow-xl border border-yellow-400/50',
+          'bg-gradient-to-r from-yellow-500 to-orange-600 text-gray-900 dark:text-white shadow-lg border border-yellow-400/50',
         danger:
-          'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-400 hover:to-pink-500 text-white shadow-lg hover:shadow-xl border border-red-400/50',
+          'bg-gradient-to-r from-red-500 to-pink-600 text-gray-900 dark:text-white shadow-lg border border-red-400/50',
         outline:
-          'border-2 border-blue-400 text-blue-600 hover:bg-blue-400/10 hover:border-blue-300 focus:ring-blue-400 bg-transparent shadow-lg dark:text-blue-400 dark:hover:bg-blue-400/10',
+          'border-2 border-blue-400 text-blue-600 focus:ring-blue-400 bg-transparent shadow-lg dark:text-blue-400',
         ghost:
-          'text-blue-600 hover:bg-blue-400/10 hover:text-blue-700 focus:ring-blue-400 bg-transparent dark:text-blue-400 dark:hover:bg-blue-400/10 dark:hover:text-blue-300',
-        link: 'text-blue-600 hover:text-blue-700 focus:ring-blue-400 bg-transparent shadow-none hover:underline p-0 dark:text-blue-400 dark:hover:text-blue-300',
+          'text-blue-600 focus:ring-blue-400 bg-transparent dark:text-blue-400',
+        link: 'text-blue-600 focus:ring-blue-400 bg-transparent shadow-none p-0 dark:text-blue-400',
       },
       size: {
         xs: 'px-3 py-1.5 text-xs',

@@ -52,8 +52,8 @@ const AddAdmin: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen animated-bg flex items-center justify-center p-6 w-full">
-      <Card className="w-full max-w-lg glass-card shadow-2xl animate-fade-in-up">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 flex items-center justify-center p-6 w-full">
+      <Card className="w-full max-w-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg">
         <div className="text-center mb-8">
           <div className="w-24 h-24 bg-gradient-neon rounded-3xl flex items-center justify-center mx-auto mb-6 pulse-glow shadow-xl">
             <svg
@@ -70,10 +70,10 @@ const AddAdmin: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className="text-4xl font-bold mb-3 text-gradient">
+          <h2 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             Add Administrator
           </h2>
-          <p className="text-gray-500 text-lg leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-500 text-lg leading-relaxed">
             Create a new administrator account with full system access
           </p>
         </div>
@@ -81,14 +81,14 @@ const AddAdmin: React.FC = () => {
           <Alert
             type="error"
             message={error}
-            className="mb-6 glass-card border-red-400/20 animate-fade-in-up"
+            className="mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg animate-fade-in-up"
           />
         )}
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-gray-200 mb-3"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3"
             >
               📧 Email Address
             </label>
@@ -102,12 +102,12 @@ const AddAdmin: React.FC = () => {
                 className={`block w-full px-5 py-4 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white placeholder-gray-400 backdrop-blur-md min-h-[56px] text-lg ${
                   validationErrors.email
                     ? "border-red-400/50"
-                    : "border-white/20 hover:border-white/30"
+                    : "border-white/20"
                 }`}
                 placeholder="admin@example.com"
               />
               <svg
-                className="absolute right-4 top-4.5 h-6 w-6 text-gray-400"
+                className="absolute right-4 top-4.5 h-6 w-6 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -132,7 +132,7 @@ const AddAdmin: React.FC = () => {
           <div className="space-y-2">
             <label
               htmlFor="name"
-              className="block text-sm font-semibold text-gray-200 mb-3"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3"
             >
               👤 Full Name
             </label>
@@ -146,12 +146,12 @@ const AddAdmin: React.FC = () => {
                 className={`block w-full px-5 py-4 border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 glass text-white placeholder-gray-400 backdrop-blur-md min-h-[56px] text-lg ${
                   validationErrors.name
                     ? "border-red-400/50"
-                    : "border-white/20 hover:border-white/30"
+                    : "border-white/20"
                 }`}
                 placeholder="John Doe"
               />
               <svg
-                className="absolute right-4 top-4.5 h-6 w-6 text-gray-400"
+                className="absolute right-4 top-4.5 h-6 w-6 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ const AddAdmin: React.FC = () => {
               </p>
             )}
           </div>
-          <div className="glass-card border border-amber-400/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl p-5 animate-fade-in-up animate-delay-200">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl p-5 animate-fade-in-up animate-delay-200">
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
                 <svg className="w-3 h-3 text-amber-900" fill="currentColor" viewBox="0 0 20 20">
@@ -197,7 +197,7 @@ const AddAdmin: React.FC = () => {
           <Button
             type="submit"
             loading={loading}
-            className="w-full py-4 text-xl font-semibold min-h-[60px] shadow-2xl hover:shadow-blue-500/30 animate-fade-in-up animate-delay-300"
+            className="w-full py-4 text-xl font-semibold min-h-[60px] shadow-2xl animate-fade-in-up animate-delay-300"
           >
             {loading ? "Creating Administrator..." : "✨ Create Administrator"}
           </Button>

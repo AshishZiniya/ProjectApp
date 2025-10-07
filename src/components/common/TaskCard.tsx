@@ -44,10 +44,10 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
       availablePriorities: Object.keys(TASK_PRIORITY_CONFIG)
     });
     return (
-      <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up hover-lift">
+      <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up">
         <div className="flex-1 p-4">
           <p className="text-red-400 text-sm">Error: Invalid task data</p>
-          <h3 className="text-xl font-bold text-white line-clamp-1 mt-2">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-1 mt-2">
             {task.title || 'Untitled Task'}
           </h3>
         </div>
@@ -56,14 +56,14 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
   }
 
   return (
-    <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up hover-lift">
+    <Card className="flex flex-col justify-between transition-all duration-300 min-h-[320px] group animate-fade-in-up">
       <div className="flex-1">
         <div className="flex items-center mb-4">
           <div
-            className={`w-12 h-12 ${statusInfo.color} rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+            className={`w-12 h-12 ${statusInfo.color} rounded-xl flex items-center justify-center mr-4 transition-transform duration-300 shadow-lg`}
           >
             <svg
-              className="w-7 h-7 text-white"
+              className="w-7 h-7 text-gray-900 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -76,12 +76,12 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-white line-clamp-1 group-hover:text-blue-300 transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-1 transition-colors">
             {task.title}
           </h3>
         </div>
         {task.description && (
-          <p className="text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">
             {task.description}
           </p>
         )}
@@ -94,7 +94,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
                 {priorityInfo.label[0]}
               </span>
             </div>
-            <span className="font-medium text-gray-200">
+            <span className="font-medium text-gray-600 dark:text-gray-200">
               {priorityInfo.label}
             </span>
           </div>
@@ -110,7 +110,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
           <Button
             variant="outline"
             size="sm"
-            className="w-full hover:bg-blue-400/10 hover:border-blue-400 group-hover:shadow-blue-500/20"
+            className="w-full"
           >
             <svg
               className="w-4 h-4 mr-2"
@@ -139,7 +139,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
             variant="danger"
             size="sm"
             onClick={() => onDelete(task)}
-            className="flex-1 hover:bg-red-500/20 hover:border-red-400/50 group-hover:shadow-red-500/20"
+            className="flex-1"
           >
             <svg
               className="w-4 h-4 mr-2"

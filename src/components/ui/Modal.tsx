@@ -81,17 +81,17 @@ const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className={`glass-card rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 focus:outline-none border border-white/20 animate-scale-in ${className}`}
+        className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 focus:outline-none animate-scale-in ${className}`}
         tabIndex={-1}
         role="document"
       >
         <div className="mb-6">
-          <h3 id="modal-title" className="text-2xl font-bold text-white mb-4">
+          <h3 id="modal-title" className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             {title}
           </h3>
           <p
             id="modal-description"
-            className="text-gray-500 text-lg leading-relaxed"
+            className="text-gray-700 dark:text-gray-500 text-lg leading-relaxed"
           >
             {message}
           </p>

@@ -58,14 +58,14 @@ const ForgotPassword: React.FC = () => {
             <p className="text-gray-600 text-lg">
               We&#39;ve sent a password reset link to {email}
             </p>
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm text-gray-700 dark:text-gray-500 mt-4">
               Didn&#39;t receive the email? Check your spam folder or try again.
             </p>
           </div>
           <div className="space-y-4">
             <Link
               href="/auth/login"
-              className="block text-center text-blue-600 hover:underline"
+              className="block text-center text-blue-600"
             >
               Back to Login
             </Link>
@@ -121,7 +121,7 @@ const ForgotPassword: React.FC = () => {
                 placeholder="Enter your email"
               />
               <svg
-                className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
+                className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -145,7 +145,7 @@ const ForgotPassword: React.FC = () => {
         </form>
         <p className="mt-6 text-center text-gray-600">
           Remember your password?{" "}
-          <Link href="/auth/login" className="text-blue-600 hover:underline">
+          <Link href="/auth/login" className="text-blue-600">
             Sign in
           </Link>
         </p>
