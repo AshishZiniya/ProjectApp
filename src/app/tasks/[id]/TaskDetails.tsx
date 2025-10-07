@@ -10,7 +10,7 @@ import React, {
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/api";
-import { LegacyTask as Task, Comment } from "@/types";
+import { Task, Comment } from "@/types";
 import Card from "@/components/ui/Card";
 import Alert from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";

@@ -356,111 +356,88 @@ const ProjectDetails: React.FC = () => {
             </>
           ) : (
             (tasks ?? []).map((task) => (
-              <Card
-                key={task.id}
-                className="p-4 transition-transform"
-              >
-                <div className="flex items-center mb-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
-                    <svg
-                      className="w-5 h-5 text-gray-900 dark:text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+              <div key={task.id} className="group">
+                <Card className="p-6 hover:shadow-md transition-all duration-200 w-fit">
+                  <div className="flex flex-col gap-5 items-start justify-between">
+                    <div className="flex items-center space-x-4 flex-1 min-w-0">
+                      {/* Task Avatar/ID */}
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-bold text-sm">
+                          {task.id.slice(0, 2).toUpperCase()}
+                        </span>
+                      </div>
+
+                      {/* Task Info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                          {task.title}
+                        </h3>
+                        {task.description && (
+                          <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                            {task.description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Status and Priority */}
+                    <div className="flex items-center space-x-3 flex-shrink-0">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2 h-2 ${
+                          task.priority === "HIGH"
+                            ? "bg-red-500"
+                            : task.priority === "MEDIUM"
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
+                        } rounded-full`}></div>
+                        <span className="text-sm font-medium text-gray-600">
+                          {task.priority}
+                        </span>
+                      </div>
+
+                      <div className={`px-3 py-1 ${
+                        task.status === "DONE"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      } text-xs font-medium`}>
+                        {task.status === "DONE" ? "Completed" : "Pending"}
+                      </div>
+
+                      <Link href={`/tasks/${task.id}`}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="opacity-75 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          View Task
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800 truncate">
-                    {task.title}
-                  </h3>
-                </div>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                  {task.description || "No description"}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      task.priority === "HIGH"
-                        ? "bg-red-100 text-red-800"
-                        : task.priority === "MEDIUM"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : task.priority === "LOW"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    <svg
-                      className="w-3 h-3 mr-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {task.priority === "HIGH"
-                      ? "High"
-                      : task.priority === "MEDIUM"
-                        ? "Medium"
-                        : task.priority === "LOW"
-                          ? "Low"
-                          : "Unknown"}
-                  </span>
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      task.status === "DONE"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    <svg
-                      className="w-3 h-3 mr-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {task.status === "DONE" ? "Completed" : "Pending"}
-                  </span>
-                </div>
-                {task.assignedTo && (
-                  <div className="flex items-center text-gray-700 text-sm">
-                    <svg
-                      className="w-4 h-4 mr-1 text-gray-700 dark:text-gray-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                    <span className="font-medium">{task.assignedTo.name}</span>
-                  </div>
-                )}
-                <div className="flex justify-end mt-3">
-                  <Link href={`/tasks/${task.id}`} passHref>
-                    <Button variant="secondary" size="sm">
-                      View Task
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
+
+                  {/* Assigned User */}
+                  {task.assignedTo && (
+                    <div className="flex items-center mt-4 pt-4 border-t border-gray-100">
+                      <svg
+                        className="w-4 h-4 mr-2 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium text-gray-600">
+                        Assigned to {task.assignedTo.name}
+                      </span>
+                    </div>
+                  )}
+                </Card>
+              </div>
             ))
           )}
         </div>

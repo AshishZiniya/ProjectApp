@@ -31,10 +31,10 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link
           href="/"
-          className="text-2xl font-bold text-primary-600 transition-all duration-300 flex items-center gap-3 group dark:text-primary-400"
+          className="text-2xl font-bold text-primary-600 hover:text-primary-700 transition-all duration-300 flex items-center gap-3 group dark:text-primary-400 dark:hover:text-primary-300"
         >
           <div className="relative w-12 h-12 flex-shrink-0">
-            <div className="absolute inset-0 bg-gradient-neon rounded-xl opacity-20 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-neon rounded-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
             <Image
               src="/logo.svg"
               alt="Task Manager Logo"
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
               quality={85}
             />
           </div>
-          <span className="font-bold text-xl hidden sm:block text-foreground transition-colors">
+          <span className="font-bold text-xl hidden sm:block text-foreground group-hover:text-primary-600 transition-colors dark:group-hover:text-primary-300">
             Task Manager
           </span>
         </Link>
@@ -54,25 +54,25 @@ const Navbar: React.FC = () => {
           {/* Authentication and authorization are handled in middleware */}
           <Link
             href="/users"
-            className="hidden lg:block text-gray-600 transition-colors px-3 py-2 rounded-xl border border-transparent dark:text-gray-500"
+            className="hidden lg:block text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 border border-transparent hover:border-primary-200 dark:text-gray-500 dark:hover:text-primary-400 dark:hover:bg-white/5 dark:hover:border-white/10"
           >
             Users
           </Link>
           <Link
             href="/admin/add-admin"
-            className="hidden lg:block text-gray-600 transition-colors px-3 py-2 rounded-xl border border-transparent dark:text-gray-500"
+            className="hidden lg:block text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 border border-transparent hover:border-primary-200 dark:text-gray-500 dark:hover:text-primary-400 dark:hover:bg-white/5 dark:hover:border-white/10"
           >
             Add Admin
           </Link>
           <Link
             href="/projects"
-            className="text-gray-600 transition-colors px-3 py-2 rounded-xl border border-transparent dark:text-gray-500"
+            className="text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 border border-transparent hover:border-primary-200 dark:text-gray-500 dark:hover:text-primary-400 dark:hover:bg-white/5 dark:hover:border-white/10"
           >
             Projects
           </Link>
           <Link
             href="/tasks"
-            className="text-gray-600 transition-colors px-3 py-2 rounded-xl border border-transparent dark:text-gray-500"
+            className="text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 border border-transparent hover:border-primary-200 dark:text-gray-500 dark:hover:text-primary-400 dark:hover:bg-white/5 dark:hover:border-white/10"
           >
             Tasks
           </Link>
@@ -81,12 +81,12 @@ const Navbar: React.FC = () => {
             <>
               <Link
                 href={`/users/${user?.id}`}
-                className="flex text-gray-600 items-center gap-3 transition-colors cursor-pointer px-3 py-2 rounded-xl border border-transparent dark:text-gray-500"
+                className="flex text-gray-600 items-center gap-3 hover:text-primary-600 transition-colors cursor-pointer px-3 py-2 rounded-xl hover:bg-primary-50 border border-transparent hover:border-primary-200 dark:text-gray-500 dark:hover:text-primary-400 dark:hover:bg-white/5 dark:hover:border-white/10"
               >
                 <div className="w-8 h-8 bg-gradient-to-r from-primary-400 to-primary-600 rounded-lg flex items-center justify-center">
                   <FontAwesomeIcon
                     icon={faUser}
-                    className="text-gray-900 dark:text-white text-sm"
+                    className="text-white text-sm"
                   />
                 </div>
                 <strong className="hidden sm:block">
@@ -98,6 +98,7 @@ const Navbar: React.FC = () => {
                 loading={authLoading}
                 variant="secondary"
                 size="sm"
+                className="hover:bg-error-50 hover:border-error-200 dark:hover:bg-error-500/20 dark:hover:border-error-400/50"
               >
                 Logout
               </Button>

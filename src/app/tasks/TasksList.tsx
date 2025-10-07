@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import api from '@/lib/api';
-import { LegacyTask as Task, PaginatedResponse } from '@/types';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Task, PaginatedResponse } from '@/types';
 import Modal from '@/components/ui/Modal';
-import useToast from '@/hooks/useToast';
 import { PAGE_LIMIT_OPTIONS } from '@/constants';
-import { useApiQuery } from '@/hooks/useApiQuery';
+import { useTasks } from '@/hooks/useTasks';
 import DataList from '@/components/common/DataList';
 import TaskCard from '@/components/common/TaskCard';
 
@@ -15,25 +13,33 @@ const TasksList: React.FC = () => {
   const [limit, setLimit] = useState(10);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
-  const [deleting, setDeleting] = useState(false);
 
-  const { showSuccess, showError } = useToast();
+  // Use the new task hooks
+  const { getTasks, deleteTask, deleteTaskState } = useTasks();
 
-  // Use optimized API query with caching
-  const {
-    data: response,
-    loading,
-    error,
-    refetch,
-  } = useApiQuery<PaginatedResponse<Task>>('/tasks/all', {
-    params: { page, limit },
-    onError: () => {
-      showError('Failed to fetch tasks.');
-    },
-  });
+  // Get tasks operation state from the hook
+  const { loading, error } = useTasks().getTasksState;
+  const { loading: deleting } = deleteTaskState;
+
+  // State for tasks data
+  const [response, setResponse] = useState<PaginatedResponse<Task> | null>(null);
+
+  // Custom execute function for loading tasks with current filters
+  const loadTasks = useCallback(async () => {
+    const result = await getTasks({ page, limit });
+    if (result) {
+      setResponse(result);
+    }
+  }, [getTasks, page, limit]);
 
   const tasks = response?.data || [];
   const totalPages = response?.pages || 1;
+
+  // Load tasks when component mounts or page/limit changes
+  useEffect(() => {
+    loadTasks();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, limit]);
 
   const handleDeleteClick = (task: Task) => {
     setTaskToDelete(task);
@@ -43,17 +49,11 @@ const TasksList: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (!taskToDelete) return;
 
-    setDeleting(true);
-    try {
-      await api.delete(`/tasks/${taskToDelete.id}`);
-      refetch();
-      showSuccess('Task deleted successfully!');
+    const success = await deleteTask(taskToDelete.id as string);
+    if (success) {
+      await loadTasks();
       setShowDeleteModal(false);
       setTaskToDelete(null);
-    } catch {
-      showError('Failed to delete task.');
-    } finally {
-      setDeleting(false);
     }
   };
 
@@ -63,7 +63,7 @@ const TasksList: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="px-6 py-12 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 min-h-screen">
       <DataList
         title="Task Dashboard"
         subtitle="Manage and track all your tasks across projects"
@@ -93,7 +93,7 @@ const TasksList: React.FC = () => {
         onConfirm={handleDeleteConfirm}
         loading={deleting}
       />
-    </>
+    </div>
   );
 };
 
