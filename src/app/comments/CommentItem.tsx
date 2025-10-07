@@ -41,7 +41,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
           variant="danger"
           size="sm"
           onClick={() => onDelete(comment)}
-          className="opacity-0 transition-opacity"
+          className="transition-opacity"
         >
           <svg
             className="w-4 h-4"
