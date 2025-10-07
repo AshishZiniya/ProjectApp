@@ -94,7 +94,7 @@ const ProjectDetails: React.FC = () => {
   };
 
   const ProjectDetailsSkeleton = () => (
-    <Card className="max-w-8xl mx-auto animate-pulse">
+    <Card className="w-full animate-pulse">
       <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
@@ -163,7 +163,7 @@ const ProjectDetails: React.FC = () => {
 
   if (loading)
     return (
-      <div className="p-6 w-full">
+      <div className="w-full">
         <ProjectDetailsSkeleton />
       </div>
     );
@@ -171,8 +171,8 @@ const ProjectDetails: React.FC = () => {
     return <Alert type="info" message="Project not found." className="m-6" />;
 
   return (
-    <div className="p-6 w-full">
-      <Card className="max-w-8xl mx-auto shadow-2xl">
+    <div className="w-full">
+      <Card className="w-full shadow-2xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Project Details
@@ -187,7 +187,7 @@ const ProjectDetails: React.FC = () => {
         {!isEditing ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 p-4">
                 <div className="flex items-center mb-2">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
                     <span className="text-blue-600 font-bold">#</span>

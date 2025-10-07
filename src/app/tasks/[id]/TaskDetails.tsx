@@ -103,11 +103,6 @@ const TaskDetails: React.FC = (): ReactNode => {
     fetchTaskAndComments();
     const apiBaseUrl = process.env.API_BASE_URL;
 
-    if (!apiBaseUrl) {
-      showError("API base URL not configured");
-      return;
-    }
-
     const socket = io(apiBaseUrl, {
       transports: ["websocket"], // force websocket (optional but recommended)
       withCredentials: true,
@@ -137,8 +132,7 @@ const TaskDetails: React.FC = (): ReactNode => {
     return () => {
       socket.emit("leaveTaskComments", id);
       socket.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    };  
   }, [fetchTaskAndComments, id]);
 
   const handleUpdate = async () => {
@@ -197,7 +191,7 @@ const TaskDetails: React.FC = (): ReactNode => {
   };
 
   const TaskDetailsSkeleton = () => (
-    <Card className="max-w-8xl mx-auto animate-pulse">
+    <Card className="w-full animate-pulse">
       <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div> {/* Title */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
@@ -284,7 +278,7 @@ const TaskDetails: React.FC = (): ReactNode => {
 
   if (loading)
     return (
-      <div className="p-6 w-full">
+      <div className="w-full">
         <TaskDetailsSkeleton />
       </div>
     );
@@ -292,8 +286,8 @@ const TaskDetails: React.FC = (): ReactNode => {
     return <Alert type="info" message="Task not found." className="m-6" />;
 
   return (
-    <div className="px-6 py-8 w-full">
-      <Card className="max-w-6xl mx-auto">
+    <div className="w-full">
+      <Card className="w-full">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold mb-2 text-gray-900">
             Task Details

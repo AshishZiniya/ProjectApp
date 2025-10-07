@@ -124,8 +124,8 @@ const UserDetails: React.FC = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 w-full">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 w-full">
+        <div className="w-full">
           <UserDetailsSkeleton />
         </div>
       </div>
@@ -135,8 +135,8 @@ const UserDetails: React.FC = () => {
     return <Alert type="info" message="User not found." className="m-6" />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 w-full">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 w-full">
+      <div className="w-full">
         <Card className="shadow-2xl">
           <div className="text-center mb-8">
             <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
