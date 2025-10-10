@@ -66,19 +66,19 @@ function DataList<T extends { id: string }>({
   return (
     <div className={`w-full ${className || ''}`}>
       {/* Header Section */}
-      <div className={`text-center mb-12 ${headerClassName || ''}`}>
-        <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+      <div className={`text-center mb-8 sm:mb-12 ${headerClassName || ''}`}>
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
           {title}
         </h1>
-        <p className="text-xl text-gray-700 dark:text-gray-500 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-500 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
           {subtitle}
         </p>
       </div>
 
       {/* Controls Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8 px-4 sm:px-0">
         {showSearch && onSearchChange && (
-          <div className="w-full sm:w-80 lg:w-96">
+          <div className="w-full sm:w-72 md:w-80 lg:w-96">
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-xl p-1">
               <Input
                 type="text"
@@ -88,7 +88,7 @@ function DataList<T extends { id: string }>({
                   onSearchChange(e.target.value);
                   onPageChange(1);
                 }}
-                className="w-full bg-transparent border-none text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0"
+                className="w-full bg-transparent border-none text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0 text-sm sm:text-base"
               />
             </div>
           </div>
@@ -98,7 +98,7 @@ function DataList<T extends { id: string }>({
             <Button
               variant="primary"
               size="lg"
-              className="w-full sm:w-auto shadow-2xl"
+              className="w-full sm:w-auto shadow-2xl text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
             >
               {createButtonText}
             </Button>
@@ -118,18 +118,32 @@ function DataList<T extends { id: string }>({
       {/* Content Section */}
       <div className={contentClassName || ''}>
         {loading ? (
-          <div className={`grid ${gridCols} gap-8`}>
+          <div className={`grid ${gridCols} gap-4 sm:gap-6 lg:gap-8`}>
             {[...Array(limit)].map((_, index) => (
               <div
                 key={index}
-                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-2xl p-6 animate-pulse ${skeletonHeight}`}
+                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-2xl p-4 sm:p-6 animate-pulse ${skeletonHeight}`}
               >
-                <div className="h-4 bg-white/10 rounded mb-4"></div>
-                <div className="h-3 bg-white/10 rounded mb-2"></div>
-                <div className="h-3 bg-white/10 rounded w-3/4 mb-4"></div>
-                <div className="flex space-x-2">
-                  <div className="h-10 bg-white/10 rounded-xl flex-1"></div>
-                  <div className="h-10 bg-white/10 rounded-xl flex-1"></div>
+                <div className="flex items-center space-x-3 sm:space-x-4 mb-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                  <div className="flex-1">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  </div>
+                </div>
+                <div className="space-y-2 mb-4">
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="h-8 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-lg w-16 sm:w-20"></div>
+                    <div className="h-8 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-lg w-16 sm:w-20"></div>
+                  </div>
                 </div>
               </div>
             ))}

@@ -27,7 +27,7 @@ export default function ClientLayout({
         <Suspense
           fallback={
             <main
-              className={`flex-1 w-full ${!isAuthPage ? 'mt-20' : ''} animated-bg`}
+              className={`flex-1 w-full ${!isAuthPage ? 'mt-16 sm:mt-20' : ''} animated-bg`}
             >
               <div className="flex items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
@@ -35,7 +35,7 @@ export default function ClientLayout({
             </main>
           }
         >
-          <main className={`flex-1 w-full ${!isAuthPage ? 'mt-28' : ''} animated-bg`}>
+          <main className={`flex-1 w-full ${!isAuthPage ? 'mt-20 sm:mt-28' : ''} animated-bg`}>
             {children}
           </main>
         </Suspense>

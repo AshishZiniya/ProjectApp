@@ -15,13 +15,13 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
   ({ project, onDelete }) => {
 
     return (
-    <Card className="p-6 hover:shadow-md transition-all duration-200 group w-fit">
-      <div className="flex flex-col items-start justify-between gap-5">
-        <div className="flex items-center space-x-4 flex-1 min-w-0">
+    <Card className="p-4 sm:p-6 hover:shadow-md transition-all duration-200 group w-full">
+      <div className="flex flex-col items-start justify-between gap-4 sm:gap-5">
+        <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0 w-full">
           {/* Project Avatar */}
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
             <svg
-              className="w-6 h-6 text-white"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -37,11 +37,11 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
 
           {/* Project Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1 transition-colors">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 line-clamp-1 transition-colors">
               {project.name}
             </h3>
             {project.description && (
-              <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+              <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
                 {project.description}
               </p>
             )}
@@ -49,11 +49,11 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
         </div>
 
         {/* Owner and Actions */}
-        <div className="flex items-center space-x-3 flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full flex items-center justify-center">
+        <div className="flex items-center justify-between space-x-2 sm:space-x-3 flex-shrink-0 w-full">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
               <svg
-                className="w-3 h-3 text-white"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -66,31 +66,33 @@ const ProjectCard: React.FC<ProjectCardProps> = memo(
                 />
               </svg>
             </div>
-            <span className="text-sm font-medium text-gray-600 truncate max-w-24">
+            <span className="text-xs sm:text-sm font-medium text-gray-600 truncate">
               {project.owner.name}
             </span>
           </div>
 
-          <Link href={`/projects/${project.id}`}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              View Project
-            </Button>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Link href={`/projects/${project.id}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+              >
+                View
+              </Button>
+            </Link>
 
-          {onDelete && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDelete(project)}
-              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-            >
-              Delete
-            </Button>
-          )}
+            {onDelete && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDelete(project)}
+                className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+              >
+                Delete
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </Card>

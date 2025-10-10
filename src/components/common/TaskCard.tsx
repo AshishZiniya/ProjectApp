@@ -61,23 +61,23 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
   }
 
   return (
-    <Card className="p-6 hover:shadow-md transition-all duration-200 group w-fit">
-      <div className="flex flex-col items-start gap-5 justify-between">
-        <div className="flex items-center space-x-4 flex-1 min-w-0">
+    <Card className="p-4 sm:p-6 hover:shadow-md transition-all duration-200 group w-full">
+      <div className="flex flex-col items-start gap-4 sm:gap-5 justify-between">
+        <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0 w-full">
           {/* Task Avatar/ID */}
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-bold text-sm">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-bold text-xs sm:text-sm">
               {task.id.slice(0, 2).toUpperCase()}
             </span>
           </div>
 
           {/* Task Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
               {task.title}
             </h3>
             {task.description && (
-              <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+              <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
                 {task.description}
               </p>
             )}
@@ -85,38 +85,40 @@ const TaskCard: React.FC<TaskCardProps> = memo(({ task, onDelete }) => {
         </div>
 
         {/* Status and Priority */}
-        <div className="flex items-center space-x-3 flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 ${priorityInfo.color} rounded-full`}></div>
-            <span className="text-sm font-medium text-gray-600">
+        <div className="flex items-center justify-between space-x-2 sm:space-x-3 flex-shrink-0 w-full">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className={`w-2 h-2 ${priorityInfo.color} rounded-full flex-shrink-0`}></div>
+            <span className="text-xs sm:text-sm font-medium text-gray-600 truncate">
               {priorityInfo.label}
             </span>
           </div>
 
-          <div className={`px-3 py-1 ${statusInfo.color} text-xs font-medium`}>
+          <div className={`px-2 sm:px-3 py-1 ${statusInfo.color} text-xs font-medium rounded-full`}>
             {statusInfo.label}
           </div>
 
-          <Link href={`/tasks/${task.id}`}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              View Task
-            </Button>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Link href={`/tasks/${task.id}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+              >
+                View
+              </Button>
+            </Link>
 
-          {onDelete && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDelete(task)}
-              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-            >
-              Delete
-            </Button>
-          )}
+            {onDelete && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDelete(task)}
+                className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+              >
+                Delete
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </Card>

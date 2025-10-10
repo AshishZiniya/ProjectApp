@@ -12,24 +12,24 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
-  <Card className="p-6 hover:shadow-md transition-all duration-200 group w-fit">
-    <div className="flex flex-col items-start justify-between gap-5">
-      <div className="flex items-center space-x-4 flex-1 min-w-0">
+  <Card className="p-4 sm:p-6 hover:shadow-md transition-all duration-200 group w-full">
+    <div className="flex flex-col items-start justify-between gap-4 sm:gap-5">
+      <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0 w-full">
         {/* User Avatar */}
-        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-lg">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <span className="text-white font-bold text-base sm:text-lg">
             {user.name.charAt(0).toUpperCase()}
           </span>
         </div>
 
         {/* User Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1 transition-colors">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 line-clamp-1 transition-colors">
             {user.name}
           </h3>
           <div className="flex items-center space-x-2">
             <svg
-              className="w-4 h-4 text-gray-400"
+              className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -41,45 +41,47 @@ const UserCard: React.FC<UserCardProps> = memo(({ user, onDelete }) => (
                 d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            <span className="text-gray-600 text-sm truncate">{user.email}</span>
+            <span className="text-gray-600 text-xs sm:text-sm truncate">{user.email}</span>
           </div>
         </div>
       </div>
 
       {/* Role and Actions */}
-      <div className="flex items-center space-x-3 flex-shrink-0">
+      <div className="flex items-center justify-between space-x-2 sm:space-x-3 flex-shrink-0 w-full">
         <div
-          className={`px-3 py-1 text-xs font-medium ${
+          className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-full ${
             user.role === 'ADMIN'
-              ? 'bg-purple-100 text-purple-800'
+              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300'
               : user.role === 'SUPERADMIN'
-              ? 'bg-red-100 text-red-800'
-              : 'bg-blue-100 text-blue-800'
+              ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
+              : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300'
           }`}
         >
           {user.role}
         </div>
 
-        <Link href={`/users/${user.id}`}>
-          <Button
-            variant="outline"
-            size="sm"
-            className="opacity-75 group-hover:opacity-100 transition-opacity duration-200"
-          >
-            View Profile
-          </Button>
-        </Link>
+        <div className="flex items-center space-x-2">
+          <Link href={`/users/${user.id}`}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+            >
+              View
+            </Button>
+          </Link>
 
-        {onDelete && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDelete(user)}
-            className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-          >
-            Delete
-          </Button>
-        )}
+          {onDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDelete(user)}
+              className="opacity-75 group-hover:opacity-100 transition-opacity duration-200 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+            >
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   </Card>
