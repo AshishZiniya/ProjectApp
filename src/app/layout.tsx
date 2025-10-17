@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Analytics } from '@vercel/analytics/next';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
@@ -105,8 +103,6 @@ export default function RootLayout({
       </head>
       <body className="bg-background text-foreground antialiased min-h-screen transition-colors duration-300">
         <div className="contents">
-          <SpeedInsights />
-          <Analytics />
           <ClientLayout>{children}</ClientLayout>
           <ThemeToggle />
         </div>
